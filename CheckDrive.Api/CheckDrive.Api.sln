@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDricer.Infrastructure", "CheckDricer.Infrastructure\CheckDricer.Infrastructure.csproj", "{08B1A074-5F04-4301-8621-F57040FE99B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDriver.Domain", "CheckDriver.Domain\CheckDriver.Domain.csproj", "{200CCB5F-9247-4D3D-96BE-317E01064EBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDriver.Services", "CheckDriver.Services\CheckDriver.Services.csproj", "{6A3D09BB-A142-46B5-B50C-1510533019DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08B1A074-5F04-4301-8621-F57040FE99B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08B1A074-5F04-4301-8621-F57040FE99B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08B1A074-5F04-4301-8621-F57040FE99B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08B1A074-5F04-4301-8621-F57040FE99B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
