@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CheckDriver.Domain.Entities
+﻿namespace CheckDriver.Domain.Entities
 {
     public class MechanicHandover
     {
@@ -21,6 +15,6 @@ namespace CheckDriver.Domain.Entities
         public int DriverId { get; set; }
         public Driver? Driver { get; set; }
 
-        public ICollection <MechanicAcceptance>? MechanicAcceptances { get; set; }
+        public ICollection<MechanicAcceptance>? MechanicAcceptances { get; set; }
     }
 }
