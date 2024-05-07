@@ -9,9 +9,9 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<OperatorReview> builder)
         {
             builder.ToTable(nameof(OperatorReview));
+            builder.HasKey(x => x.Id);
 
             builder.Property(x => x.OilAmount)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.Property(x => x.Comments)
@@ -24,11 +24,14 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
 
             builder.HasOne(o => o.Operator)
                 .WithMany(x => x.OperatorReviews)
-                .HasForeignKey(o => o.OperatorId);
+                .HasForeignKey(o => o.OperatorId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(o => o.Driver)
-               .WithMany(x => x.OperatorReviews)
-               .HasForeignKey(o => o.DriverId);
+                .WithMany(x => x.OperatorReviews)
+                .HasForeignKey(o => o.DriverId)
+                .OnDelete(DeleteBehavior.NoAction); 
         }
     }
+
 }

@@ -11,6 +11,6 @@
         public double Distance { get; set; }
 
         public int MechanicHandoverId { get; set; }
-        public MechanicHandover? MechanicHandover { get; set; }
+        public MechanicHandover MechanicHandover { get; set; }
     }
 }
