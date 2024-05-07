@@ -9,6 +9,7 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<DoctorReview> builder)
         {
             builder.ToTable(nameof(DoctorReview));
+            builder.HasKey(x => x.Id);
 
             builder.Property(x => x.IsHealthy)
                 .IsRequired();
@@ -19,11 +20,14 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
 
             builder.HasOne(x => x.Driver)
                 .WithMany(a => a.DoctorReviews)
-                .HasForeignKey(x => x.DriverId);
+                .HasForeignKey(x => x.DriverId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(a => a.Doctor)
                  .WithMany(x => x.DoctorReviews)
-                .HasForeignKey(a => a.DoctorId);
+                 .HasForeignKey(a => a.DoctorId)
+                 .OnDelete(DeleteBehavior.NoAction);
         }
     }
+
 }

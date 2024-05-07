@@ -20,12 +20,12 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(x => x.Distance)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.HasOne(m => m.MechanicHandover)
                 .WithMany(x => x.MechanicAcceptances)
-                .HasForeignKey(m => m.MechanicHandoverId);
+                .HasForeignKey(m => m.MechanicHandoverId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -12,28 +12,31 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
             builder.HasKey(t => t.Id);
 
             builder.Property(x => x.FuelSpended)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.Property(x => x.DistanceCovered)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.HasOne(d => d.Dispatcher)
                 .WithMany(x => x.DispetcherReviews)
-                .HasForeignKey(d => d.DispatcherId);
+                .HasForeignKey(d => d.DispatcherId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(d => d.Operator)
                 .WithMany(x => x.DispetcherReviews)
-                .HasForeignKey(d => d.OperatorId);
+                .HasForeignKey(d => d.OperatorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(d => d.Mechanic)
                 .WithMany(x => x.DispetcherReviews)
-                .HasForeignKey(d => d.MechanicId);
+                .HasForeignKey(d => d.MechanicId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(d => d.Driver)
                 .WithMany(x => x.DispetcherReviews)
-                .HasForeignKey(d => d.DriverId);
+                .HasForeignKey(d => d.DriverId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
+
 }

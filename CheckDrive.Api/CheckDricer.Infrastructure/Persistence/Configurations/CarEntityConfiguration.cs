@@ -8,7 +8,7 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Car> builder)
         {
-            builder.ToTable(nameof(Car));
+            builder.ToTable("Car");
             builder.HasKey(c => c.Id);
 
             builder.Property(x => x.Model)
@@ -24,15 +24,12 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(x => x.ManufacturedYear)
-                .HasColumnType("integer")
                 .IsRequired();
 
             builder.Property(x => x.FuelConsumptionFor100Km)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.Property(x => x.FuelTankCapacity)
-                .HasColumnType("double")
                 .IsRequired();
 
             builder.HasMany(c => c.MechanicHandovers)

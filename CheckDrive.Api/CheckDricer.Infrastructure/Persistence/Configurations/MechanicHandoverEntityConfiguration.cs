@@ -21,20 +21,23 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
 
             builder.HasOne(m => m.Mechanic)
                 .WithMany(x => x.MechanicHandovers)
-                .HasForeignKey(m => m.MechanicId);
+                .HasForeignKey(m => m.MechanicId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(m => m.Car)
                 .WithMany(x => x.MechanicHandovers)
-                .HasForeignKey(m => m.CarId);
+                .HasForeignKey(m => m.CarId)
+                .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(m => m.Driver)
                 .WithMany(x => x.MechanicHandovers)
-                .HasForeignKey(m => m.DriverId);
-
+                .HasForeignKey(m => m.DriverId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(m => m.MechanicAcceptances)
                 .WithOne(c => c.MechanicHandover)
                 .HasForeignKey(c => c.MechanicHandoverId);
         }
     }
+
 }
