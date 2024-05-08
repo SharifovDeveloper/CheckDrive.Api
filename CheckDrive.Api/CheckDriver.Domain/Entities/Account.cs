@@ -1,8 +1,9 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Entities
 {
-    public class Account
+    public class Account : EntityBase
     {
-        public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }

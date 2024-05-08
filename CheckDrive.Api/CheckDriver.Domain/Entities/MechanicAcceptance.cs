@@ -1,9 +1,9 @@
-﻿namespace CheckDriver.Domain.Entities
-{
-    public class MechanicAcceptance
-    {
-        public int Id { get; set; }
+﻿using CheckDriver.Domain.Common;
 
+namespace CheckDriver.Domain.Entities
+{
+    public class MechanicAcceptance : EntityBase
+    {
         public bool IsAccepted { get; set; }
         public string? Comments { get; set; }
         public Status Status { get; set; }

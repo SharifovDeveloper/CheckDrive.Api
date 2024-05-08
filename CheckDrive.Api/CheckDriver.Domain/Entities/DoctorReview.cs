@@ -1,8 +1,9 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Entities
 {
-    public class DoctorReview
+    public class DoctorReview : EntityBase
     {
-        public int Id { get; set; }
         public bool IsHealthy { get; set; }
         public string? Comments { get; set; }
         public DateTime Date { get; set; }

@@ -26,7 +26,7 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
             builder.Property(x => x.ManufacturedYear)
                 .IsRequired();
 
-            builder.Property(x => x.FuelConsumptionFor100Km)
+            builder.Property(x => x.MeduimFuelConsumption)
                 .IsRequired();
 
             builder.Property(x => x.FuelTankCapacity)

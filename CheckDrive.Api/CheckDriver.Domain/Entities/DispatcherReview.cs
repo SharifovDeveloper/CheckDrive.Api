@@ -1,8 +1,9 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Entities
 {
-    public class DispatcherReview
+    public class DispatcherReview : EntityBase
     {
-        public int Id { get; set; }
         public double FuelSpended { get; set; }
         public double DistanceCovered { get; set; }
         public DateTime Date { get; set; }
