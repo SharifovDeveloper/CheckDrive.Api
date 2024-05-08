@@ -18,6 +18,5 @@
         public virtual ICollection<Mechanic> Mechanics { get; set; }
         public virtual ICollection<Driver> Drivers { get; set; }
         public virtual ICollection<Doctor> Doctors { get; set; }
-        public virtual ICollection<Technician> Technicians { get; set; }
     }
 }
