@@ -79,11 +79,11 @@ namespace CheckDrive.Api.Extensions
                 {
                     accounts.Add(new Account()
                     {
-                        Login = _faker.Person.FirstName + "@gmail.com",
-                        Password = _faker.Lorem.Word().Substring(0, 8),
+                        Login = _faker.Name.FirstName() + "@gmail.com",
+                        Password = _faker.Random.Word().PadRight(8).Substring(0, 8),
                         PhoneNumber = _faker.Phone.PhoneNumber("+998-(##) ###-##-##"),
-                        FirstName = _faker.Person.FirstName,
-                        LastName = _faker.Person.LastName,
+                        FirstName = _faker.Name.FirstName(),
+                        LastName = _faker.Name.LastName(),
                         Bithdate = _faker.Date.Between(DateTime.Now.AddYears(-50), DateTime.Now.AddYears(-20)),
                         RoleId = role.Id,
                     });
@@ -105,7 +105,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Gentra",
                     Color = "Black",
                     Number = "01 145 PBA",
-                    FuelConsumptionFor100Km = 8.2,
+                    MeduimFuelConsumption = 8.2,
                     FuelTankCapacity = 60,
                     ManufacturedYear = 2019,
                 },
@@ -114,7 +114,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Matiz",
                     Color = "White",
                     Number = "01 146 PBA",
-                    FuelConsumptionFor100Km = 6.4,
+                    MeduimFuelConsumption = 6.4,
                     FuelTankCapacity = 35,
                     ManufacturedYear = 2015,
                 },
@@ -123,7 +123,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Nexia 2",
                     Color = "Gray",
                     Number = "01 147 PBA",
-                    FuelConsumptionFor100Km = 8.2,
+                    MeduimFuelConsumption = 8.2,
                     FuelTankCapacity = 45,
                     ManufacturedYear = 2018,
                 },
@@ -132,7 +132,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Spark",
                     Color = "Blue",
                     Number = "01 148 PBA",
-                    FuelConsumptionFor100Km = 6.6,
+                    MeduimFuelConsumption = 6.6,
                     FuelTankCapacity = 35,
                     ManufacturedYear = 2019,
                 },
@@ -141,7 +141,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Prado",
                     Color = "Black",
                     Number = "01 149 PBA",
-                    FuelConsumptionFor100Km = 11.4,
+                    MeduimFuelConsumption = 11.4,
                     FuelTankCapacity = 90,
                     ManufacturedYear = 2019,
                 },
@@ -150,7 +150,7 @@ namespace CheckDrive.Api.Extensions
                     Model = "Cadillac",
                     Color = "Black",
                     Number = "01 150 PBA",
-                    FuelConsumptionFor100Km = 10.7,
+                    MeduimFuelConsumption = 10.7,
                     FuelTankCapacity = 117,
                     ManufacturedYear = 2019,
                 },
@@ -282,7 +282,7 @@ namespace CheckDrive.Api.Extensions
 
         private static void CreateDoctorReviews(CheckDriveDbContext context)
         {
-            if(!context.DoctorReviews.Any()) return;
+            if(context.DoctorReviews.Any()) return;
 
             var drivers = context.Drivers.ToList();
             var doctors = context.Doctors.ToList();
@@ -408,6 +408,7 @@ namespace CheckDrive.Api.Extensions
                     Status = status,
                     Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
                     Distance = _faker.Random.Int(50,100),
+                    MechanicHandoverId = mechanicsHandover.Id,
                 });
             }
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CheckDricer.Infrastructure.Persistence.Migrations
+namespace CheckDricer.Infrastructure.Persistence.Mihrations
 {
     [DbContext(typeof(CheckDriveDbContext))]
     partial class CheckDriveDbContextModelSnapshot : ModelSnapshot
@@ -81,14 +81,14 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<double>("FuelConsumptionFor100Km")
-                        .HasColumnType("float");
-
                     b.Property<double>("FuelTankCapacity")
                         .HasColumnType("float");
 
                     b.Property<int>("ManufacturedYear")
                         .HasColumnType("int");
+
+                    b.Property<double>("MeduimFuelConsumption")
+                        .HasColumnType("float");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -97,8 +97,8 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -192,7 +192,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -262,7 +261,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -301,7 +299,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -359,7 +356,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -404,24 +400,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role", (string)null);
-                });
-
-            modelBuilder.Entity("CheckDriver.Domain.Entities.Technician", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Technician", (string)null);
                 });
 
             modelBuilder.Entity("CheckDriver.Domain.Entities.Account", b =>
@@ -601,17 +579,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     b.Navigation("Operator");
                 });
 
-            modelBuilder.Entity("CheckDriver.Domain.Entities.Technician", b =>
-                {
-                    b.HasOne("CheckDriver.Domain.Entities.Account", "Account")
-                        .WithMany("Technicians")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
             modelBuilder.Entity("CheckDriver.Domain.Entities.Account", b =>
                 {
                     b.Navigation("Dispatchers");
@@ -623,8 +590,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     b.Navigation("Mechanics");
 
                     b.Navigation("Operators");
-
-                    b.Navigation("Technicians");
                 });
 
             modelBuilder.Entity("CheckDriver.Domain.Entities.Car", b =>

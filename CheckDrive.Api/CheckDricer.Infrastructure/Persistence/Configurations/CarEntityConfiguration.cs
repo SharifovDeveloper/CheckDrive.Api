@@ -20,7 +20,7 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(x => x.Number)
-                .HasMaxLength(8)
+                .HasMaxLength(10)
                 .IsRequired();
 
             builder.Property(x => x.ManufacturedYear)

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CheckDricer.Infrastructure.Persistence.Migrations
+namespace CheckDricer.Infrastructure.Persistence.Mihrations
 {
     /// <inheritdoc />
-    public partial class Initial_Create : Migration
+    public partial class Initial_create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,8 +19,8 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Model = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Color = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
-                    FuelConsumptionFor100Km = table.Column<double>(type: "float", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    MeduimFuelConsumption = table.Column<double>(type: "float", nullable: false),
                     FuelTankCapacity = table.Column<double>(type: "float", nullable: false),
                     ManufacturedYear = table.Column<int>(type: "int", nullable: false)
                 },
@@ -163,32 +163,13 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Technician",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Technician", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Technician_Account_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Account",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DoctorReview",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsHealthy = table.Column<bool>(type: "bit", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false)
@@ -215,7 +196,7 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsHanded = table.Column<bool>(type: "bit", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MechanicId = table.Column<int>(type: "int", nullable: false),
@@ -288,7 +269,7 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OilAmount = table.Column<double>(type: "float", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OperatorId = table.Column<int>(type: "int", nullable: false),
@@ -316,7 +297,7 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Distance = table.Column<double>(type: "float", nullable: false),
@@ -421,11 +402,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
                 name: "IX_OperatorReview_OperatorId",
                 table: "OperatorReview",
                 column: "OperatorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Technician_AccountId",
-                table: "Technician",
-                column: "AccountId");
         }
 
         /// <inheritdoc />
@@ -442,9 +418,6 @@ namespace CheckDricer.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "OperatorReview");
-
-            migrationBuilder.DropTable(
-                name: "Technician");
 
             migrationBuilder.DropTable(
                 name: "Dispatcher");
