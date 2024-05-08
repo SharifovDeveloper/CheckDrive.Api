@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public double OilAmount { get; set; }
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
         public Status Status { get; set; }
         public DateTime Date { get; set; }
 
