@@ -14,7 +14,6 @@ namespace CheckDricer.Infrastructure.Persistence
         public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<Operator> Operators { get; set; }
         public virtual DbSet<Dispatcher> Dispatchers { get; set; }
-        public virtual DbSet<Technician> Technicianes { get; set; }
         public virtual DbSet<DoctorReview> DoctorReviews { get; set; }
         public virtual DbSet<OperatorReview> OperatorReviews { get; set; }
         public virtual DbSet<MechanicHandover> MechanicsHandovers { get; set; }
