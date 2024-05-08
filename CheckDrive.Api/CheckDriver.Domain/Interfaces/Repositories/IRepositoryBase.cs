@@ -1,6 +1,8 @@
-﻿namespace CheckDriver.Domain.Interfaces.Repositories
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Interfaces.Repositories
 {
-    public interface IRepositoryBase<T>
+    public interface IRepositoryBase<T> where T : EntityBase
     {
         Task<IEnumerable<T>> FindAllAsync();
         Task<T> FindByIdAsync(int id);

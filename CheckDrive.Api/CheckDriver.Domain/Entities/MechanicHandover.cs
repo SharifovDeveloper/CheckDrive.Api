@@ -1,8 +1,9 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Entities
 {
-    public class MechanicHandover
+    public class MechanicHandover : EntityBase
     {
-        public int Id { get; set; }
         public bool IsHanded { get; set; }
         public string? Comments { get; set; }
         public Status Status { get; set; }
