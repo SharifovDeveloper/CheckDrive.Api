@@ -1,4 +1,4 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿    namespace CheckDriver.Domain.Entities
 {
     public class DispatcherReview
     {

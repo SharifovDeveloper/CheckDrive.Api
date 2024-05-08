@@ -1,6 +1,10 @@
 ﻿namespace CheckDrive.Api.Extensions
 {
-    public class StringExtension
+    public static class StringExtensions
     {
+        public static string FirstLetterToUpper(this string str)
+        {
+            return str[..1].ToUpper() + str[1..].ToLower();
+        }
     }
 }
