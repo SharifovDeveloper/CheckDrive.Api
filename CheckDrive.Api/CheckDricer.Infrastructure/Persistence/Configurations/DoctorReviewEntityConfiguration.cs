@@ -15,8 +15,7 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(x => x.Comments)
-                .HasMaxLength(255)
-                .IsRequired();
+                .HasMaxLength(255);
 
             builder.HasOne(x => x.Driver)
                 .WithMany(a => a.DoctorReviews)
