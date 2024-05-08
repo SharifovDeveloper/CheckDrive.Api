@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDricer.Infrastructure", "CheckDricer.Infrastructure\CheckDricer.Infrastructure.csproj", "{08B1A074-5F04-4301-8621-F57040FE99B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Infrastructure", "CheckDricer.Infrastructure\CheckDrive.Infrastructure.csproj", "{08B1A074-5F04-4301-8621-F57040FE99B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDriver.Domain", "CheckDriver.Domain\CheckDriver.Domain.csproj", "{200CCB5F-9247-4D3D-96BE-317E01064EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Domain", "CheckDriver.Domain\CheckDrive.Domain.csproj", "{200CCB5F-9247-4D3D-96BE-317E01064EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDriver.Services", "CheckDriver.Services\CheckDriver.Services.csproj", "{6A3D09BB-A142-46B5-B50C-1510533019DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Services", "CheckDriver.Services\CheckDrive.Services.csproj", "{6A3D09BB-A142-46B5-B50C-1510533019DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

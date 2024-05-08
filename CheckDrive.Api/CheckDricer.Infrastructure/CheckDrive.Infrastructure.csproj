@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CheckDriver.Domain\CheckDriver.Domain.csproj" />
+    <ProjectReference Include="..\CheckDriver.Domain\CheckDrive.Domain.csproj" />
   </ItemGroup>
 
 </Project>
