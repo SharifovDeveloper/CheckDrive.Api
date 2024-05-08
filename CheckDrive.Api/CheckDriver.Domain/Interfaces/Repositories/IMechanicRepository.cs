@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CheckDriver.Domain.Entities;
 
 namespace CheckDriver.Domain.Interfaces.Repositories
 {
-    internal class IMechanicRepository
+    public interface IMechanicRepository : IRepositoryBase<Mechanic>
     {
     }
 }
