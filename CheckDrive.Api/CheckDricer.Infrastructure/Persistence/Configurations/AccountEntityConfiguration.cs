@@ -54,10 +54,6 @@ namespace CheckDricer.Infrastructure.Persistence.Configurations
             builder.HasMany(a => a.Doctors)
                 .WithOne(x => x.Account)
                 .HasForeignKey(x => x.AccountId);
-
-            builder.HasMany(a => a.Technicians)
-                .WithOne(x => x.Account)
-                .HasForeignKey(x => x.AccountId);
         }
     }
 }

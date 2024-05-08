@@ -1,12 +1,13 @@
-﻿namespace CheckDriver.Domain.Entities
-{
-    public class Mechanic
-    {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
-        public Account? Account { get; set; }
+﻿using CheckDriver.Domain.Common;
 
-        public ICollection<DispatcherReview>? DispetcherReviews { get; set; }
-        public ICollection<MechanicHandover>? MechanicHandovers { get; set; }
+namespace CheckDriver.Domain.Entities
+{
+    public class Mechanic : EntityBase
+    {
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
+
+        public virtual ICollection<DispatcherReview> DispetcherReviews { get; set; }
+        public virtual ICollection<MechanicHandover> MechanicHandovers { get; set; }
     }
 }

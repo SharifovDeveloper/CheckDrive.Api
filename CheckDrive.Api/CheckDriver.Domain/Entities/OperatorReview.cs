@@ -1,10 +1,11 @@
-﻿namespace CheckDriver.Domain.Entities
+﻿using CheckDriver.Domain.Common;
+
+namespace CheckDriver.Domain.Entities
 {
-    public class OperatorReview
+    public class OperatorReview : EntityBase
     {
-        public int Id { get; set; }
         public double OilAmount { get; set; }
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
         public Status Status { get; set; }
         public DateTime Date { get; set; }
 
