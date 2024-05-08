@@ -1,5 +1,4 @@
-﻿using CheckDriver.Domain.Common;
-
+using CheckDriver.Domain.Common;
 namespace CheckDriver.Domain.Entities
 {
     public class DispatcherReview : EntityBase
