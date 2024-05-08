@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CheckDricer.Infrastructure\CheckDricer.Infrastructure.csproj" />
+    <ProjectReference Include="..\CheckDricer.Infrastructure\CheckDrive.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
