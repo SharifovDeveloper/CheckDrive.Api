@@ -9,12 +9,12 @@
         public DateTime Date { get; set; }
 
         public int MechanicId { get; set; }
-        public Mechanic? Mechanic { get; set; }
+        public Mechanic Mechanic { get; set; }
         public int CarId { get; set; }
-        public Car? Car { get; set; }
+        public Car Car { get; set; }
         public int DriverId { get; set; }
-        public Driver? Driver { get; set; }
+        public Driver Driver { get; set; }
 
-        public ICollection<MechanicAcceptance>? MechanicAcceptances { get; set; }
+        public virtual ICollection<MechanicAcceptance> MechanicAcceptances { get; set; }
     }
 }
