@@ -1,16 +1,19 @@
-using CheckDricer.Infrastructure.Persistence;
 using CheckDrive.Api.Extensions;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.StaticFiles;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog();
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureDatabaseContext();
+builder.Services.AddEndpointsApiExplorer()
+        .AddSwaggerGen()
+        .AddSingleton<FileExtensionContentTypeProvider>()
+        .ConfigureLogger()
+        .ConfigureDatabaseContext();
 
 var app = builder.Build();
 
