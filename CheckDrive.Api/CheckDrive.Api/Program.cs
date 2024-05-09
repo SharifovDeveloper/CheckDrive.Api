@@ -1,4 +1,5 @@
 using CheckDrive.Api.Extensions;
+using CheckDrive.Api.Middlewares;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -23,6 +24,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
