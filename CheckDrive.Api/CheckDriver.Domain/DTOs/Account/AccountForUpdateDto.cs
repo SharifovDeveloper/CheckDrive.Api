@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.DTOs.Account
 {
     public class AccountForUpdateDto
     {
+        public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
@@ -11,6 +12,6 @@ namespace CheckDrive.Domain.DTOs.Account
         public string LastName { get; set; }
         public DateTime Bithdate { get; set; }
 
-        public RoleDto RoleDto { get; set; }
+        public int RoleId { get; set; }
     }
 }

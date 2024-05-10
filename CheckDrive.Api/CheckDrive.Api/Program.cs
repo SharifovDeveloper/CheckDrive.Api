@@ -1,6 +1,7 @@
 using CheckDrive.Api.Extensions;
 using CheckDrive.Api.Middlewares;
 using Microsoft.AspNetCore.StaticFiles;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,13 +9,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
+                .AddXmlSerializerFormatters();
+
 builder.Services.AddEndpointsApiExplorer()
+        .AddEndpointsApiExplorer()
         .AddSwaggerGen()
         .AddSingleton<FileExtensionContentTypeProvider>()
         .ConfigureLogger()
-        .ConfigureDatabaseContext();
+        .ConfigureRepositories()
+        .ConfigureDatabaseContext()
+        .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 
 var app = builder.Build();
 

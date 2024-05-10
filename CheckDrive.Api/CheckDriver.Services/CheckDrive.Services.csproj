@@ -18,4 +18,9 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CheckDricer.Infrastructure\CheckDrive.Infrastructure.csproj" />
+    <ProjectReference Include="..\CheckDriver.Domain\CheckDrive.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

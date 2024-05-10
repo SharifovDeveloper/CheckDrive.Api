@@ -11,6 +11,6 @@ namespace CheckDrive.Domain.DTOs.Account
         public string LastName { get; set; }
         public DateTime Bithdate { get; set; }
 
-        public RoleDto RoleDto { get; set; }
+        public int RoleId { get; set; }
     }
 }
