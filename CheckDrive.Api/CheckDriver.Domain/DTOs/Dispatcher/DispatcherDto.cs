@@ -5,6 +5,7 @@ namespace CheckDrive.Domain.DTOs.Dispatcher
     public class DispatcherDto
     {
         public int Id { get; set; }
-        public AccountDto AccountDto { get; set; }
+        public int AccountId { get; set; }
+        public AccountDto Account { get; set; }
     }
 }

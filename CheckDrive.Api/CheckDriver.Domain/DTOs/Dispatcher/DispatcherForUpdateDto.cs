@@ -1,9 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Dispatcher
+﻿namespace CheckDrive.Domain.DTOs.Dispatcher
 {
     public class DispatcherForUpdateDto
     {
-        public AccountForUpdateDto AccountForUpdateDto { get; set; }
+        public int Id { get; set; }
+        public int AccountId { get; set; }
     }
 }
