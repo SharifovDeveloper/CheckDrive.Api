@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IDispatcherService
     {
-        Task<IEnumerable<DispatcherDto>> GetAllDispatchersAsync();
         Task<GetBaseResponse<DispatcherDto>> GetDispatchersAsync(DispatcherResourceParameters resourceParameters);
         Task<DispatcherDto?> GetDispatcherByIdAsync(int id);
         Task<DispatcherDto> CreateDispatcherAsync(DispatcherForCreateDto dispatcherForCreate);

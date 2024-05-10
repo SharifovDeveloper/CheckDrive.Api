@@ -14,10 +14,11 @@ namespace CheckDrive.Api.Extensions
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<IDispatcherRepository, DispatcherRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICarService, CarService>();
-            
+            services.AddScoped<IDispatcherService, DispatcherService>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>
