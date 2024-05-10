@@ -3,65 +3,65 @@ using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CheckDrive.Api.Controllers
+namespace CheckDrive.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class AccountController : Controller
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class AccountController : Controller
+    private readonly IAccountService _accountService;
+
+    public AccountController(IAccountService accountService)
     {
-        private readonly IAccountService _accountService;
+        _accountService = accountService;
+    }
 
-        public AccountController(IAccountService accountService)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<AccountDto>>> GetAccountsAsync(
+        [FromQuery] AccountResourceParameters accountResource)
+    {
+        var accounts = await _accountService.GetAccountsAsync(accountResource);
+
+        return Ok(accounts);
+    }
+    [HttpGet("{id}", Name = "GetAccountById")]
+    public async Task<ActionResult<AccountDto>> GetAccountByIdAsync(int id)
+    {
+        var account = await _accountService.GetAccountByIdAsync(id);
+
+        if (account is null)
+            return NotFound($"Account with id: {id} does not exist.");
+
+        return Ok(account);
+    }
+    [HttpPost]
+    public async Task<ActionResult> PostAsync([FromBody] AccountForCreateDto forCreateDto)
+    {
+        var createdAccount = await _accountService.CreateAccountAsync(forCreateDto);
+
+        return CreatedAtAction(nameof(GetAccountByIdAsync), new { createdAccount.Id }, createdAccount);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto forUpdateDto)
+    {
+        if (id != forUpdateDto.Id)
         {
-            _accountService = accountService;
+            return BadRequest(
+                $"Route id: {id} does not match with parameter id: {forUpdateDto.Id}.");
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountDto>>> GetAccountsAsync(
-            [FromQuery] AccountResourceParameters accountResource)
-        {
-            var accounts = await _accountService.GetAccountsAsync(accountResource);
+        var updateAccount = await _accountService.UpdateAccountAsync(forUpdateDto);
 
-            return Ok(accounts);
-        }
-        [HttpGet("{id}", Name = "GetAccountById")]
-        public async Task<ActionResult<AccountDto>> GetAccountByIdAsync(int id)
-        {
-            var account = await _accountService.GetAccountByIdAsync(id);
+        return Ok(updateAccount);
+    }
 
-            if (account is null)
-                return NotFound($"Account with id: {id} does not exist.");
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _accountService.DeleteAccountAsync(id);
 
-            return Ok(account);
-        }
-        [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] AccountForCreateDto forCreateDto)
-        {
-            var createdAccount = await _accountService.CreateAccountAsync(forCreateDto);
-
-            return CreatedAtAction(nameof(GetAccountByIdAsync), new { createdAccount.Id }, createdAccount);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto forUpdateDto)
-        {
-            if (id != forUpdateDto.Id)
-            {
-                return BadRequest(
-                    $"Route id: {id} does not match with parameter id: {forUpdateDto.Id}.");
-            }
-
-            var updateAccount = await _accountService.UpdateAccountAsync(forUpdateDto);
-
-            return Ok(updateAccount);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await _accountService.DeleteAccountAsync(id);
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }
+
