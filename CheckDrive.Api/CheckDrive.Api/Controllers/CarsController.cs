@@ -7,11 +7,11 @@ namespace CheckDrive.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CarController : Controller
+public class CarsController : Controller
 {
     private readonly ICarService _carService;
 
-    public CarController(ICarService carService)
+    public CarsController(ICarService carService)
     {
         _carService = carService;
     }

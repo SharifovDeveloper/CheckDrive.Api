@@ -11,7 +11,7 @@
         public double? FuelSpendedGreaterThan { get; set; }
         public double? DistanceCovered { get; set; }
         public double? DistanceCoveredLessThan { get; set; }
-        public double? DistanceCoveredThan { get; set; }
+        public double? DistanceCoveredGreaterThan { get; set; }
         public DateTime? Date { get; set; }
         public override string OrderBy { get; set; } = "id";
     }
