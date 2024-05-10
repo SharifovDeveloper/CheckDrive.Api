@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface ICarService
     {
-        Task<IEnumerable<CarDto>> GetAllCarsAsync();
         Task<GetBaseResponse<CarDto>> GetCarsAsync(CarResourceParameters resourceParameters);
         Task<CarDto?> GetCarByIdAsync(int id);
         Task<CarDto> CreateCarAsync(CarForCreateDto carForCreate);

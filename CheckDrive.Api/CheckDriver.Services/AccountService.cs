@@ -23,27 +23,7 @@ namespace CheckDrive.Services
 
         public async Task<GetBaseResponse<AccountDto>> GetAccountsAsync(AccountResourceParameters resourceParameters)
         {
-            var query = _context.Accounts.AsQueryable();
-
-            if (resourceParameters.RoleId != 0 && resourceParameters.RoleId is not null)
-            {
-                query = query.Where(x => x.RoleId == resourceParameters.RoleId);
-            }
-            if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
-            {
-                query = resourceParameters.OrderBy.ToLowerInvariant() switch
-                {
-                    "firstname" => query.OrderBy(x => x.FirstName),
-                    "firstnamedesc" => query.OrderByDescending(x => x.FirstName),
-                    "lastname" => query.OrderBy(x => x.LastName),
-                    "lastnamedesc" => query.OrderByDescending(x => x.LastName),
-                    "login" => query.OrderBy(x => x.Login),
-                    "logindesc" => query.OrderByDescending(x => x.Login),
-                    "phonenumber" => query.OrderBy(x => x.PhoneNumber),
-                    "phonenumberdesc" => query.OrderByDescending(x => x.PhoneNumber),
-                    _ => query.OrderBy(x => x.Id),
-                };
-            }
+            var query = GetQueryAccountResParameters(resourceParameters);
 
             var accounts = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
@@ -97,6 +77,33 @@ namespace CheckDrive.Services
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<Account> GetQueryAccountResParameters(
+          AccountResourceParameters resourceParameters)
+        {
+            var query = _context.Accounts.AsQueryable();
+
+            if (resourceParameters.RoleId != 0 && resourceParameters.RoleId is not null)
+            {
+                query = query.Where(x => x.RoleId == resourceParameters.RoleId);
+            }
+            if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
+            {
+                query = resourceParameters.OrderBy.ToLowerInvariant() switch
+                {
+                    "firstname" => query.OrderBy(x => x.FirstName),
+                    "firstnamedesc" => query.OrderByDescending(x => x.FirstName),
+                    "lastname" => query.OrderBy(x => x.LastName),
+                    "lastnamedesc" => query.OrderByDescending(x => x.LastName),
+                    "login" => query.OrderBy(x => x.Login),
+                    "logindesc" => query.OrderByDescending(x => x.Login),
+                    "phonenumber" => query.OrderBy(x => x.PhoneNumber),
+                    "phonenumberdesc" => query.OrderByDescending(x => x.PhoneNumber),
+                    _ => query.OrderBy(x => x.Id),
+                };
+            }
+            return query;
         }
     }
 }
