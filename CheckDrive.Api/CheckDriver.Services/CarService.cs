@@ -61,9 +61,9 @@ public class CarService : ICarService
         _context.Cars.Update(carEntity);
         await _context.SaveChangesAsync();
 
-        var accountDto = _mapper.Map<CarDto>(carEntity);
+        var carDto = _mapper.Map<CarDto>(carEntity);
 
-        return accountDto;
+        return carDto;
     }
 
     public async Task DeleteCarAsync(int id)

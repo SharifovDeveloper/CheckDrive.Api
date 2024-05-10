@@ -7,11 +7,11 @@ namespace CheckDrive.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AccountController : Controller
+public class AccountsController : Controller
 {
     private readonly IAccountService _accountService;
 
-    public AccountController(IAccountService accountService)
+    public AccountsController(IAccountService accountService)
     {
         _accountService = accountService;
     }
