@@ -1,4 +1,8 @@
 ﻿using CheckDricer.Infrastructure.Persistence;
+using CheckDricer.Infrastructure.Persistence.Repositories;
+using CheckDrive.Domain.Interfaces.Services;
+using CheckDrive.Services;
+using CheckDriver.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -6,6 +10,19 @@ namespace CheckDrive.Api.Extensions
 {
     public static class ConfigureServicesExtensions
     {
+        public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddControllers()
+              .AddNewtonsoftJson(options =>
+                  options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore
+               );
+
+            return services;
+        }
         public static IServiceCollection ConfigureDatabaseContext(this IServiceCollection services)
         {
             var builder = WebApplication.CreateBuilder();

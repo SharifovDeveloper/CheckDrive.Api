@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IAccountService
     {
-        Task<IEnumerable<AccountDto>> GetAllAccountsAsync();
         Task<GetBaseResponse<AccountDto>> GetAccountsAsync(AccountResourceParameters resourceParameters);
         Task<AccountDto?> GetAccountByIdAsync(int id);
         Task<AccountDto> CreateAccountAsync(AccountForCreateDto accountForCreate);
