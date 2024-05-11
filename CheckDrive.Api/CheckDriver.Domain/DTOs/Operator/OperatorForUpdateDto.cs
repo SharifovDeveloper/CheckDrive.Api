@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.DTOs.Operator
 {
     public class OperatorForUpdateDto
     {
-        public AccountForUpdateDto AccountForUpdateDto { get; set; }
+        public int Id { get; set; }
+        public int AccountId { get; set; }
     }
 }
