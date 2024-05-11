@@ -1,5 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.MechanicHandover;
-using CheckDriver.Domain.Entities;
+﻿using CheckDriver.Domain.Entities;
 
 namespace CheckDrive.Domain.DTOs.MechanicAcceptance
 {
@@ -11,6 +10,6 @@ namespace CheckDrive.Domain.DTOs.MechanicAcceptance
         public DateTime Date { get; set; }
         public double Distance { get; set; }
 
-        public MechanicHandoverDto MechanicHandoverDto { get; set; }
+        public int MechanicHandoverId { get; set; }
     }
 }

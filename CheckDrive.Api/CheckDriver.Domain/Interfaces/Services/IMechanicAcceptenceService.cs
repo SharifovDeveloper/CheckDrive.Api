@@ -4,9 +4,8 @@ using CheckDrive.Domain.Responses;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {
-    public interface IMechanicAcceptenceService
+    public interface IMechanicAcceptanceService
     {
-        Task<IEnumerable<MechanicAcceptanceDto>> GetAllMechanicAcceptencesAsync();
         Task<GetBaseResponse<MechanicAcceptanceDto>> GetMechanicAcceptencesAsync(MechanicAcceptanceResourceParameters resourceParameters);
         Task<MechanicAcceptanceDto?> GetMechanicAcceptenceByIdAsync(int id);
         Task<MechanicAcceptanceDto> CreateMechanicAcceptenceAsync(MechanicAcceptanceForCreateDto acceptanceForCreateDto);
