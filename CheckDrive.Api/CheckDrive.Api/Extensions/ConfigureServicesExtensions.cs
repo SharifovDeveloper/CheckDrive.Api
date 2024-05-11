@@ -23,6 +23,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IMechanicRepository, MechanicRepository>();
             services.AddScoped<IMechanicAcceptenceRepository, MechanicAcceptenceRepository>();
             services.AddScoped<IMechanicHandoverRepository, MechanicHandoverRepository>();
+            services.AddScoped<IOperatorRepository, OperatorRepository>();
 
 
             services.AddScoped<IAccountService, AccountService>();
@@ -35,6 +36,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IMechanicService, MechanicService>();
             services.AddScoped<IMechanicAcceptanceService, MechanicAcceptanceService>();
             services.AddScoped<IMechanicHandoverService, MechanicHandoverService>();
+            services.AddScoped<IOperatorService, OperatorService>();
 
 
 

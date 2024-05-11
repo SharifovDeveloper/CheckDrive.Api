@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IOperatorService
     {
-        Task<IEnumerable<OperatorDto>> GetAllOperatorsAsync();
         Task<GetBaseResponse<OperatorDto>> GetOperatorsAsync(OperatorResourceParameters resourceParameters);
         Task<OperatorDto?> GetOperatorByIdAsync(int id);
         Task<OperatorDto> CreateOperatorAsync(OperatorForCreateDto operatorForCreate);
