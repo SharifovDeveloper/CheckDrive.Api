@@ -12,7 +12,7 @@ namespace CheckDrive.Domain.DTOs.OperatorReview
         public Status Status { get; set; }
         public DateTime Date { get; set; }
 
-        public OperatorDto OperatorDto { get; set; }
-        public DriverDto DriverDto { get; set; }
+        public int OperatorId { get; set; }
+        public int DriverId { get; set; }
     }
 }
