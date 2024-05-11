@@ -5,6 +5,7 @@ namespace CheckDrive.Domain.DTOs.Mechanic
     public class MechanicDto
     {
         public int Id { get; set; }
+        public int AccountId { get; set; }
         public AccountDto AccountDto { get; set; }
     }
 }

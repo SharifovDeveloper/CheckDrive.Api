@@ -4,6 +4,6 @@ namespace CheckDrive.Domain.DTOs.Mechanic
 {
     public class MechanicForCreateDto
     {
-        public AccountForCreateDto AccountForCreateDto { get; set; }
+        public int AccountId { get; set; }
     }
 }
