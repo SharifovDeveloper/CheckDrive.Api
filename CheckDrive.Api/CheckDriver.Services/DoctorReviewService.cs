@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CheckDricer.Infrastructure.Persistence;
 using CheckDrive.Domain.DTOs.DoctorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;

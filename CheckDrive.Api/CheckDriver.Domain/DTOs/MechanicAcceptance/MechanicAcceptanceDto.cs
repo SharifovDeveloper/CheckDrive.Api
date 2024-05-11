@@ -13,6 +13,7 @@ namespace CheckDrive.Domain.DTOs.MechanicAcceptance
         public double Distance { get; set; }
 
 
-        public MechanicHandoverDto MechanicHandoverDto { get; set; }
+        public int MechanicHandoverId { get; set; }
+        public MechanicHandoverDto MechanicHandover { get; set; }
     }
 }
