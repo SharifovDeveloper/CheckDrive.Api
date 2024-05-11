@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IMechanicService
     {
-        Task<IEnumerable<MechanicDto>> GetAllMechanicesAsync();
         Task<GetBaseResponse<MechanicDto>> GetMechanicesAsync(MechanicResourceParameters resourceParameters);
         Task<MechanicDto?> GetMechanicByIdAsync(int id);
         Task<MechanicDto> CreateMechanicAsync(MechanicForCreateDto mechanicForCreate);
