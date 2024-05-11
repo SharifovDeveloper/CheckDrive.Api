@@ -2,7 +2,7 @@
 using CheckDriver.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CheckDricer.Infrastructure.Persistence.Repositories
+namespace CheckDriver.Infrastructure.Persistence.Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
     {

@@ -1,7 +1,6 @@
 ﻿using Bogus;
-using CheckDricer.Infrastructure.Persistence;
 using CheckDriver.Domain.Entities;
-using System.Data;
+using CheckDriver.Infrastructure.Persistence;
 
 namespace CheckDrive.Api.Extensions
 {

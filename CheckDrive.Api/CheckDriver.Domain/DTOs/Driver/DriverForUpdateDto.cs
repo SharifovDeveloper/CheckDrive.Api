@@ -1,9 +1,11 @@
-﻿using CheckDrive.Domain.DTOs.Account;
+﻿
+using CheckDrive.Domain.DTOs.Account;
 
 namespace CheckDrive.Domain.DTOs.Driver
 {
     public class DriverForUpdateDto
     {
-        public AccountForUpdateDto AccountForUpdateDto { get; set; }
+        public int Id { get; set; }
+        public int AccountId { get; set; }
     }
 }

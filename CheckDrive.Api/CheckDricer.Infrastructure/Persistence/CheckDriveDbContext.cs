@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace CheckDricer.Infrastructure.Persistence
+namespace CheckDriver.Infrastructure.Persistence
 {
     public class CheckDriveDbContext : DbContext
     {

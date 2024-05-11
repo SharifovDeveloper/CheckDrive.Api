@@ -1,8 +1,9 @@
-﻿using CheckDricer.Infrastructure.Persistence;
-using CheckDricer.Infrastructure.Persistence.Repositories;
+﻿using CheckDricer.Infrastructure.Persistence.Repositories;
 using CheckDrive.Domain.Interfaces.Services;
+using CheckDrive.Infrastructure.Persistence.Repositories;
 using CheckDrive.Services;
 using CheckDriver.Domain.Interfaces.Repositories;
+using CheckDriver.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -17,12 +18,14 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IDispatcherRepository, DispatcherRepository>();
             services.AddScoped<IDispatcherReviewRepository, DispatcherReviewRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IDriverRepository, DriverRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IDispatcherService, DispatcherService>();
             services.AddScoped<IDispatcherReviewService, DispatcherReviewService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IDriverService, DriverService>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>
