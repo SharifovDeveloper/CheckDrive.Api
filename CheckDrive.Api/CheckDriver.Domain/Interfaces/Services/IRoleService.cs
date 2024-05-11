@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IRoleService
     {
-        Task<IEnumerable<RoleDto>> GetAllRolesAsync();
         Task<GetBaseResponse<RoleDto>> GetRolesAsync(RoleResourceParameters resourceParameters);
         Task<RoleDto?> GetRoleByIdAsync(int id);
         Task<RoleDto> CreateRoleAsync(RoleForCreateDto roleForCreate);
