@@ -8,11 +8,11 @@ namespace CheckDrive.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 
-public class MechanicController : Controller
+public class MechanicasController : Controller
 {
     private readonly IMechanicService _mechanicService;
 
-    public MechanicController(IMechanicService mechanicService)
+    public MechanicasController(IMechanicService mechanicService)
     {
         _mechanicService = mechanicService;
     }
