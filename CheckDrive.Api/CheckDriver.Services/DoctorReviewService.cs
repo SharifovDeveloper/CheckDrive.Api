@@ -6,6 +6,7 @@ using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDriver.Domain.Entities;
+using CheckDriver.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace CheckDrive.Services;
