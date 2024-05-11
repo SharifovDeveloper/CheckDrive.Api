@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.DTOs.Doctor
 {
     public class DoctorForUpdateDto
     {
-        public AccountForUpdateDto AccountForUpdateDto { get; set; }
+        public int Id { get; set; }
+        public int AccountId { get; set; }
     }
 }
