@@ -1,7 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.Car;
-using CheckDrive.Domain.DTOs.Driver;
-using CheckDrive.Domain.DTOs.Mechanic;
-using CheckDriver.Domain.Entities;
+﻿using CheckDriver.Domain.Entities;
 
 namespace CheckDrive.Domain.DTOs.MechanicHandover
 {
@@ -12,8 +9,8 @@ namespace CheckDrive.Domain.DTOs.MechanicHandover
         public Status Status { get; set; }
         public DateTime Date { get; set; }
 
-        public MechanicDto MechanicDto { get; set; }
-        public CarDto CarDto { get; set; }
-        public DriverDto DriverDto { get; set; }
+        public int MechanicId { get; set; }
+        public int CarId { get; set; }
+        public int DriverId { get; set; }
     }
 }

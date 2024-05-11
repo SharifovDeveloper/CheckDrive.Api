@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IMechanicHandoverService
     {
-        Task<IEnumerable<MechanicHandoverDto>> GetAllMechanicHandoversAsync();
         Task<GetBaseResponse<MechanicHandoverDto>> GetMechanicHandoversAsync(MechanicHandoverResourceParameters resourceParameters);
         Task<MechanicHandoverDto?> GetMechanicHandoverByIdAsync(int id);
         Task<MechanicHandoverDto> CreateMechanicHandoverAsync(MechanicHandoverForCreateDto handoverForCreateDto);

@@ -7,10 +7,10 @@ namespace CheckDrive.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class DoctorReviewController : Controller
+public class DoctorReviewsController : Controller
 {
     private readonly IDoctorReviewService _doctorReviewService;
-    public DoctorReviewController(IDoctorReviewService doctorReviewService)
+    public DoctorReviewsController(IDoctorReviewService doctorReviewService)
     {
         _doctorReviewService = doctorReviewService;
     }
