@@ -6,6 +6,5 @@ namespace CheckDrive.Domain.DTOs.Dispatcher
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
-        public AccountDto Account { get; set; }
     }
 }

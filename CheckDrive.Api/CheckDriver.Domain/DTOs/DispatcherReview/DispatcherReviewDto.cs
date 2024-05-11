@@ -15,9 +15,5 @@ namespace CheckDrive.Domain.DTOs.DispatcherReview
         public int OperatorId { get; set; }
         public int MechanicId { get; set; }
         public int DriverId { get; set; }
-        public DispatcherDto Dispatcher { get; set; }
-        public OperatorDto Operator { get; set; }
-        public MechanicDto Mechanic { get; set; }
-        public DriverDto Driver { get; set; }
     }
 }

@@ -14,8 +14,8 @@ namespace CheckDrive.Domain.DTOs.MechanicHandover
         public Status Status { get; set; }
         public DateTime Date { get; set; }
 
-        public MechanicDto Mechanic { get; set; }
-        public CarDto Car { get; set; }
-        public DriverDto Driver { get; set; }
+        public int MechanicId { get; set; }
+        public int CarId { get; set; }
+        public int DriverId { get; set; }
     }
 }
