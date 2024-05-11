@@ -7,11 +7,11 @@ namespace CheckDrive.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 
-public class OperatorController : Controller
+public class OperatorsController : Controller
 {
     private readonly IOperatorService _operatorService;
 
-    public OperatorController(IOperatorService operatorService)
+    public OperatorsController(IOperatorService operatorService)
     {
         _operatorService = operatorService;
     }
