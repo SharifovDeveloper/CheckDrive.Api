@@ -1,7 +1,7 @@
-﻿using CheckDricer.Infrastructure.Persistence;
-using CheckDricer.Infrastructure.Persistence.Repositories;
-using CheckDriver.Domain.Entities;
+﻿using CheckDriver.Domain.Entities;
 using CheckDriver.Domain.Interfaces.Repositories;
+using CheckDriver.Infrastructure.Persistence;
+using CheckDriver.Infrastructure.Persistence.Repositories;
 
 namespace CheckDrive.Infrastructure.Persistence.Repositories
 {

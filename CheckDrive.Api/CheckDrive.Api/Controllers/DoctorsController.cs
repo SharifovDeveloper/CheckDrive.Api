@@ -53,9 +53,9 @@ public class DoctorsController : Controller
                 $"Route id: {id} does not match with parameter id: {doctorforUpdateDto.Id}.");
         }
 
-        var updateDispatcher = await _doctorService.UpdateDoctorAsync(doctorforUpdateDto);
+        var updateDoctor = await _doctorService.UpdateDoctorAsync(doctorforUpdateDto);
 
-        return Ok(updateDispatcher);
+        return Ok(updateDoctor);
     }
 
     [HttpDelete("{id}")]

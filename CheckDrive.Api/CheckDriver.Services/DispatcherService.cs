@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using CheckDricer.Infrastructure.Persistence;
-using CheckDrive.Domain.DTOs.Account;
 using CheckDrive.Domain.DTOs.Dispatcher;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDriver.Domain.Entities;
+using CheckDriver.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace CheckDrive.Services;
@@ -23,20 +22,7 @@ public class DispatcherService : IDispatcherService
     }
     public async Task<GetBaseResponse<DispatcherDto>> GetDispatchersAsync(DispatcherResourceParameters resourceParameters)
     {
-        var query = _context.Dispatchers.AsQueryable();
-
-        if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
-        {
-            query = query.Where(x => x.AccountId == resourceParameters.AccountId);
-        }
-
-        if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
-        {
-            query = resourceParameters.OrderBy.ToLowerInvariant() switch
-            {
-                _ => query.OrderBy(x => x.Id),
-            };
-        }
+        var query = GetQueryDispatcherResParameters(resourceParameters);
 
         var dispatchers = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
@@ -90,6 +76,19 @@ public class DispatcherService : IDispatcherService
         }
 
         await _context.SaveChangesAsync();
+    }
+
+    private IQueryable<Dispatcher> GetQueryDispatcherResParameters(
+           DispatcherResourceParameters resourceParameters)
+    {
+        var query = _context.Dispatchers.AsQueryable();
+
+        if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
+        {
+            query = query.Where(x => x.AccountId == resourceParameters.AccountId);
+        }
+
+        return query;
     }
 }
 

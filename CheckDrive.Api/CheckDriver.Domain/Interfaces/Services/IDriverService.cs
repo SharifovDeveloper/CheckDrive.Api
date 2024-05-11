@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IDriverService
     {
-        Task<IEnumerable<DriverDto>> GetAllDriversAsync();
         Task<GetBaseResponse<DriverDto>> GetDriversAsync(DriverResourceParameters resourceParameters);
         Task<DriverDto?> GetDriverByIdAsync(int id);
         Task<DriverDto> CreateDriverAsync(DriverForCreateDto driverForCreate);

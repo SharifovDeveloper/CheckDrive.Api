@@ -1,10 +1,7 @@
 ﻿using CheckDriver.Domain.Entities;
 using CheckDriver.Domain.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CheckDriver.Infrastructure.Persistence;
+using CheckDriver.Infrastructure.Persistence.Repositories;
 
 namespace CheckDricer.Infrastructure.Persistence.Repositories
 {
