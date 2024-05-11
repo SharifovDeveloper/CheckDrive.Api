@@ -23,7 +23,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
     public async Task<GetBaseResponse<DispatcherReviewDto>> GetDispatcherReviewsAsync(DispatcherReviewResourceParameters resourceParameters)
     {
-        var query = GetQueryCarResParameters(resourceParameters);
+        var query = GetQueryDispatcherReviewResParameters(resourceParameters);
 
         var dispatcherReviews = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
@@ -79,7 +79,7 @@ public class DispatcherReviewService : IDispatcherReviewService
         await _context.SaveChangesAsync();
     }
 
-    private IQueryable<DispatcherReview> GetQueryCarResParameters(
+    private IQueryable<DispatcherReview> GetQueryDispatcherReviewResParameters(
        DispatcherReviewResourceParameters dispatcherReviewParameters)
     {
         var query = _context.DispatchersReviews.AsQueryable();
