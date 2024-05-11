@@ -6,6 +6,5 @@ namespace CheckDrive.Domain.DTOs.Driver
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
-        public AccountDto Account { get; set; }
     }
 }
