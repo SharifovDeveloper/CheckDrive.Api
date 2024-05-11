@@ -1,14 +1,11 @@
-﻿using CheckDrive.Domain.DTOs.Doctor;
-using CheckDrive.Domain.DTOs.Driver;
-
-namespace CheckDrive.Domain.DTOs.DoctorReview
+﻿namespace CheckDrive.Domain.DTOs.DoctorReview
 {
     public class DoctorReviewForCreateDto
     {
         public bool IsHealthy { get; set; }
         public string? Comments { get; set; }
         public DateTime Date { get; set; }
-        public DriverDto DriverDto { get; set; }
-        public DoctorDto DoctorDto { get; set; }
+        public int DriverId { get; set; }
+        public int DoctorId { get; set; }
     }
 }

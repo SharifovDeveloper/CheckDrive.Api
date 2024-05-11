@@ -18,6 +18,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IDispatcherRepository, DispatcherRepository>();
             services.AddScoped<IDispatcherReviewRepository, DispatcherReviewRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<IDoctorReviewRepository,DoctorReviewRepository>();
             services.AddScoped<IDriverRepository, DriverRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
@@ -25,7 +26,9 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IDispatcherService, DispatcherService>();
             services.AddScoped<IDispatcherReviewService, DispatcherReviewService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IDoctorReviewService, DoctorReviewService>();
             services.AddScoped<IDriverService, DriverService>();
+
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>
