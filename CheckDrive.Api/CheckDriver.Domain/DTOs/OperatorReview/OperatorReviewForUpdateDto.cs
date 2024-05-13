@@ -6,6 +6,7 @@ namespace CheckDrive.Domain.DTOs.OperatorReview
 {
     public class OperatorReviewForUpdateDto
     {
+        public int Id { get; set; }
         public double OilAmount { get; set; }
         public string? Comments { get; set; }
         public Status Status { get; set; }
