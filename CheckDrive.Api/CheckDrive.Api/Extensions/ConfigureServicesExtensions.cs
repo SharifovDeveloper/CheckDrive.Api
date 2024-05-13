@@ -25,6 +25,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IMechanicHandoverRepository, MechanicHandoverRepository>();
             services.AddScoped<IOperatorRepository, OperatorRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IOperatorReviewRepository, OperatorReviewRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICarService, CarService>();
@@ -38,6 +39,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IMechanicHandoverService, MechanicHandoverService>();
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IOperatorReviewService,OperatorReviewService>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>
