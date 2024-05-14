@@ -1,6 +1,6 @@
 ﻿using Bogus;
-using CheckDriver.Domain.Entities;
-using CheckDriver.Infrastructure.Persistence;
+using CheckDrive.Domain.Entities;
+using CheckDrive.Infrastructure.Persistence;
 
 namespace CheckDrive.Api.Extensions
 {
@@ -72,9 +72,9 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var role in roles)
             {
-                var accountsCount = new Random().Next(5,10);
+                var accountsCount = new Random().Next(5, 10);
 
-                for(int i = 0; i < accountsCount; i++)
+                for (int i = 0; i < accountsCount; i++)
                 {
                     accounts.Add(new Account()
                     {
@@ -167,7 +167,7 @@ namespace CheckDrive.Api.Extensions
             var roles = context.Roles.ToList();
             List<Driver> drivers = new();
 
-            foreach(var account in accounts)
+            foreach (var account in accounts)
             {
                 var driverRole = roles.FirstOrDefault(r => r.Name == "Driver");
                 if (driverRole != null && account.RoleId == driverRole.Id)
@@ -281,17 +281,17 @@ namespace CheckDrive.Api.Extensions
 
         private static void CreateDoctorReviews(CheckDriveDbContext context)
         {
-            if(context.DoctorReviews.Any()) return;
+            if (context.DoctorReviews.Any()) return;
 
             var drivers = context.Drivers.ToList();
             var doctors = context.Doctors.ToList();
             List<DoctorReview> doctorReviews = new();
 
-            foreach (var doctor in doctors) 
+            foreach (var doctor in doctors)
             {
                 int doctorReviewsCount = new Random().Next(5, 10);
-                
-                for(int i = 0; i < doctorReviewsCount; i++)
+
+                for (int i = 0; i < doctorReviewsCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var isHealthy = _faker.Random.Bool();
@@ -314,17 +314,17 @@ namespace CheckDrive.Api.Extensions
 
         private static void CreateMechanicHandovers(CheckDriveDbContext context)
         {
-            if(context.MechanicsHandovers.Any()) return;
+            if (context.MechanicsHandovers.Any()) return;
 
             var cars = context.Cars.ToList();
             var drivers = context.Drivers.ToList();
             var mechanics = context.Mechanics.ToList();
             List<MechanicHandover> mechanicHandovers = new();
 
-            foreach(var mechanic in mechanics)
+            foreach (var mechanic in mechanics)
             {
                 var mechanicHandoversCount = new Random().Next(5, 10);
-                for(int i = 0; i < mechanicHandoversCount; i++)
+                for (int i = 0; i < mechanicHandoversCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var randomCar = _faker.PickRandom(cars);
@@ -357,10 +357,10 @@ namespace CheckDrive.Api.Extensions
             var drivers = context.Drivers.ToList();
             List<OperatorReview> operatorReviews = new();
 
-            foreach(var operatorr in operators)
+            foreach (var operatorr in operators)
             {
                 var operatorReviewsCount = new Random().Next(5, 10);
-                for(int i = 0; i < operatorReviewsCount; i++)
+                for (int i = 0; i < operatorReviewsCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var status = _faker.Random.Enum<Status>();
@@ -373,7 +373,7 @@ namespace CheckDrive.Api.Extensions
 
                     operatorReviews.Add(new OperatorReview()
                     {
-                        OilAmount = _faker.Random.Double(10,20),
+                        OilAmount = _faker.Random.Double(10, 20),
                         Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
                         Status = status,
                         Comments = comments,
@@ -394,7 +394,7 @@ namespace CheckDrive.Api.Extensions
             var mechanicsHandovers = context.MechanicsHandovers.ToList();
             List<MechanicAcceptance> mechanicAcceptances = new();
 
-            foreach(var mechanicsHandover in mechanicsHandovers)
+            foreach (var mechanicsHandover in mechanicsHandovers)
             {
                 var isAccepted = _faker.Random.Bool();
                 var comments = isAccepted ? "" : _faker.Lorem.Sentence();
@@ -406,18 +406,18 @@ namespace CheckDrive.Api.Extensions
                     Comments = comments,
                     Status = status,
                     Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
-                    Distance = _faker.Random.Int(50,100),
+                    Distance = _faker.Random.Int(50, 100),
                     MechanicHandoverId = mechanicsHandover.Id,
                 });
             }
 
-            context.MechanicsAcceptances.AddRange(mechanicAcceptances); 
+            context.MechanicsAcceptances.AddRange(mechanicAcceptances);
             context.SaveChanges();
         }
 
         private static void CreateDispatcherReviews(CheckDriveDbContext context)
         {
-            if(context.DispatchersReviews.Any()) return;
+            if (context.DispatchersReviews.Any()) return;
 
             var dispatchers = context.Dispatchers.ToList();
             var mechanics = context.Mechanics.ToList();
@@ -425,10 +425,10 @@ namespace CheckDrive.Api.Extensions
             var operators = context.Operators.ToList();
             List<DispatcherReview> dispatcherReviews = new();
 
-            foreach(var dispatcher in dispatchers) 
+            foreach (var dispatcher in dispatchers)
             {
                 var dispatcherReviewsCount = new Random().Next(5, 10);
-                for(int i = 0;  i < dispatcherReviewsCount; i++)
+                for (int i = 0; i < dispatcherReviewsCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var randomOperator = _faker.PickRandom(operators);
@@ -437,8 +437,8 @@ namespace CheckDrive.Api.Extensions
                     dispatcherReviews.Add(new DispatcherReview()
                     {
                         Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
-                        FuelSpended = _faker.Random.Double(10,20),
-                        DistanceCovered = _faker.Random.Int(50,100),
+                        FuelSpended = _faker.Random.Double(10, 20),
+                        DistanceCovered = _faker.Random.Int(50, 100),
                         DispatcherId = dispatcher.Id,
                         DriverId = randomDriver.Id,
                         OperatorId = randomOperator.Id,

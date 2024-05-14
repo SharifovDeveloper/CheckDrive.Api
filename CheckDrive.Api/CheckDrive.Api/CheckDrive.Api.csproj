@@ -24,8 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CheckDricer.Infrastructure\CheckDrive.Infrastructure.csproj" />
-    <ProjectReference Include="..\CheckDriver.Services\CheckDrive.Services.csproj" />
+    <ProjectReference Include="..\CheckDrive.Domain\CheckDrive.Domain.csproj" />
+    <ProjectReference Include="..\CheckDrive.Infrastructure\CheckDrive.Infrastructure.csproj" />
+    <ProjectReference Include="..\CheckDrive.Services\CheckDrive.Services.csproj" />
   </ItemGroup>
 
 </Project>

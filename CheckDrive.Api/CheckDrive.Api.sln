@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Infrastructure", "CheckDricer.Infrastructure\CheckDrive.Infrastructure.csproj", "{08B1A074-5F04-4301-8621-F57040FE99B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Domain", "CheckDrive.Domain\CheckDrive.Domain.csproj", "{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Domain", "CheckDriver.Domain\CheckDrive.Domain.csproj", "{200CCB5F-9247-4D3D-96BE-317E01064EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Infrastructure", "CheckDrive.Infrastructure\CheckDrive.Infrastructure.csproj", "{5D2E618A-505E-4885-819B-44D7ABA9BC92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Services", "CheckDriver.Services\CheckDrive.Services.csproj", "{6A3D09BB-A142-46B5-B50C-1510533019DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Services", "CheckDrive.Services\CheckDrive.Services.csproj", "{16FF0A5A-4264-4926-B680-C84D79D51CD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +21,18 @@ Global
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08B1A074-5F04-4301-8621-F57040FE99B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08B1A074-5F04-4301-8621-F57040FE99B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08B1A074-5F04-4301-8621-F57040FE99B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08B1A074-5F04-4301-8621-F57040FE99B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{200CCB5F-9247-4D3D-96BE-317E01064EBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A3D09BB-A142-46B5-B50C-1510533019DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
