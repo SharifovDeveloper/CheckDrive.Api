@@ -45,26 +45,17 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto> CreateDoctorAsync(DoctorForCreateDto doctorForCreate)
     {
-        var doctorEntity = _mapper.Map<Doctor>(doctorForCreate);
-
-        await _context.Doctors.AddAsync(doctorEntity);
+        var accountEntity = _mapper.Map<Account>(doctorForCreate);
+        await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
 
-        var doctorDto = _mapper.Map<DoctorDto>(doctorEntity);
-
-        return doctorDto;
-    }
-
-    public async Task<DoctorDto> UpdateDoctorAsync(DoctorForUpdateDto doctorForUpdate)
-    {
-        var doctorEntity = _mapper.Map<Doctor>(doctorForUpdate);
-
-        _context.Doctors.Update(doctorEntity);
+        var doctor = new Doctor() { AccountId = accountEntity.Id };
+        await _context.Doctors.AddAsync(doctor);
         await _context.SaveChangesAsync();
 
-        var doctorDto = _mapper.Map<DoctorDto>(doctorEntity);
+        var accountDto = _mapper.Map<DoctorDto>(accountEntity);
 
-        return doctorDto;
+        return accountDto;
     }
 
     public async Task DeleteDoctorAsync(int id)
@@ -82,7 +73,7 @@ public class DoctorService : IDoctorService
     private IQueryable<Doctor> GetQueryDoctorResParameters(
            DoctorResourceParameters resourceParameters)
     {
-        var query = _context.Doctors.AsQueryable();
+        var query = _context.Doctors.Include(x => x.Account).AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

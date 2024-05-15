@@ -9,7 +9,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<GetBaseResponse<DoctorDto>> GetDoctorsAsync(DoctorResourceParameters resourceParameters);
         Task<DoctorDto?> GetDoctorByIdAsync(int id);
         Task<DoctorDto> CreateDoctorAsync(DoctorForCreateDto doctorForCreate);
-        Task<DoctorDto> UpdateDoctorAsync(DoctorForUpdateDto doctorForUpdate);
         Task DeleteDoctorAsync(int id);
     }
 }
