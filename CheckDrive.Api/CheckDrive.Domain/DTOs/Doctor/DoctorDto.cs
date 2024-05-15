@@ -1,10 +1,14 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Doctor
+﻿namespace CheckDrive.Domain.DTOs.Doctor;
+public record DoctorDto(
+    int Id,
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Bithdate)
 {
-    public class DoctorDto
-    {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
-    }
+
+    // Parameterless constructor required by AutoMapper
+    public DoctorDto() : this(default, default, default, default, default, default, default) { }
 }
