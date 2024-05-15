@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CheckDrive.Domain.DTOs.Account;
 using CheckDrive.Domain.DTOs.Dispatcher;
+using CheckDrive.Domain.DTOs.Driver;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -44,17 +46,20 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto> CreateDispatcherAsync(DispatcherForCreateDto dispatcherForCreate)
     {
-        var dispatcherEntity = _mapper.Map<Dispatcher>(dispatcherForCreate);
-
-        await _context.Dispatchers.AddAsync(dispatcherEntity);
+        var accountEntity = _mapper.Map<Account>(dispatcherForCreate);
+        await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
 
-        var dispatcherDto = _mapper.Map<DispatcherDto>(dispatcherEntity);
+        var dispatcher = new Dispatcher() { AccountId = accountEntity.Id };
+        await _context.Dispatchers.AddAsync(dispatcher);
+        await _context.SaveChangesAsync();
 
-        return dispatcherDto;
+        var accountDto = _mapper.Map<DispatcherDto>(accountEntity);
+
+        return accountDto;
     }
 
-    public async Task<DispatcherDto> UpdateDispatcherAsync(DispatcherForUpdateDto dispatcherForUpdate)
+    public async Task<DispatcherDto> UpdateDispatcherAsync(AccountForUpdateDto dispatcherForUpdate)
     {
         var dispatcherEntity = _mapper.Map<Dispatcher>(dispatcherForUpdate);
 
@@ -81,7 +86,7 @@ public class DispatcherService : IDispatcherService
     private IQueryable<Dispatcher> GetQueryDispatcherResParameters(
            DispatcherResourceParameters resourceParameters)
     {
-        var query = _context.Dispatchers.AsQueryable();
+        var query = _context.Dispatchers.Include(x => x.Account).AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

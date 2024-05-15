@@ -1,4 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Dispatcher;
+﻿using CheckDrive.Domain.DTOs.Account;
+using CheckDrive.Domain.DTOs.Dispatcher;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,11 @@ namespace CheckDrive.Api.Controllers;
 public class DispatchersController : Controller
 {
     private readonly IDispatcherService _dispatcherService;
-
-    public DispatchersController(IDispatcherService dispatcherService)
+    private readonly IAccountService _accountService;
+    public DispatchersController(IDispatcherService dispatcherService,IAccountService accountService)
     {
         _dispatcherService = dispatcherService;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -43,7 +45,7 @@ public class DispatchersController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutAsync(int id, [FromBody] DispatcherForUpdateDto dispatcherforUpdateDto)
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto dispatcherforUpdateDto)
     {
         if (id != dispatcherforUpdateDto.Id)
         {
@@ -51,7 +53,7 @@ public class DispatchersController : Controller
                 $"Route id: {id} does not match with parameter id: {dispatcherforUpdateDto.Id}.");
         }
 
-        var updateDispatcher = await _dispatcherService.UpdateDispatcherAsync(dispatcherforUpdateDto);
+        var updateDispatcher = await _accountService.UpdateAccountAsync(dispatcherforUpdateDto);
 
         return Ok(updateDispatcher);
     }
