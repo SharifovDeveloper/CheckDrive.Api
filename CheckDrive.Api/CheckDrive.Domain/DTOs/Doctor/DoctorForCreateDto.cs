@@ -1,9 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Doctor
-{
-    public class DoctorForCreateDto
-    {
-        public int AccountId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Doctor;
+public record DoctorForCreateDto(
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Birthdate);
