@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.Domain.DTOs.Account;
 using CheckDrive.Domain.DTOs.Mechanic;
 using CheckDrive.Domain.Entities;
 
@@ -6,12 +7,19 @@ namespace CheckDrive.Domain.Mappings
 {
     public class MechanicMappings : Profile
     {
-        public MechanicMappings() 
+        public MechanicMappings()
         {
-            CreateMap<MechanicDto, Mechanic>();
-            CreateMap<Mechanic, MechanicDto>();
-            CreateMap<MechanicForCreateDto, Mechanic>();
-            CreateMap<MechanicForUpdateDto, Mechanic>();
+            CreateMap<Mechanic, MechanicDto>()
+                .ForMember(x => x.FirstName, e => e.MapFrom(f => f.Account.FirstName))
+                .ForMember(x => x.LastName, e => e.MapFrom(f => f.Account.LastName))
+                .ForMember(x => x.Login, e => e.MapFrom(f => f.Account.Login))
+                .ForMember(x => x.Password, e => e.MapFrom(f => f.Account.Password))
+                .ForMember(x => x.Bithdate, e => e.MapFrom(f => f.Account.Bithdate))
+                .ForMember(x => x.PhoneNumber, e => e.MapFrom(f => f.Account.PhoneNumber));
+            CreateMap<MechanicForCreateDto, Account>()
+                .ForMember(x => x.RoleId, e => e.MapFrom(RoleId => 6));
+            CreateMap<Account, MechanicDto>();
+            CreateMap<AccountForUpdateDto, Mechanic>();
         }
     }
 }
