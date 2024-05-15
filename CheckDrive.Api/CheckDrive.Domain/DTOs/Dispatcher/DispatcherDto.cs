@@ -1,10 +1,14 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Dispatcher
+﻿namespace CheckDrive.Domain.DTOs.Dispatcher;
+public record DispatcherDto(
+    int Id,
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Bithdate)
 {
-    public class DispatcherDto
-    {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
-    }
+
+    // Parameterless constructor required by AutoMapper
+    public DispatcherDto() : this(default, default, default, default, default, default, default) { }
 }
