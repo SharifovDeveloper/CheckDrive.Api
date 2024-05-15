@@ -9,7 +9,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<GetBaseResponse<OperatorDto>> GetOperatorsAsync(OperatorResourceParameters resourceParameters);
         Task<OperatorDto?> GetOperatorByIdAsync(int id);
         Task<OperatorDto> CreateOperatorAsync(OperatorForCreateDto operatorForCreate);
-        Task<OperatorDto> UpdateOperatorAsync(OperatorForUpdateDto operatorForUpdate);
         Task DeleteOperatorAsync(int id);
     }
 }
