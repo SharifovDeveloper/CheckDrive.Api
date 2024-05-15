@@ -1,7 +1,3 @@
-﻿namespace CheckDrive.Domain.DTOs.Role
-{
-    public class RoleForCreateDto
-    {
-        public string Name { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Role;
+public record RoleForCreateDto(
+    string Name);

@@ -1,10 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Role
-{
-    public class RoleDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Role;
+public record RoleDto(
+    int Id,
+    string Name);
