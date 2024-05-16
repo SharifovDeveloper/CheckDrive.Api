@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>CheckDrive.DTOs</AssemblyName>
+    <Authors>Muhammadali</Authors>
+    <Company>DevHub</Company>
+    <Product>CheckDrive.DTOs</Product>
+    <Description>This package contains DTOs used for checkdrive projects</Description>
+	<IsPackable>true</IsPackable>
+	<Version>1.0.1</Version>
+  </PropertyGroup>
+
+</Project>
