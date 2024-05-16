@@ -1,17 +1,10 @@
-﻿using CheckDrive.Domain.DTOs.Role;
-
-namespace CheckDrive.Domain.DTOs.Account
-{
-    public class AccountForUpdateDto
-    {
-        public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string PhoneNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime Bithdate { get; set; }
-
-        public int RoleId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Account;
+public record AccountForUpdateDto(
+    int Id,
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Bithdate,
+    int RoleId);

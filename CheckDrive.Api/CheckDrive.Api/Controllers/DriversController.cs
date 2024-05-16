@@ -1,4 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Driver;
+﻿using CheckDrive.Domain.DTOs.Account;
+using CheckDrive.Domain.DTOs.Driver;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,11 @@ namespace CheckDrive.Api.Controllers;
 public class DriversController : Controller
 {
     private readonly IDriverService _driverService;
-
-    public DriversController(IDriverService driverService)
+    private readonly IAccountService _accountService;
+    public DriversController(IDriverService driverService , IAccountService accountService)
     {
         _driverService = driverService;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -45,15 +47,14 @@ public class DriversController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutAsync(int id, [FromBody] DriverForUpdateDto driverforUpdateDto)
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto driverforUpdateDto)
     {
         if (id != driverforUpdateDto.Id)
         {
             return BadRequest(
                 $"Route id: {id} does not match with parameter id: {driverforUpdateDto.Id}.");
         }
-
-        var updateDriver = await _driverService.UpdateDriverAsync(driverforUpdateDto);
+        var updateDriver = await _accountService.UpdateAccountAsync(driverforUpdateDto);
 
         return Ok(updateDriver);
     }

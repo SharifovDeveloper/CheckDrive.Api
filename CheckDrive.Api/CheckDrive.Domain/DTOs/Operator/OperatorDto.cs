@@ -1,10 +1,13 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Operator
+﻿namespace CheckDrive.Domain.DTOs.Operator;
+public record OperatorDto(
+    int Id,
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Bithdate)
 {
-    public class OperatorDto
-    {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
-    }
+    // Parameterless constructor required by AutoMapper
+    public OperatorDto() : this(default, default, default, default, default, default, default) { }
 }

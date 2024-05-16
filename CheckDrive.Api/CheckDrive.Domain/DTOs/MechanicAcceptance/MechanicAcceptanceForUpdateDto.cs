@@ -1,15 +1,11 @@
 ﻿using CheckDrive.Domain.Entities;
 
-namespace CheckDrive.Domain.DTOs.MechanicAcceptance
-{
-    public class MechanicAcceptanceForUpdateDto
-    {
-        public int Id { get; set; }
-        public bool IsAccepted { get; set; }
-        public string? Comments { get; set; }
-        public Status Status { get; set; }
-        public DateTime Date { get; set; }
-        public double Distance { get; set; }
-        public int MechanicHandoverId { get; set; }
-    }
-}
+namespace CheckDrive.Domain.DTOs.MechanicAcceptance;
+public record MechanicAcceptanceForUpdateDto(
+    int Id,
+    bool IsAccepted,
+    string? Comments,
+    Status Status,
+    DateTime Date,
+    double Distance,
+    int MechanicHandoverId);

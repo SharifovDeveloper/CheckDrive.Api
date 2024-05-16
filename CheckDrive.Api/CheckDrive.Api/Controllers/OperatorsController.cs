@@ -1,4 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Operator;
+﻿using CheckDrive.Domain.DTOs.Account;
+using CheckDrive.Domain.DTOs.Operator;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace CheckDrive.Api.Controllers;
 public class OperatorsController : Controller
 {
     private readonly IOperatorService _operatorService;
+    private readonly IAccountService _accountService;
 
-    public OperatorsController(IOperatorService operatorService)
+    public OperatorsController(IOperatorService operatorService, IAccountService accountService)
     {
         _operatorService = operatorService;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -45,7 +48,7 @@ public class OperatorsController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutAsync(int id, [FromBody] OperatorForUpdateDto operatorForUpdate)
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto operatorForUpdate)
     {
         if (id != operatorForUpdate.Id)
         {
@@ -53,7 +56,7 @@ public class OperatorsController : Controller
                 $"Route id: {id} does not match with parameter id: {operatorForUpdate.Id}.");
         }
 
-        var updatedOperator = await _operatorService.UpdateOperatorAsync(operatorForUpdate);
+        var updatedOperator = await _accountService.UpdateAccountAsync(operatorForUpdate);
 
         return Ok(updatedOperator);
     }

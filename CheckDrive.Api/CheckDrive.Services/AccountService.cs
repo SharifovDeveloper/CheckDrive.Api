@@ -45,12 +45,9 @@ namespace CheckDrive.Services
 
         public async Task<AccountDto> CreateAccountAsync(AccountForCreateDto accountForCreate)
         {
-            var accountEntity = _mapper.Map<Account>(accountForCreate);
+            var createdAccount = await CreateAndCheckAccountRoles(accountForCreate);
 
-            await _context.Accounts.AddAsync(accountEntity);
-            await _context.SaveChangesAsync();
-
-            var accountDto = _mapper.Map<AccountDto>(accountEntity);
+            var accountDto = _mapper.Map<AccountDto>(createdAccount);
 
             return accountDto;
         }
@@ -79,6 +76,39 @@ namespace CheckDrive.Services
             await _context.SaveChangesAsync();
         }
 
+        private async Task<Account> CreateAndCheckAccountRoles(AccountForCreateDto accountForCreate)
+        {
+            var accountEntity = _mapper.Map<Account>(accountForCreate);
+            await _context.Accounts.AddAsync(accountEntity);
+            await _context.SaveChangesAsync();
+
+            switch (accountForCreate.RoleId)
+            {
+                case 2:
+                    var driver = new Driver { AccountId = accountEntity.Id };
+                    await _context.Drivers.AddAsync(driver);
+                    break;
+                case 3:
+                    var doctor = new Doctor { AccountId = accountEntity.Id };
+                    await _context.Doctors.AddAsync(doctor);
+                    break;
+                case 4:
+                    var _operator = new Operator { AccountId = accountEntity.Id };
+                    await _context.Operators.AddAsync(_operator);
+                    break;
+                case 5:
+                    var dispatcher = new Dispatcher { AccountId = accountEntity.Id };
+                    await _context.Dispatchers.AddAsync(dispatcher);
+                    break;
+                case 6:
+                    var mechanic = new Mechanic { AccountId = accountEntity.Id };
+                    await _context.Mechanics.AddAsync(mechanic);
+                    break;
+            }
+            await _context.SaveChangesAsync();
+
+            return accountEntity;
+        }
         private IQueryable<Account> GetQueryAccountResParameters(
           AccountResourceParameters resourceParameters)
         {

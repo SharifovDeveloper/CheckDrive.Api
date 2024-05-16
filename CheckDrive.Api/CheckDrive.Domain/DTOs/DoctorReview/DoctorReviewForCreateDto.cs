@@ -1,11 +1,8 @@
-﻿namespace CheckDrive.Domain.DTOs.DoctorReview
-{
-    public class DoctorReviewForCreateDto
-    {
-        public bool IsHealthy { get; set; }
-        public string? Comments { get; set; }
-        public DateTime Date { get; set; }
-        public int DriverId { get; set; }
-        public int DoctorId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.DoctorReview;
+public record DoctorReviewForCreateDto(
+    bool IsHealthy,
+    string? Comments,
+    DateTime Date,
+    int DriverId,
+    int DoctorId);
+

@@ -1,9 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Mechanic
-{
-    public class MechanicForCreateDto
-    {
-        public int AccountId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Mechanic;
+public record MechanicForCreateDto(
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Birthdate);

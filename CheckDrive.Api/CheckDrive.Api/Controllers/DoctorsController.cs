@@ -1,4 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Doctor;
+﻿using CheckDrive.Domain.DTOs.Account;
+using CheckDrive.Domain.DTOs.Doctor;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace CheckDrive.Api.Controllers;
 public class DoctorsController : Controller
 {
     private readonly IDoctorService _doctorService;
+    private readonly IAccountService _accountService;
 
-    public DoctorsController(IDoctorService doctorService)
+    public DoctorsController(IDoctorService doctorService, IAccountService accountService)
     {
         _doctorService = doctorService;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -45,7 +48,7 @@ public class DoctorsController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutAsync(int id, [FromBody] DoctorForUpdateDto doctorforUpdateDto)
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto doctorforUpdateDto)
     {
         if (id != doctorforUpdateDto.Id)
         {
@@ -53,7 +56,7 @@ public class DoctorsController : Controller
                 $"Route id: {id} does not match with parameter id: {doctorforUpdateDto.Id}.");
         }
 
-        var updateDoctor = await _doctorService.UpdateDoctorAsync(doctorforUpdateDto);
+        var updateDoctor = await _accountService.UpdateAccountAsync(doctorforUpdateDto);
 
         return Ok(updateDoctor);
     }

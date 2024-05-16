@@ -1,4 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Mechanic;
+﻿using CheckDrive.Domain.DTOs.Account;
+using CheckDrive.Domain.DTOs.Mechanic;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +9,15 @@ namespace CheckDrive.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 
-public class MechanicasController : Controller
+public class MechanicsController : Controller
 {
     private readonly IMechanicService _mechanicService;
+    private readonly IAccountService _accountService;
 
-    public MechanicasController(IMechanicService mechanicService)
+    public MechanicsController(IMechanicService mechanicService, IAccountService accountService)
     {
         _mechanicService = mechanicService;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -46,7 +49,7 @@ public class MechanicasController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutAsync(int id, [FromBody] MechanicForUpdateDto mechanicForUpdate)
+    public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto mechanicForUpdate)
     {
         if (id != mechanicForUpdate.Id)
         {
@@ -54,7 +57,7 @@ public class MechanicasController : Controller
                 $"Route id: {id} does not match with parameter id: {mechanicForUpdate.Id}.");
         }
 
-        var updatedMechanic = await _mechanicService.UpdateMechanicAsync(mechanicForUpdate);
+        var updatedMechanic = await _accountService.UpdateAccountAsync(mechanicForUpdate);
 
         return Ok(updatedMechanic);
     }

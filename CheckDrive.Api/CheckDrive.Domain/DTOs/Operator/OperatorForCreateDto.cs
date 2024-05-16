@@ -1,9 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-
-namespace CheckDrive.Domain.DTOs.Operator
-{
-    public class OperatorForCreateDto
-    {
-        public int AccountId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Operator;
+public record OperatorForCreateDto(
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Birthdate);

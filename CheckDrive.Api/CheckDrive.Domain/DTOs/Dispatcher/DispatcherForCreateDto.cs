@@ -1,7 +1,8 @@
-﻿namespace CheckDrive.Domain.DTOs.Dispatcher
-{
-    public class DispatcherForCreateDto
-    {
-        public int AccountId { get; set; }
-    }
-}
+﻿namespace CheckDrive.Domain.DTOs.Dispatcher;
+public record DispatcherForCreateDto(
+    string Login,
+    string Password,
+    string PhoneNumber,
+    string FirstName,
+    string LastName,
+    DateTime Birthdate);

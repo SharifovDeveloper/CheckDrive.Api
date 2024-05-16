@@ -43,22 +43,17 @@ public class MechanicService : IMechanicService
 
     public async Task<MechanicDto> CreateMechanicAsync(MechanicForCreateDto mechanicForCreate)
     {
-        var mechanicEntity = _mapper.Map<Mechanic>(mechanicForCreate);
-
-        await _context.Mechanics.AddAsync(mechanicEntity);
+        var accountEntity = _mapper.Map<Account>(mechanicForCreate);
+        await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<MechanicDto>(mechanicEntity);
-    }
-
-    public async Task<MechanicDto> UpdateMechanicAsync(MechanicForUpdateDto mechanicForUpdate)
-    {
-        var mechanicEntity = _mapper.Map<Mechanic>(mechanicForUpdate);
-
-        _context.Mechanics.Update(mechanicEntity);
+        var mechanic = new Mechanic() { AccountId = accountEntity.Id };
+        await _context.Mechanics.AddAsync(mechanic);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<MechanicDto>(mechanicEntity);
+        var accountDto = _mapper.Map<MechanicDto>(accountEntity);
+
+        return accountDto;
     }
 
     public async Task DeleteMechanicAsync(int id)
@@ -75,7 +70,7 @@ public class MechanicService : IMechanicService
     private IQueryable<Mechanic> GetQueryMechanicResParameters(
        MechanicResourceParameters resourceParameters)
     {
-        var query = _context.Mechanics.AsQueryable();
+        var query = _context.Mechanics.Include(x => x.Account).AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

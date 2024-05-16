@@ -45,26 +45,17 @@ public class DriverService : IDriverService
 
     public async Task<DriverDto> CreateDriverAsync(DriverForCreateDto driverForCreate)
     {
-        var driverEntity = _mapper.Map<Driver>(driverForCreate);
-
-        await _context.Drivers.AddAsync(driverEntity);
+        var accountEntity = _mapper.Map<Account>(driverForCreate);
+        await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
 
-        var driverDto = _mapper.Map<DriverDto>(driverEntity);
-
-        return driverDto;
-    }
-
-    public async Task<DriverDto> UpdateDriverAsync(DriverForUpdateDto driverForUpdate)
-    {
-        var driverEntity = _mapper.Map<Driver>(driverForUpdate);
-
-        _context.Drivers.Update(driverEntity);
+        var driver = new Driver() { AccountId = accountEntity.Id };
+        await _context.Drivers.AddAsync(driver);
         await _context.SaveChangesAsync();
 
-        var driverDto = _mapper.Map<DriverDto>(driverEntity);
+        var accountDto = _mapper.Map<DriverDto>(accountEntity);
 
-        return driverDto;
+        return accountDto;
     }
 
     public async Task DeleteDriverAsync(int id)
@@ -82,7 +73,7 @@ public class DriverService : IDriverService
     private IQueryable<Driver> GetQueryDriverResParameters(
        DriverResourceParameters resourceParameters)
     {
-        var query = _context.Drivers.AsQueryable();
+        var query = _context.Drivers.Include(x => x.Account).AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

@@ -39,22 +39,17 @@ public class OperatorService : IOperatorService
     }
     public async Task<OperatorDto> CreateOperatorAsync(OperatorForCreateDto operatorForCreate)
     {
-        var operatorEntity = _mapper.Map<Operator>(operatorForCreate);
-
-        await _context.Operators.AddAsync(operatorEntity);
+        var accountEntity = _mapper.Map<Account>(operatorForCreate);
+        await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<OperatorDto>(operatorEntity);
-    }
-
-    public async Task<OperatorDto> UpdateOperatorAsync(OperatorForUpdateDto operatorForUpdate)
-    {
-        var operatorEntity = _mapper.Map<Operator>(operatorForUpdate);
-
-        _context.Operators.Update(operatorEntity);
+        var _operator = new Operator() { AccountId = accountEntity.Id };
+        await _context.Operators.AddAsync(_operator);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<OperatorDto>(operatorEntity);
+        var accountDto = _mapper.Map<OperatorDto>(accountEntity);
+
+        return accountDto;
     }
 
     public async Task DeleteOperatorAsync(int id)
@@ -71,7 +66,7 @@ public class OperatorService : IOperatorService
     private IQueryable<Operator> GetQueryOperatorResParameters(
        OperatorResourceParameters resourceParameters)
     {
-        var query = _context.Operators.AsQueryable();
+        var query = _context.Operators.Include(x => x.Account).AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {
