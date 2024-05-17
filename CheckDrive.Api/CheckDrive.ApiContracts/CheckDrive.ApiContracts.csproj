@@ -2,12 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>CheckDrive.ApiContracts</AssemblyName>
-    <Authors>Muhammadali</Authors>
-    <Company>DevHub</Company>
-    <Product>CheckDrive.ApiContracts</Product>
-    <Description>This package contains ApiContracts for CheckDrive projects</Description>
-	<IsPackable>true</IsPackable>
   </PropertyGroup>
 
 </Project>
