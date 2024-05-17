@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.DTOs.Role;
 using CheckDrive.Domain.Entities;
+using CheckDrive.ApiContracts.Role;
+
 
 namespace CheckDrive.Domain.Mappings
 {
     public class RoleMappings : Profile
     {
-        public RoleMappings() 
+        public RoleMappings()
         {
             CreateMap<RoleDto, Role>();
             CreateMap<Role, RoleDto>();

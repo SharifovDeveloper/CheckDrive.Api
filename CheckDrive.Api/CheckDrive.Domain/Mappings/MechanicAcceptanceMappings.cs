@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.DTOs.MechanicAcceptance;
 using CheckDrive.Domain.Entities;
+using CheckDrive.ApiContracts.MechanicAcceptance;
 
 namespace CheckDrive.Domain.Mappings
 {
     public class MechanicAcceptanceMappings : Profile
     {
-        public MechanicAcceptanceMappings() 
+        public MechanicAcceptanceMappings()
         {
             CreateMap<MechanicAcceptanceDto, MechanicAcceptance>();
             CreateMap<MechanicAcceptance, MechanicAcceptanceDto>();

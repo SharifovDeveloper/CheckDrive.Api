@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.DTOs.Car;
 using CheckDrive.Domain.Entities;
+using CheckDrive.ApiContracts.Car;
 
 namespace CheckDrive.Domain.Mappings
 {
     public class CarMappings : Profile
     {
-        public CarMappings() 
+        public CarMappings()
         {
             CreateMap<CarDto, Car>();
             CreateMap<Car, CarDto>();
