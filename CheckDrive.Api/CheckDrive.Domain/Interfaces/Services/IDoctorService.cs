@@ -1,6 +1,6 @@
-﻿using CheckDrive.Domain.DTOs.Doctor;
-using CheckDrive.Domain.ResourceParameters;
+﻿using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
+using CheckDrive.ApiContracts.Doctor;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {
