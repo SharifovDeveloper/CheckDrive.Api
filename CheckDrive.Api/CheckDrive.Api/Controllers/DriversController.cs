@@ -1,8 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-using CheckDrive.Domain.DTOs.Driver;
-using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
+using CheckDrive.ApiContracts.Driver;
+using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 
@@ -12,7 +12,7 @@ public class DriversController : Controller
 {
     private readonly IDriverService _driverService;
     private readonly IAccountService _accountService;
-    public DriversController(IDriverService driverService , IAccountService accountService)
+    public DriversController(IDriverService driverService, IAccountService accountService)
     {
         _driverService = driverService;
         _accountService = accountService;

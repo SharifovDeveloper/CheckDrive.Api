@@ -1,8 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Driver;
-using CheckDrive.Domain.DTOs.MechanicAcceptance;
-using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
+using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.ApiContracts.Driver;
 
 namespace CheckDrive.Api.Controllers;
 

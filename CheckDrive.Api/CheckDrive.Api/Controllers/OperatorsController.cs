@@ -1,8 +1,8 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-using CheckDrive.Domain.DTOs.Operator;
-using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
+using CheckDrive.ApiContracts.Operator;
+using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 [ApiController]
