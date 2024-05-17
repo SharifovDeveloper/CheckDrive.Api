@@ -1,4 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.Mechanic;
+﻿using CheckDrive.ApiContracts.Mechanic;
 
 namespace CheckDrive.Domain.Responses
 {

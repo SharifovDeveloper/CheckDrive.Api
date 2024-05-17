@@ -1,4 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.DispatcherReview;
+﻿using CheckDrive.ApiContracts.DispatcherReview;
 
 namespace CheckDrive.Domain.Responses
 {
