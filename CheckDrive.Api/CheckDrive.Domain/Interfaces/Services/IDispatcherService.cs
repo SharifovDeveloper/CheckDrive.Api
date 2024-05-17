@@ -1,7 +1,6 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-using CheckDrive.Domain.DTOs.Dispatcher;
-using CheckDrive.Domain.ResourceParameters;
+﻿using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
+using CheckDrive.ApiContracts.Dispatcher;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {

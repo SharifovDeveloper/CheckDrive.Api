@@ -1,4 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.DoctorReview;
+﻿using CheckDrive.ApiContracts.DoctorReview;
 
 namespace CheckDrive.Domain.Responses
 {

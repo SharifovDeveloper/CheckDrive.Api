@@ -1,4 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.Car;
+﻿using CheckDrive.ApiContracts.Car;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;

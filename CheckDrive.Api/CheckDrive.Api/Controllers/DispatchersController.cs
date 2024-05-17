@@ -1,5 +1,5 @@
-﻿using CheckDrive.Domain.DTOs.Account;
-using CheckDrive.Domain.DTOs.Dispatcher;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ public class DispatchersController : Controller
 {
     private readonly IDispatcherService _dispatcherService;
     private readonly IAccountService _accountService;
-    public DispatchersController(IDispatcherService dispatcherService,IAccountService accountService)
+    public DispatchersController(IDispatcherService dispatcherService, IAccountService accountService)
     {
         _dispatcherService = dispatcherService;
         _accountService = accountService;

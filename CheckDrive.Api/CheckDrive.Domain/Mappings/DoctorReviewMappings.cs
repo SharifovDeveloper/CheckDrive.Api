@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.DTOs.DoctorReview;
 using CheckDrive.Domain.Entities;
+using CheckDrive.ApiContracts.DoctorReview;
+
 
 namespace CheckDrive.Domain.Mappings
 {
     public class DoctorReviewMappings : Profile
     {
-        public DoctorReviewMappings() 
+        public DoctorReviewMappings()
         {
             CreateMap<DoctorReviewDto, DoctorReview>();
             CreateMap<DoctorReview, DoctorReviewDto>();

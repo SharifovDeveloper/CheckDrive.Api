@@ -1,4 +1,4 @@
-﻿using CheckDrive.Domain.DTOs.Role;
+﻿using CheckDrive.ApiContracts.Role;
 
 namespace CheckDrive.Domain.Responses
 {
