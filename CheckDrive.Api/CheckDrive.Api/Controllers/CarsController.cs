@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CheckDrive.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/cars")]
 public class CarsController : Controller
 {
     private readonly ICarService _carService;
