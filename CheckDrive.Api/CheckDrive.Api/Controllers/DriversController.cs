@@ -1,13 +1,13 @@
-﻿using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Driver;
+using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using CheckDrive.ApiContracts.Driver;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/drivers")]
 public class DriversController : Controller
 {
     private readonly IDriverService _driverService;
