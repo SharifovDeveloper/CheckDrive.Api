@@ -1,12 +1,12 @@
-﻿using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/accounts")]
 public class AccountsController : Controller
 {
     private readonly IAccountService _accountService;

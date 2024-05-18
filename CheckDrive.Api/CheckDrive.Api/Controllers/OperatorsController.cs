@@ -1,22 +1,25 @@
-﻿using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Operator;
+using CheckDrive.ApiContracts.OperatorReview;
+using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using CheckDrive.ApiContracts.Operator;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("api/operators")]
 
 public class OperatorsController : Controller
 {
     private readonly IOperatorService _operatorService;
+    private readonly IOperatorReviewService _operatorReviewService;
     private readonly IAccountService _accountService;
 
-    public OperatorsController(IOperatorService operatorService, IAccountService accountService)
+    public OperatorsController(IOperatorService operatorService, IAccountService accountService, IOperatorReviewService operatorReviewService)
     {
         _operatorService = operatorService;
         _accountService = accountService;
+        _operatorReviewService = operatorReviewService;
     }
 
     [HttpGet]
@@ -65,6 +68,56 @@ public class OperatorsController : Controller
     public async Task<ActionResult> Delete(int id)
     {
         await _operatorService.DeleteOperatorAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpGet("reviews")]
+    public async Task<ActionResult<IEnumerable<OperatorReviewDto>>> GetOperatorReviewsAsync(
+    [FromQuery] OperatorReviewResourceParameters resourceParameters)
+    {
+        var operatorReviews = await _operatorReviewService.GetOperatorReviewsAsync(resourceParameters);
+
+        return Ok(operatorReviews);
+    }
+
+    [HttpGet("review/{id}")]
+    public async Task<ActionResult<OperatorReviewDto>> GetOperatorReviewByIdAsync(int id)
+    {
+        var operatorReview = await _operatorReviewService.GetOperatorReviewByIdAsync(id);
+
+        if (operatorReview is null)
+            return NotFound($"DoctorReview with id: {id} does not exist.");
+
+        return Ok(operatorReview);
+    }
+
+    [HttpPost("review")]
+    public async Task<ActionResult> PostAsync([FromBody] OperatorReviewForCreateDto operatorReview)
+    {
+        var createdOperatorReview = await _operatorReviewService.CreateOperatorReviewAsync(operatorReview);
+
+        return CreatedAtAction(nameof(GetOperatorReviewByIdAsync), new { createdOperatorReview.Id }, createdOperatorReview);
+    }
+
+    [HttpPut("review/{id}")]
+    public async Task<ActionResult> PutAsync(int id, [FromBody] OperatorReviewForUpdateDto operatorReview)
+    {
+        if (id != operatorReview.Id)
+        {
+            return BadRequest(
+                $"Route id: {id} does not match with parameter id: {operatorReview.Id}.");
+        }
+
+        var updateOreratorReview = await _operatorReviewService.UpdateOperatorReviewAsync(operatorReview);
+
+        return Ok(updateOreratorReview);
+    }
+
+    [HttpDelete("review/{id}")]
+    public async Task<ActionResult> DeleteReview(int id)
+    {
+        await _operatorReviewService.DeleteOperatorReviewAsync(id);
 
         return NoContent();
     }
