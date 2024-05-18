@@ -1,12 +1,12 @@
-﻿using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.ApiContracts.Role;
+using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using CheckDrive.ApiContracts.Role;
 
 namespace CheckDrive.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/roles")]
 public class RolesController : Controller
 {
     private readonly IRoleService _roleService;
