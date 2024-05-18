@@ -1,22 +1,25 @@
-﻿using CheckDrive.Domain.Interfaces.Services;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Doctor;
+using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using CheckDrive.ApiContracts.Doctor;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/doctors")]
 public class DoctorsController : Controller
 {
     private readonly IDoctorService _doctorService;
+    private readonly IDoctorReviewService _reviewService;
     private readonly IAccountService _accountService;
 
-    public DoctorsController(IDoctorService doctorService, IAccountService accountService)
+    public DoctorsController(IDoctorService doctorService, IAccountService accountService, IDoctorReviewService reviewService)
     {
         _doctorService = doctorService;
         _accountService = accountService;
+        _reviewService = reviewService;
     }
 
     [HttpGet]
@@ -65,6 +68,57 @@ public class DoctorsController : Controller
     public async Task<ActionResult> Delete(int id)
     {
         await _doctorService.DeleteDoctorAsync(id);
+
+        return NoContent();
+    }
+
+
+    [HttpGet("reviews")]
+    public async Task<ActionResult<IEnumerable<DoctorReviewDto>>> GetDoctorReviewsAsync(
+        [FromQuery] DoctorReviewResourceParameters resourceParameters)
+    {
+        var doctorReviews = await _reviewService.GetDoctorReviewsAsync(resourceParameters);
+
+        return Ok(doctorReviews);
+    }
+
+    [HttpGet("review/{id}")]
+    public async Task<ActionResult<DoctorReviewDto>> GetDoctorReviewByIdAsync(int id)
+    {
+        var doctorReview = await _reviewService.GetDoctorReviewByIdAsync(id);
+
+        if (doctorReview is null)
+            return NotFound($"DoctorReview with id: {id} does not exist.");
+
+        return Ok(doctorReview);
+    }
+
+    [HttpPost("review")]
+    public async Task<ActionResult> PostAsync([FromBody] DoctorReviewForCreateDto doctorReview)
+    {
+        var createdDoctorReview = await _reviewService.CreateDoctorReviewAsync(doctorReview);
+
+        return CreatedAtAction(nameof(GetDoctorReviewByIdAsync), new { createdDoctorReview.Id }, createdDoctorReview);
+    }
+
+    [HttpPut("review/{id}")]
+    public async Task<ActionResult> PutAsync(int id, [FromBody] DoctorReviewForUpdateDto doctorReview)
+    {
+        if (id != doctorReview.Id)
+        {
+            return BadRequest(
+                $"Route id: {id} does not match with parameter id: {doctorReview.Id}.");
+        }
+
+        var updateDoctorReview = await _reviewService.UpdateDoctorReviewAsync(doctorReview);
+
+        return Ok(updateDoctorReview);
+    }
+
+    [HttpDelete("review/{id}")]
+    public async Task<ActionResult> DeleteReview(int id)
+    {
+        await _reviewService.DeleteDoctorReviewAsync(id);
 
         return NoContent();
     }
