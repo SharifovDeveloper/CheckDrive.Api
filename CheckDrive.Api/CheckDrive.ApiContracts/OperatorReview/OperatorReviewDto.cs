@@ -11,6 +11,8 @@ namespace CheckDrive.ApiContracts.OperatorReview
         public DateTime Date { get; set; }
 
         public int OperatorId { get; set; }
+        public string OperatorName { get; set; }
         public int DriverId { get; set; }
+        public string DriverName { get; set; }
     }
 }
