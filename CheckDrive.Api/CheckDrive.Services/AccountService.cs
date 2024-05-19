@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Account;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Services
 {
@@ -114,6 +114,11 @@ namespace CheckDrive.Services
         {
             var query = _context.Accounts.AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
+            {
+                query = query.Where(x => x.FirstName.Contains(resourceParameters.SearchString)
+                || x.LastName.Contains(resourceParameters.SearchString));
+            }
             if (resourceParameters.RoleId != 0 && resourceParameters.RoleId is not null)
             {
                 query = query.Where(x => x.RoleId == resourceParameters.RoleId);

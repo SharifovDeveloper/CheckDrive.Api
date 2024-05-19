@@ -39,7 +39,7 @@ public class AccountsController : Controller
     {
         var createdAccount = await _accountService.CreateAccountAsync(forCreateDto);
 
-        return CreatedAtAction(nameof(GetAccountByIdAsync), new { createdAccount.Id }, createdAccount);
+        return CreatedAtAction("GetAccountById", new { id = createdAccount.Id }, createdAccount);
     }
 
     [HttpPut("{id}")]

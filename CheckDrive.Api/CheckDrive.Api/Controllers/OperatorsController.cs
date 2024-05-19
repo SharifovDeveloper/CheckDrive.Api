@@ -31,7 +31,7 @@ public class OperatorsController : Controller
         return Ok(mechanics);
     }
 
-    [HttpGet("{id}", Name = "GetOperatorByIdAsync")]
+    [HttpGet("{id}", Name = "GetOperatorById")]
     public async Task<ActionResult<OperatorDto>> GetOperatorByIdAsync(int id)
     {
         var _operator = await _operatorService.GetOperatorByIdAsync(id);
@@ -47,7 +47,7 @@ public class OperatorsController : Controller
     {
         var createdOperator = await _operatorService.CreateOperatorAsync(operatorForCreate);
 
-        return CreatedAtAction(nameof(GetOperatorByIdAsync), new { createdOperator.Id }, createdOperator);
+        return CreatedAtAction("GetOperatorById", new { createdOperator.Id }, createdOperator);
     }
 
     [HttpPut("{id}")]
@@ -81,7 +81,7 @@ public class OperatorsController : Controller
         return Ok(operatorReviews);
     }
 
-    [HttpGet("review/{id}")]
+    [HttpGet("review/{id}", Name = "GetOperatorReviewById")]
     public async Task<ActionResult<OperatorReviewDto>> GetOperatorReviewByIdAsync(int id)
     {
         var operatorReview = await _operatorReviewService.GetOperatorReviewByIdAsync(id);
@@ -97,7 +97,7 @@ public class OperatorsController : Controller
     {
         var createdOperatorReview = await _operatorReviewService.CreateOperatorReviewAsync(operatorReview);
 
-        return CreatedAtAction(nameof(GetOperatorReviewByIdAsync), new { createdOperatorReview.Id }, createdOperatorReview);
+        return CreatedAtAction("GetOperatorReviewById", new { createdOperatorReview.Id }, createdOperatorReview);
     }
 
     [HttpPut("review/{id}")]

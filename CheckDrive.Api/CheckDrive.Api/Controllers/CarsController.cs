@@ -40,7 +40,7 @@ public class CarsController : Controller
     {
         var createdCar = await _carService.CreateCarAsync(forCreateDto);
 
-        return CreatedAtAction(nameof(GetCarByIdAsync), new { createdCar.Id }, createdCar);
+        return CreatedAtAction("GetCarById", new { id = createdCar.Id }, createdCar);
     }
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] CarForUpdateDto forUpdateDto)

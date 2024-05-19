@@ -25,7 +25,7 @@ public class RolesController : Controller
         return Ok(roles);
     }
 
-    [HttpGet("{id}", Name = "GetRoleByIdAsync")]
+    [HttpGet("{id}", Name = "GetRoleById")]
     public async Task<ActionResult<RoleDto>> GetRoleByIdAsync(int id)
     {
         var role = await _roleService.GetRoleByIdAsync(id);
@@ -40,7 +40,7 @@ public class RolesController : Controller
     {
         var createdRole = await _roleService.CreateRoleAsync(forCreateDto);
 
-        return CreatedAtAction(nameof(GetRoleByIdAsync), new { createdRole.Id }, createdRole);
+        return CreatedAtAction("GetRoleById", new { createdRole.Id }, createdRole);
     }
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] RoleForUpdateDto forUpdateDto)

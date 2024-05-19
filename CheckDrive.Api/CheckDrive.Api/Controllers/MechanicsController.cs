@@ -35,7 +35,7 @@ public class MechanicsController : Controller
         return Ok(mechanics);
     }
 
-    [HttpGet("{id}", Name = "GetMechanicByIdAsync")]
+    [HttpGet("{id}", Name = "GetMechanicById")]
     public async Task<ActionResult<MechanicDto>> GetMechanicByIdAsync(int id)
     {
         var mechanic = await _mechanicService.GetMechanicByIdAsync(id);
@@ -51,7 +51,7 @@ public class MechanicsController : Controller
     {
         var createdMechanic = await _mechanicService.CreateMechanicAsync(mechanicForCreate);
 
-        return CreatedAtAction(nameof(GetMechanicByIdAsync), new { createdMechanic.Id }, createdMechanic);
+        return CreatedAtAction("GetMechanicById", new { createdMechanic.Id }, createdMechanic);
     }
 
     [HttpPut("{id}")]
@@ -85,7 +85,7 @@ public class MechanicsController : Controller
         return Ok(mechanicAcceptances);
     }
 
-    [HttpGet("acceptance/{id}")]
+    [HttpGet("acceptance/{id}", Name = "GetMechanicAcceptanceById")]
     public async Task<ActionResult<MechanicAcceptanceDto>> GetMechanicAcceptanceByIdAsync(int id)
     {
         var mechanicAcceptance = await _mechanicAcceptanceService.GetMechanicAcceptenceByIdAsync(id);
@@ -101,7 +101,7 @@ public class MechanicsController : Controller
     {
         var createdMechanicAcceptance = await _mechanicAcceptanceService.CreateMechanicAcceptenceAsync(mechanicAcceptanceforCreateDto);
 
-        return CreatedAtAction(nameof(GetMechanicAcceptanceByIdAsync), new { createdMechanicAcceptance.Id }, createdMechanicAcceptance);
+        return CreatedAtAction("GetMechanicAcceptanceById", new { createdMechanicAcceptance.Id }, createdMechanicAcceptance);
     }
 
     [HttpPut("acceptance/{id}")]
@@ -135,7 +135,7 @@ public class MechanicsController : Controller
         return Ok(mechanicHandovers);
     }
 
-    [HttpGet("handover/{id}")]
+    [HttpGet("handover/{id}", Name = "GetMechanicHandoverById")]
     public async Task<ActionResult<MechanicHandoverDto>> GetMechanicHandoverByIdAsync(int id)
     {
         var mechanicHandover = await _mechanicHandoverService.GetMechanicHandoverByIdAsync(id);
@@ -151,7 +151,7 @@ public class MechanicsController : Controller
     {
         var createdMechanicHandover = await _mechanicHandoverService.CreateMechanicHandoverAsync(mechanicHandoverforCreateDto);
 
-        return CreatedAtAction(nameof(GetMechanicHandoverByIdAsync), new { createdMechanicHandover.Id }, createdMechanicHandover);
+        return CreatedAtAction("GetMechanicHandoverById", new { createdMechanicHandover.Id }, createdMechanicHandover);
     }
 
     [HttpPut("handover/{id}")]

@@ -27,7 +27,7 @@ public class DriversController : Controller
         return Ok(drivers);
     }
 
-    [HttpGet("{id}", Name = "GetDriverByIdAsync")]
+    [HttpGet("{id}", Name = "GetDriverById")]
     public async Task<ActionResult<DriverDto>> GetDriverByIdAsync(int id)
     {
         var driver = await _driverService.GetDriverByIdAsync(id);
@@ -43,7 +43,7 @@ public class DriversController : Controller
     {
         var createdDriver = await _driverService.CreateDriverAsync(driverforCreateDto);
 
-        return CreatedAtAction(nameof(GetDriverByIdAsync), new { createdDriver.Id }, createdDriver);
+        return CreatedAtAction("GetDriverById", new { createdDriver.Id }, createdDriver);
     }
 
     [HttpPut("{id}")]

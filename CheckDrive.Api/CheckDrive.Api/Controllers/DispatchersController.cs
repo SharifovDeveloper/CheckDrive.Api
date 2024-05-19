@@ -31,7 +31,7 @@ public class DispatchersController : Controller
         return Ok(dispatchers);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetDispatcherById")]
     public async Task<ActionResult<DispatcherDto>> GetDispatcherByIdAsync(int id)
     {
         var dispatcher = await _dispatcherService.GetDispatcherByIdAsync(id);
@@ -47,7 +47,7 @@ public class DispatchersController : Controller
     {
         var createdDispatcher = await _dispatcherService.CreateDispatcherAsync(dispatcherforCreateDto);
 
-        return CreatedAtAction(nameof(GetDispatcherByIdAsync), new { createdDispatcher.Id }, createdDispatcher);
+        return CreatedAtAction("GetDispatcherById", new { id = createdDispatcher.Id }, createdDispatcher);
     }
 
     [HttpPut("{id}")]
@@ -81,7 +81,7 @@ public class DispatchersController : Controller
         return Ok(dispatcherReviews);
     }
 
-    [HttpGet("review/{id}")]
+    [HttpGet("review/{id}", Name = "GetDispatcherReviewById")]
     public async Task<ActionResult<DispatcherReviewDto>> GetDispatcherReviewByIdAsync(int id)
     {
         var dispatcherReview = await _reviewService.GetDispatcherReviewByIdAsync(id);
@@ -97,7 +97,7 @@ public class DispatchersController : Controller
     {
         var createdDispatcherReview = await _reviewService.CreateDispatcherReviewAsync(dispatcherReviewforCreateDto);
 
-        return CreatedAtAction(nameof(GetDispatcherReviewByIdAsync), new { createdDispatcherReview.Id }, createdDispatcherReview);
+        return CreatedAtAction("GetDispatcherReviewById", new { id = createdDispatcherReview.Id }, createdDispatcherReview);
     }
 
     [HttpPut("review/{id}")]
