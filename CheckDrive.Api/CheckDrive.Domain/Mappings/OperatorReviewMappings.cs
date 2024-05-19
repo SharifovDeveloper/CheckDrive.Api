@@ -10,7 +10,7 @@ namespace CheckDrive.Domain.Mappings
         public OperatorReviewMappings()
         {
             CreateMap<OperatorReviewDto, OperatorReview>()
-                .ForMember(x => x.Operator.Account.FirstName, f => f.MapFrom(e => e.OperatorName);
+                .ForMember(x => x.Operator.Account.FirstName, f => f.MapFrom(e => e.OperatorName));
             CreateMap<OperatorReview, OperatorReviewDto>();
             CreateMap<OperatorReviewForCreateDto, OperatorReview>();
             CreateMap<OperatorReviewForUpdateDto, OperatorReview>();
