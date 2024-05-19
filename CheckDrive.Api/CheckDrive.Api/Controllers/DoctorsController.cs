@@ -31,7 +31,7 @@ public class DoctorsController : Controller
         return Ok(doctors);
     }
 
-    [HttpGet("{id}", Name = "GetDoctorByIdAsync")]
+    [HttpGet("{id}", Name = "GetDoctorById")]
     public async Task<ActionResult<DoctorDto>> GetDoctorByIdAsync(int id)
     {
         var doctor = await _doctorService.GetDoctorByIdAsync(id);
@@ -47,7 +47,7 @@ public class DoctorsController : Controller
     {
         var createdDoctor = await _doctorService.CreateDoctorAsync(doctorforCreateDto);
 
-        return CreatedAtAction(nameof(GetDoctorByIdAsync), new { createdDoctor.Id }, createdDoctor);
+        return CreatedAtAction("GetDoctorById", new { createdDoctor.Id }, createdDoctor);
     }
 
     [HttpPut("{id}")]
@@ -82,7 +82,7 @@ public class DoctorsController : Controller
         return Ok(doctorReviews);
     }
 
-    [HttpGet("review/{id}")]
+    [HttpGet("review/{id}", Name = "GetDoctorReviewById")]
     public async Task<ActionResult<DoctorReviewDto>> GetDoctorReviewByIdAsync(int id)
     {
         var doctorReview = await _reviewService.GetDoctorReviewByIdAsync(id);
@@ -98,7 +98,7 @@ public class DoctorsController : Controller
     {
         var createdDoctorReview = await _reviewService.CreateDoctorReviewAsync(doctorReview);
 
-        return CreatedAtAction(nameof(GetDoctorReviewByIdAsync), new { createdDoctorReview.Id }, createdDoctorReview);
+        return CreatedAtAction("GetDoctorReviewById", new { createdDoctorReview.Id }, createdDoctorReview);
     }
 
     [HttpPut("review/{id}")]
