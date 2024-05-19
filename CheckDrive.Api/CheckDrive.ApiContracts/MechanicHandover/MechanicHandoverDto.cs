@@ -11,7 +11,10 @@ namespace CheckDrive.ApiContracts.MechanicHandover
         public DateTime Date { get; set; }
 
         public int MechanicId { get; set; }
+        public string MechanicName { get; set; }
         public int CarId { get; set; }
+        public string CarName { get; set; }
         public int DriverId { get; set; }
+        public string DriverName { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace CheckDrive.ApiContracts.MechanicAcceptance
         public DateTime Date { get; set; }
         public double Distance { get; set; }
         public int MechanicHandoverId { get; set; }
+        public string MechanicHandoverName { get; set; }
     }
 }
