@@ -11,7 +11,6 @@ namespace CheckDrive.ApiContracts.Account
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime Bithdate { get; set; }
-
         public int RoleId { get; set; }
     }
 }
