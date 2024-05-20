@@ -4,6 +4,7 @@ namespace CheckDrive.ApiContracts.OperatorReview
 {
     public class OperatorReviewForCreateDto
     {
+        public bool IsGiven { get; set; }
         public double OilAmount { get; set; }
         public string Comments { get; set; } = "";
         public StatusForDto Status { get; set; }

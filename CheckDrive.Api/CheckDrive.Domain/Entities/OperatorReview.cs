@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.Entities
 {
     public class OperatorReview : EntityBase
     {
+        public bool IsGiven { get; set; }
         public double OilAmount { get; set; }
         public string? Comments { get; set; }
         public Status Status { get; set; }
