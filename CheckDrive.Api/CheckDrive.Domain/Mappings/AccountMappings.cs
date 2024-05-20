@@ -9,7 +9,8 @@ namespace CheckDrive.Domain.Mappings
         public AccountMappings()
         {
             CreateMap<AccountDto, Account>();
-            CreateMap<Account, AccountDto>();
+            CreateMap<Account, AccountDto>()
+                .ForMember(x=>x.RoleName,e=>e.MapFrom(d=>d.Role.Name));
             CreateMap<AccountForCreateDto, Account>();
             CreateMap<AccountForCreateDto, Driver>();
             CreateMap<AccountForUpdateDto, Account>();

@@ -112,7 +112,7 @@ namespace CheckDrive.Services
         private IQueryable<Account> GetQueryAccountResParameters(
           AccountResourceParameters resourceParameters)
         {
-            var query = _context.Accounts.AsQueryable();
+            var query = _context.Accounts.Include(x=>x.Role).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
             {
