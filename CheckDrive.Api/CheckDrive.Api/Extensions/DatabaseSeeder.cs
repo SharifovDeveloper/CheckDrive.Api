@@ -364,18 +364,15 @@ namespace CheckDrive.Api.Extensions
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var status = _faker.Random.Enum<Status>();
-
-                    string comments = null;
-                    if (_faker.Random.Bool())
-                    {
-                        comments = _faker.Lorem.Sentence();
-                    }
+                    var isGiven = _faker.Random.Bool();
+                    var comments = isGiven ? "" : _faker.Lorem.Sentence();
 
                     operatorReviews.Add(new OperatorReview()
                     {
                         OilAmount = _faker.Random.Double(10, 20),
                         Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
                         Status = status,
+                        IsGiven = isGiven,
                         Comments = comments,
                         OperatorId = operatorr.Id,
                         DriverId = randomDriver.Id

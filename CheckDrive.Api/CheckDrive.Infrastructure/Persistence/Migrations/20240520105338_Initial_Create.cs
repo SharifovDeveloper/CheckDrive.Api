@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CheckDrive.Infrastructure.Persistence.Mihrations
+namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_create : Migration
+    public partial class Initial_Create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -268,6 +268,7 @@ namespace CheckDrive.Infrastructure.Persistence.Mihrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsGiven = table.Column<bool>(type: "bit", nullable: false),
                     OilAmount = table.Column<double>(type: "float", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),

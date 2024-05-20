@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.ResourceParameters
 {
     public class OperatorReviewResourceParameters : ResourceParametersBase
     {
+        public bool? IsGiven { get; set; }
         public double? OilAmount { get; set; }
         public double? OilAmountLessThan { get; set; }
         public double? OilAmountGreaterThan { get; set; }

@@ -76,7 +76,12 @@ namespace CheckDrive.Services
         private IQueryable<OperatorReview> GetQueryOperatorReviewResParameters(
        OperatorReviewResourceParameters operatorReviewResource)
         {
-            var query = _context.OperatorReviews.Include(a=>a.Operator).ThenInclude(a=>a.Account).AsQueryable();
+            var query = _context.OperatorReviews
+                .Include(a => a.Operator)
+                .ThenInclude(a => a.Account)
+                .Include(o => o.Operator)
+                .ThenInclude(o => o.Account)
+                .AsQueryable();
 
             if (operatorReviewResource.Date is not null)
             {
@@ -93,6 +98,10 @@ namespace CheckDrive.Services
             if (operatorReviewResource.OilAmountGreaterThan is not null)
             {
                 query = query.Where(x => x.OilAmount > operatorReviewResource.OilAmountGreaterThan);
+            }
+            if (operatorReviewResource.IsGiven is not null)
+            {
+                query = query.Where(x => x.IsGiven == operatorReviewResource.IsGiven);
             }
 
             return query;
