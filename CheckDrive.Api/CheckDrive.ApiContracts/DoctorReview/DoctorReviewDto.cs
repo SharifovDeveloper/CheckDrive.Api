@@ -10,5 +10,7 @@ namespace CheckDrive.ApiContracts.DoctorReview
         public DateTime Date { get; set; }
         public int DriverId { get; set; }
         public string DriverName { get; set; }
+        public int DoctorId { get; set; }
+        public string DoctorName { get; set;}
     }
 }
