@@ -36,7 +36,12 @@ public class DoctorReviewService : IDoctorReviewService
 
     public async Task<DoctorReviewDto?> GetDoctorReviewByIdAsync(int id)
     {
-        var doctorReview = await _context.DoctorReviews.FirstOrDefaultAsync(x => x.Id == id);
+        var doctorReview = await _context.DoctorReviews
+            .Include(d => d.Driver)
+            .ThenInclude(d => d.Account)
+            .Include(a => a.Doctor)
+            .ThenInclude(a => a.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var doctorReviewDto = _mapper.Map<DoctorReviewDto>(doctorReview);
 
@@ -82,7 +87,12 @@ public class DoctorReviewService : IDoctorReviewService
     private IQueryable<DoctorReview> GetQueryDoctorReviewResParameters(
        DoctorReviewResourceParameters doctorReviewResource)
     {
-        var query = _context.DoctorReviews.AsQueryable();
+        var query = _context.DoctorReviews
+            .Include(d => d.Driver)
+            .ThenInclude(d => d.Account)
+            .Include(a => a.Doctor)
+            .ThenInclude(a => a.Account)
+            .AsQueryable();
 
         if (doctorReviewResource.Date is not null)
         {

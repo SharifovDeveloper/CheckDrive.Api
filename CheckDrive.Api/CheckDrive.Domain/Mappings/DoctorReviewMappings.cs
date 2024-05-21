@@ -10,7 +10,9 @@ namespace CheckDrive.Domain.Mappings
         public DoctorReviewMappings()
         {
             CreateMap<DoctorReviewDto, DoctorReview>();
-            CreateMap<DoctorReview, DoctorReviewDto>();
+            CreateMap<DoctorReview, DoctorReviewDto>()
+                .ForMember(x => x.DriverName, f => f.MapFrom(e => $"{e.Driver.Account.FirstName} {e.Driver.Account.LastName}"))
+                .ForMember(x => x.DoctorName, f => f.MapFrom(e => $"{e.Doctor.Account.FirstName} {e.Doctor.Account.LastName}"));
             CreateMap<DoctorReviewForCreateDto, DoctorReview>();
             CreateMap<DoctorReviewForUpdateDto, DoctorReview>();
         }
