@@ -36,7 +36,16 @@ public class DispatcherReviewService : IDispatcherReviewService
 
     public async Task<DispatcherReviewDto?> GetDispatcherReviewByIdAsync(int id)
     {
-        var dispatcherReview = await _context.DispatchersReviews.FirstOrDefaultAsync(x => x.Id == id);
+        var dispatcherReview = await _context.DispatchersReviews
+            .Include(d => d.Driver)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Mechanic)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Operator)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Dispatcher)
+            .ThenInclude(d => d.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var dispatcherReviewDto = _mapper.Map<DispatcherReviewDto>(dispatcherReview);
 
@@ -82,7 +91,16 @@ public class DispatcherReviewService : IDispatcherReviewService
     private IQueryable<DispatcherReview> GetQueryDispatcherReviewResParameters(
        DispatcherReviewResourceParameters dispatcherReviewParameters)
     {
-        var query = _context.DispatchersReviews.AsQueryable();
+        var query = _context.DispatchersReviews
+            .Include(d => d.Driver)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Mechanic)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Operator)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Dispatcher)
+            .ThenInclude(d => d.Account)
+            .AsQueryable();
 
         //FuelSpended
         if (dispatcherReviewParameters.FuelSpended is not null)
