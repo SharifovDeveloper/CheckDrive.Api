@@ -36,7 +36,10 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
     public async Task<MechanicAcceptanceDto?> GetMechanicAcceptenceByIdAsync(int id)
     {
-        var mechanicAcceptance = await _context.MechanicsAcceptances.FirstOrDefaultAsync(x => x.Id == id);
+        var mechanicAcceptance = await _context.MechanicsAcceptances
+            .Include(d => d.MechanicHandover.Mechanic)
+            .ThenInclude(d => d.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptance);
 
@@ -81,7 +84,10 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     private IQueryable<MechanicAcceptance> GetQueryMechanicAcceptanceResParameters(
        MechanicAcceptanceResourceParameters resourceParameters)
     {
-        var query = _context.MechanicsAcceptances.AsQueryable();
+        var query = _context.MechanicsAcceptances
+            .Include(d => d.MechanicHandover.Mechanic)
+            .ThenInclude(d => d.Account)
+            .AsQueryable();
 
         if (resourceParameters.Date is not null)
         {
