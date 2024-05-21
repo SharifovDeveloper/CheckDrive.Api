@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Operator;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Operator;
 
 namespace CheckDrive.Services;
 public class OperatorService : IOperatorService
@@ -33,7 +33,7 @@ public class OperatorService : IOperatorService
     }
     public async Task<OperatorDto?> GetOperatorByIdAsync(int id)
     {
-        var _operator = await _context.Operators.FirstOrDefaultAsync(x => x.Id == id);
+        var _operator = await _context.Operators.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<OperatorDto>(_operator);
     }
