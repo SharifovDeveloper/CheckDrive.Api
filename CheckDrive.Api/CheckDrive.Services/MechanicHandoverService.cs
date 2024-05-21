@@ -36,7 +36,13 @@ public class MechanicHandoverService : IMechanicHandoverService
 
     public async Task<MechanicHandoverDto?> GetMechanicHandoverByIdAsync(int id)
     {
-        var mechanicHandover = await _context.MechanicsHandovers.FirstOrDefaultAsync(x => x.Id == id);
+        var mechanicHandover = await _context.MechanicsHandovers
+            .Include(d => d.Car)
+            .Include(a => a.Driver)
+            .ThenInclude(a => a.Account)
+            .Include(m => m.Mechanic)
+            .ThenInclude(m => m.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var mechanicHandoverDto = _mapper.Map<MechanicHandoverDto>(mechanicHandover);
 
@@ -82,7 +88,13 @@ public class MechanicHandoverService : IMechanicHandoverService
     private IQueryable<MechanicHandover> GetQueryMechanicHandoverResParameters(
    MechanicHandoverResourceParameters resourceParameters)
     {
-        var query = _context.MechanicsHandovers.AsQueryable();
+        var query = _context.MechanicsHandovers
+            .Include(d => d.Car)
+            .Include(a => a.Driver)
+            .ThenInclude(a => a.Account)
+            .Include(m => m.Mechanic)
+            .ThenInclude(m => m.Account)
+            .AsQueryable();
 
         if (resourceParameters.Date is not null)
         {
