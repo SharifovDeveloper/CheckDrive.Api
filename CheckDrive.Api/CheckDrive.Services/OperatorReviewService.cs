@@ -35,8 +35,13 @@ namespace CheckDrive.Services
         }
 
         public async Task<OperatorReviewDto?> GetOperatorReviewByIdAsync(int id)
-        {
-            var operatorReview = await _context.OperatorReviews.FirstOrDefaultAsync(x => x.Id == id);
+          {
+            var operatorReview = await _context.OperatorReviews
+                .Include(a => a.Driver)
+                .ThenInclude(a => a.Account)
+                .Include(o => o.Operator)
+                .ThenInclude(o => o.Account)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return _mapper.Map<OperatorReviewDto>(operatorReview);
         }
@@ -79,7 +84,7 @@ namespace CheckDrive.Services
             var query = _context.OperatorReviews
                 .Include(a => a.Operator)
                 .ThenInclude(a => a.Account)
-                .Include(o => o.Operator)
+                .Include(o => o.Driver)
                 .ThenInclude(o => o.Account)
                 .AsQueryable();
 
