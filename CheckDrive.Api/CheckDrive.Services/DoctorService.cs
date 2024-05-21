@@ -36,7 +36,7 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id)
     {
-        var doctor = await _context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+        var doctor = await _context.Doctors.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
 
         var doctorDto = _mapper.Map<DoctorDto>(doctor);
 

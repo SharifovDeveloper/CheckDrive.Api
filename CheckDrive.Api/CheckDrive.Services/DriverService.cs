@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Driver;
 
 namespace CheckDrive.Services;
 
@@ -36,7 +36,7 @@ public class DriverService : IDriverService
 
     public async Task<DriverDto?> GetDriverByIdAsync(int id)
     {
-        var driver = await _context.Drivers.FirstOrDefaultAsync(x => x.Id == id);
+        var driver = await _context.Drivers.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
 
         var driverDto = _mapper.Map<DriverDto>(driver);
 

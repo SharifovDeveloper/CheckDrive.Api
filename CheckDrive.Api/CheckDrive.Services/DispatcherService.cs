@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,8 +8,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Dispatcher;
-using CheckDrive.ApiContracts.Account;
 
 namespace CheckDrive.Services;
 
@@ -36,7 +36,7 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto?> GetDispatcherByIdAsync(int id)
     {
-        var dispatcher = await _context.Dispatchers.FirstOrDefaultAsync(x => x.Id == id);
+        var dispatcher = await _context.Dispatchers.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
 
         var dispatcherDto = _mapper.Map<DispatcherDto>(dispatcher);
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Mechanic;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Mechanic;
 
 namespace CheckDrive.Services;
 
@@ -36,7 +36,7 @@ public class MechanicService : IMechanicService
 
     public async Task<MechanicDto?> GetMechanicByIdAsync(int id)
     {
-        var machanic = await _context.Mechanics.FirstOrDefaultAsync(x => x.Id == id);
+        var machanic = await _context.Mechanics.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<MechanicDto>(machanic);
     }
