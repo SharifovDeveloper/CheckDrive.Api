@@ -33,9 +33,8 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
                 .HasForeignKey(m => m.DriverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(m => m.MechanicAcceptances)
-                .WithOne(c => c.MechanicHandover)
-                .HasForeignKey(c => c.MechanicHandoverId);
+            builder.Property(x => x.Distance)
+            .IsRequired();
         }
     }
 

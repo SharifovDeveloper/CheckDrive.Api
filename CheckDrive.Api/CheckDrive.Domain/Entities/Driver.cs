@@ -10,6 +10,7 @@ namespace CheckDrive.Domain.Entities
         public virtual ICollection<DispatcherReview> DispetcherReviews { get; set; }
         public virtual ICollection<DoctorReview> DoctorReviews { get; set; }
         public virtual ICollection<MechanicHandover> MechanicHandovers { get; set; }
+        public virtual ICollection<MechanicAcceptance> MechanicAcceptance { get; set; }
         public virtual ICollection<OperatorReview> OperatorReviews { get; set; }
     }
 }
