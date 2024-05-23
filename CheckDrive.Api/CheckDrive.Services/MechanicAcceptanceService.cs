@@ -118,6 +118,20 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             query = query.Where(x => x.Distance > resourceParameters.DistanceGreaterThan);
         }
 
+        if (resourceParameters.DriverId is not null)
+        {
+            query = query.Where(x => x.MechanicHandover.DriverId == resourceParameters.DriverId);
+        }
+        if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
+        {
+            query = resourceParameters.OrderBy.ToLowerInvariant() switch
+            {
+                "Date" => query.OrderBy(x => x.Date),
+                "Datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.Id),
+            };
+        }
+
         return query;
     }
 }

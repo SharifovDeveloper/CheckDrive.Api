@@ -36,7 +36,7 @@ namespace CheckDrive.Services
 
         public async Task<AccountDto?> GetAccountByIdAsync(int id)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+            var account = await _context.Accounts.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id);
 
             var accountDto = _mapper.Map<AccountDto>(account);
 
@@ -112,8 +112,20 @@ namespace CheckDrive.Services
         private IQueryable<Account> GetQueryAccountResParameters(
           AccountResourceParameters resourceParameters)
         {
-            var query = _context.Accounts.Include(x=>x.Role).AsQueryable();
+            var query = _context.Accounts.Include(x => x.Role).AsQueryable();
 
+            if (resourceParameters.Login is not null)
+            {
+                query = query.Where(x => x.Login == resourceParameters.Login);
+            }
+            if (resourceParameters.Pasword is not null)
+            {
+                query = query.Where(x => x.Password == resourceParameters.Pasword);
+            }
+            if (resourceParameters.RoleId != 0 && resourceParameters.RoleId is not null)
+            {
+                query = query.Where(x => x.RoleId == resourceParameters.RoleId);
+            }
             if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
             {
                 query = query.Where(x => x.FirstName.Contains(resourceParameters.SearchString)

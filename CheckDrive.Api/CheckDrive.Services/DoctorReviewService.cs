@@ -98,6 +98,19 @@ public class DoctorReviewService : IDoctorReviewService
         {
             query = query.Where(x => x.Date.Date == doctorReviewResource.Date.Value.Date);
         }
+        if (doctorReviewResource.DriverId is not null)
+        {
+            query = query.Where(x => x.DriverId == doctorReviewResource.DriverId);
+        }
+        if (!string.IsNullOrEmpty(doctorReviewResource.OrderBy))
+        {
+            query = doctorReviewResource.OrderBy.ToLowerInvariant() switch
+            {
+                "Date" => query.OrderBy(x => x.Date),
+                "Datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.Id),
+            };
+        }
 
         return query;
     }
