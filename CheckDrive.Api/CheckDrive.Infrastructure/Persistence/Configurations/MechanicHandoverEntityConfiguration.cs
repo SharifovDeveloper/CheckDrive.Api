@@ -18,6 +18,9 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
                 .HasMaxLength(255)
                 .IsRequired();
 
+            builder.Property(x => x.Distance)
+                .IsRequired();
+
             builder.HasOne(m => m.Mechanic)
                 .WithMany(x => x.MechanicHandovers)
                 .HasForeignKey(m => m.MechanicId)
@@ -26,16 +29,12 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
             builder.HasOne(m => m.Car)
                 .WithMany(x => x.MechanicHandovers)
                 .HasForeignKey(m => m.CarId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(m => m.Driver)
                 .WithMany(x => x.MechanicHandovers)
                 .HasForeignKey(m => m.DriverId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Property(x => x.Distance)
-            .IsRequired();
         }
     }
-
 }

@@ -10,5 +10,10 @@ namespace CheckDrive.Domain.ResourceParameters
         public override string OrderBy { get; set; } = "id";
 
         public int? DriverId { get; set; }
+
+        public double? Distance { get; set; }
+        public double? DistanceLessThan { get; set; }
+        public double? DistanceGreaterThan { get; set; }
+
     }
 }

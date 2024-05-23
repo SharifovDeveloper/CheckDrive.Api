@@ -396,8 +396,8 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var mechanic in mechanics)
             {
-                var mechanicHandoversCount = new Random().Next(5, 10);
-                for (int i = 0; i < mechanicHandoversCount; i++)
+                var mechanicAcceptancesCount = new Random().Next(5, 10);
+                for (int i = 0; i < mechanicAcceptancesCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
                     var randomCar = _faker.PickRandom(cars);
@@ -418,6 +418,9 @@ namespace CheckDrive.Api.Extensions
                     });
                 }
             }
+
+            context.MechanicsAcceptances.AddRange(mechanicAcceptances);
+            context.SaveChanges();
         }
 
         private static void CreateDispatcherReviews(CheckDriveDbContext context)

@@ -124,6 +124,18 @@ public class MechanicHandoverService : IMechanicHandoverService
             };
         }
 
+        if (resourceParameters.Distance is not null)
+        {
+            query = query.Where(x => x.Distance == resourceParameters.Distance);
+        }
+        if (resourceParameters.DistanceLessThan is not null)
+        {
+            query = query.Where(x => x.Distance < resourceParameters.DistanceLessThan);
+        }
+        if (resourceParameters.DistanceGreaterThan is not null)
+        {
+            query = query.Where(x => x.Distance > resourceParameters.DistanceGreaterThan);
+        }
         return query;
     }
 }

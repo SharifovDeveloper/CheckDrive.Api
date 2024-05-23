@@ -12,8 +12,7 @@ namespace CheckDrive.Domain.Mappings
             CreateMap<MechanicAcceptance, MechanicAcceptanceDto>()
                 .ForMember(d => d.CarName, f => f.MapFrom(e => e.Car.Model))
                 .ForMember(d => d.DriverName, f => f.MapFrom(e => $"{e.Driver.Account.FirstName} {e.Driver.Account.LastName}"))
-                .ForMember(d => d.MechanicName, f => f.MapFrom(e => $"{e.Mechanic.Account.FirstName} {e.Mechanic.Account.LastName}"))
-                .ForMember(d => d.MechanicHandoverName, f => f.MapFrom(e => $"{e.MechanicHandover.Mechanic.Account.FirstName} {e.MechanicHandover.Mechanic.Account.LastName}"));
+                .ForMember(d => d.MechanicName, f => f.MapFrom(e => $"{e.Mechanic.Account.FirstName} {e.Mechanic.Account.LastName}"));
             CreateMap<MechanicAcceptanceForCreateDto, MechanicAcceptance>();
             CreateMap<MechanicAcceptanceForUpdateDto, MechanicAcceptance>();
         }

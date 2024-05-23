@@ -37,9 +37,13 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     public async Task<MechanicAcceptanceDto?> GetMechanicAcceptenceByIdAsync(int id)
     {
         var mechanicAcceptance = await _context.MechanicsAcceptances
-            .Include(d => d.MechanicHandover.Mechanic)
-            .ThenInclude(d => d.Account)
+            .Include(d => d.Car)
+            .Include(a => a.Driver)
+            .ThenInclude(a => a.Account)
+            .Include(m => m.Mechanic)
+            .ThenInclude(m => m.Account)
             .FirstOrDefaultAsync(x => x.Id == id);
+
 
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptance);
 
@@ -85,8 +89,11 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
        MechanicAcceptanceResourceParameters resourceParameters)
     {
         var query = _context.MechanicsAcceptances
-            .Include(d => d.MechanicHandover.Mechanic)
-            .ThenInclude(d => d.Account)
+           .Include(d => d.Car)
+            .Include(a => a.Driver)
+            .ThenInclude(a => a.Account)
+            .Include(m => m.Mechanic)
+            .ThenInclude(m => m.Account)
             .AsQueryable();
 
         if (resourceParameters.Date is not null)
@@ -120,7 +127,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         if (resourceParameters.DriverId is not null)
         {
-            query = query.Where(x => x.MechanicHandover.DriverId == resourceParameters.DriverId);
+            query = query.Where(x => x.DriverId == resourceParameters.DriverId);
         }
         if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
         {

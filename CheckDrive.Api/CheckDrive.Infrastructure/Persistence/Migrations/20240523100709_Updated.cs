@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
-    /// <inheritdoc />
-    public partial class Initial_Create : Migration
+    public partial class Updated : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -190,6 +188,41 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MechanicAcceptance",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Distance = table.Column<double>(type: "float", nullable: false),
+                    MechanicId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    DriverId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MechanicAcceptance", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MechanicAcceptance_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MechanicAcceptance_Driver_DriverId",
+                        column: x => x.DriverId,
+                        principalTable: "Driver",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MechanicAcceptance_Mechanic_MechanicId",
+                        column: x => x.MechanicId,
+                        principalTable: "Mechanic",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MechanicHandover",
                 columns: table => new
                 {
@@ -199,6 +232,7 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Distance = table.Column<double>(type: "float", nullable: false),
                     MechanicId = table.Column<int>(type: "int", nullable: false),
                     CarId = table.Column<int>(type: "int", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: false)
@@ -291,29 +325,6 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "MechanicAcceptance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IsAccepted = table.Column<bool>(type: "bit", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Distance = table.Column<double>(type: "float", nullable: false),
-                    MechanicHandoverId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MechanicAcceptance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MechanicAcceptance_MechanicHandover_MechanicHandoverId",
-                        column: x => x.MechanicHandoverId,
-                        principalTable: "MechanicHandover",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
                 table: "Account",
@@ -370,9 +381,19 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MechanicAcceptance_MechanicHandoverId",
+                name: "IX_MechanicAcceptance_CarId",
                 table: "MechanicAcceptance",
-                column: "MechanicHandoverId");
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MechanicAcceptance_DriverId",
+                table: "MechanicAcceptance",
+                column: "DriverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MechanicAcceptance_MechanicId",
+                table: "MechanicAcceptance",
+                column: "MechanicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MechanicHandover_CarId",
@@ -418,6 +439,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "MechanicAcceptance");
 
             migrationBuilder.DropTable(
+                name: "MechanicHandover");
+
+            migrationBuilder.DropTable(
                 name: "OperatorReview");
 
             migrationBuilder.DropTable(
@@ -427,19 +451,16 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "Doctor");
 
             migrationBuilder.DropTable(
-                name: "MechanicHandover");
-
-            migrationBuilder.DropTable(
-                name: "Operator");
-
-            migrationBuilder.DropTable(
                 name: "Car");
+
+            migrationBuilder.DropTable(
+                name: "Mechanic");
 
             migrationBuilder.DropTable(
                 name: "Driver");
 
             migrationBuilder.DropTable(
-                name: "Mechanic");
+                name: "Operator");
 
             migrationBuilder.DropTable(
                 name: "Account");

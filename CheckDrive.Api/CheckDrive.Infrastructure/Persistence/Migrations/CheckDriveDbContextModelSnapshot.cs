@@ -260,6 +260,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Comments")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -270,10 +273,13 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Property<double>("Distance")
                         .HasColumnType("float");
 
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MechanicHandoverId")
+                    b.Property<int>("MechanicId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -282,7 +288,11 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MechanicHandoverId");
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("MechanicId");
 
                     b.ToTable("MechanicAcceptance", (string)null);
                 });
@@ -304,6 +314,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
@@ -516,13 +529,29 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.MechanicAcceptance", b =>
                 {
-                    b.HasOne("CheckDrive.Domain.Entities.MechanicHandover", "MechanicHandover")
-                        .WithMany("MechanicAcceptances")
-                        .HasForeignKey("MechanicHandoverId")
+                    b.HasOne("CheckDrive.Domain.Entities.Car", "Car")
+                        .WithMany("MechanicAcceptance")
+                        .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("MechanicHandover");
+                    b.HasOne("CheckDrive.Domain.Entities.Driver", "Driver")
+                        .WithMany("MechanicAcceptance")
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CheckDrive.Domain.Entities.Mechanic", "Mechanic")
+                        .WithMany("MechanicAcceptance")
+                        .HasForeignKey("MechanicId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Mechanic");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.MechanicHandover", b =>
@@ -597,6 +626,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Car", b =>
                 {
+                    b.Navigation("MechanicAcceptance");
+
                     b.Navigation("MechanicHandovers");
                 });
 
@@ -616,6 +647,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     b.Navigation("DoctorReviews");
 
+                    b.Navigation("MechanicAcceptance");
+
                     b.Navigation("MechanicHandovers");
 
                     b.Navigation("OperatorReviews");
@@ -625,12 +658,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("DispetcherReviews");
 
-                    b.Navigation("MechanicHandovers");
-                });
+                    b.Navigation("MechanicAcceptance");
 
-            modelBuilder.Entity("CheckDrive.Domain.Entities.MechanicHandover", b =>
-                {
-                    b.Navigation("MechanicAcceptances");
+                    b.Navigation("MechanicHandovers");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Operator", b =>
