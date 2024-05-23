@@ -139,8 +139,8 @@ public class DispatcherReviewService : IDispatcherReviewService
         {
             query = dispatcherReviewParameters.OrderBy.ToLowerInvariant() switch
             {
-                "Date" => query.OrderBy(x => x.Date),
-                "Datedesc" => query.OrderByDescending(x=>x.Date),
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x=>x.Date),
                 _ => query.OrderBy(x => x.Id),
             };
         }
