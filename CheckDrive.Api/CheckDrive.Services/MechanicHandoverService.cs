@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.MechanicHandover;
 
 namespace CheckDrive.Services;
 
@@ -109,6 +109,19 @@ public class MechanicHandoverService : IMechanicHandoverService
         if (resourceParameters.IsHanded is not null)
         {
             query = query.Where(x => x.IsHanded == resourceParameters.IsHanded);
+        }
+        if (resourceParameters.DriverId is not null)
+        {
+            query = query.Where(x => x.DriverId == resourceParameters.DriverId);
+        }
+        if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
+        {
+            query = resourceParameters.OrderBy.ToLowerInvariant() switch
+            {
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.Id),
+            };
         }
 
         return query;

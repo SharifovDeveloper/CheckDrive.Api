@@ -12,12 +12,9 @@ namespace CheckDrive.ApiContracts.MechanicAcceptance
         public double Distance { get; set; }
         public int DriverId { get; set; }
         public string DriverName { get; set; }
-
         public int MechanicId { get; set; }
         public string MechanicName { get; set; }
         public int CarId { get; set; }
         public string CarName { get; set; }
-        public int MechanicHandoverId { get; set; }
-        public string MechanicHandoverName { get; set; }
     }
 }

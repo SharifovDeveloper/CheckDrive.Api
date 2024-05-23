@@ -103,6 +103,11 @@ public class DispatcherReviewService : IDispatcherReviewService
             .AsQueryable();
 
         //FuelSpended
+
+        if (dispatcherReviewParameters.DriverId is not null)
+        {
+            query = query.Where(x => x.DriverId == dispatcherReviewParameters.DriverId);
+        }
         if (dispatcherReviewParameters.FuelSpended is not null)
         {
             query = query.Where(x => x.FuelSpended == dispatcherReviewParameters.FuelSpended);
@@ -130,6 +135,15 @@ public class DispatcherReviewService : IDispatcherReviewService
             query = query.Where(x => x.DistanceCovered > dispatcherReviewParameters.DistanceCoveredGreaterThan);
         }
 
+        if (!string.IsNullOrEmpty(dispatcherReviewParameters.OrderBy))
+        {
+            query = dispatcherReviewParameters.OrderBy.ToLowerInvariant() switch
+            {
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x=>x.Date),
+                _ => query.OrderBy(x => x.Id),
+            };
+        }
         return query;
     }
 }

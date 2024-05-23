@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.OperatorReview;
 
 namespace CheckDrive.Services
 {
@@ -35,7 +35,7 @@ namespace CheckDrive.Services
         }
 
         public async Task<OperatorReviewDto?> GetOperatorReviewByIdAsync(int id)
-          {
+        {
             var operatorReview = await _context.OperatorReviews
                 .Include(a => a.Driver)
                 .ThenInclude(a => a.Account)
@@ -107,6 +107,19 @@ namespace CheckDrive.Services
             if (operatorReviewResource.IsGiven is not null)
             {
                 query = query.Where(x => x.IsGiven == operatorReviewResource.IsGiven);
+            }
+            if (operatorReviewResource.DriverId is not null)
+            {
+                query = query.Where(x => x.DriverId == operatorReviewResource.DriverId);
+            }
+            if (!string.IsNullOrEmpty(operatorReviewResource.OrderBy))
+            {
+                query = operatorReviewResource.OrderBy.ToLowerInvariant() switch
+                {
+                    "date" => query.OrderBy(x => x.Date),
+                    "datedesc" => query.OrderByDescending(x => x.Date),
+                    _ => query.OrderBy(x => x.Id),
+                };
             }
 
             return query;
