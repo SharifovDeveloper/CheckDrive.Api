@@ -2,6 +2,7 @@
 {
     public class DoctorReviewResourceParameters : ResourceParametersBase
     {
+        public int? DriverId { get; set; }
         public bool? IsHealthy { get; set; }
         public DateTime? Date { get; set; }
         public override string OrderBy { get; set; } = "id";
