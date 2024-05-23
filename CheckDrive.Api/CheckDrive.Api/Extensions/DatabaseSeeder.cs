@@ -338,6 +338,7 @@ namespace CheckDrive.Api.Extensions
                         Comments = comments,
                         Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
                         Status = status,
+                        Distance = _faker.Random.Int(50, 100),
                         MechanicId = mechanic.Id,
                         DriverId = randomDriver.Id,
                         CarId = randomCar.Id,
@@ -388,28 +389,35 @@ namespace CheckDrive.Api.Extensions
         {
             if (context.MechanicsAcceptances.Any()) return;
 
-            var mechanicsHandovers = context.MechanicsHandovers.ToList();
+            var cars = context.Cars.ToList();
+            var drivers = context.Drivers.ToList();
+            var mechanics = context.Mechanics.ToList();
             List<MechanicAcceptance> mechanicAcceptances = new();
 
-            foreach (var mechanicsHandover in mechanicsHandovers)
+            foreach (var mechanic in mechanics)
             {
-                var isAccepted = _faker.Random.Bool();
-                var comments = isAccepted ? "" : _faker.Lorem.Sentence();
-                var status = _faker.Random.Enum<Status>();
-
-                mechanicAcceptances.Add(new MechanicAcceptance()
+                var mechanicHandoversCount = new Random().Next(5, 10);
+                for (int i = 0; i < mechanicHandoversCount; i++)
                 {
-                    IsAccepted = isAccepted,
-                    Comments = comments,
-                    Status = status,
-                    Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
-                    Distance = _faker.Random.Int(50, 100),
-                    MechanicHandoverId = mechanicsHandover.Id,
-                });
-            }
+                    var randomDriver = _faker.PickRandom(drivers);
+                    var randomCar = _faker.PickRandom(cars);
+                    var isAccepted = _faker.Random.Bool();
+                    var comments = isAccepted ? "" : _faker.Lorem.Sentence();
+                    var status = _faker.Random.Enum<Status>();
 
-            context.MechanicsAcceptances.AddRange(mechanicAcceptances);
-            context.SaveChanges();
+                    mechanicAcceptances.Add(new MechanicAcceptance()
+                    {
+                        IsAccepted = isAccepted,
+                        Comments = comments,
+                        Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
+                        Status = status,
+                        Distance = _faker.Random.Int(50, 100),
+                        MechanicId = mechanic.Id,
+                        DriverId = randomDriver.Id,
+                        CarId = randomCar.Id,
+                    });
+                }
+            }
         }
 
         private static void CreateDispatcherReviews(CheckDriveDbContext context)
