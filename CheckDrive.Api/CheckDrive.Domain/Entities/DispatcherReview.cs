@@ -6,7 +6,6 @@ namespace CheckDrive.Domain.Entities
         public double FuelSpended { get; set; }
         public double DistanceCovered { get; set; }
         public DateTime Date { get; set; }
-
         public int DispatcherId { get; set; }
         public Dispatcher Dispatcher { get; set; }
         public int OperatorId { get; set; }

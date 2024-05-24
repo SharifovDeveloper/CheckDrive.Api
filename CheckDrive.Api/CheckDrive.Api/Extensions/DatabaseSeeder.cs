@@ -83,7 +83,7 @@ namespace CheckDrive.Api.Extensions
                         PhoneNumber = _faker.Phone.PhoneNumber("+998-(##) ###-##-##"),
                         FirstName = _faker.Name.FirstName(),
                         LastName = _faker.Name.LastName(),
-                        Bithdate = _faker.Date.Between(DateTime.Now.AddYears(-50), DateTime.Now.AddYears(-20)),
+                        Bithdate = _faker.Date.Between(DateTime.Now.AddYears(-50), DateTime.Now.AddYears(-20)).Date,
                         RoleId = role.Id,
                     });
                 }
