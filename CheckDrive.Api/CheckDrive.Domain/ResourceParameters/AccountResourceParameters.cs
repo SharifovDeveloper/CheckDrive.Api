@@ -2,6 +2,7 @@
 {
     public class AccountResourceParameters : ResourceParametersBase
     {
+        public DateTime? BirthDate { get; set; }
         public string? Login { get; set; }
         public string? Pasword { get; set; }
         public int? RoleId { get; set; }

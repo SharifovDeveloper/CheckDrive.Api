@@ -114,6 +114,10 @@ namespace CheckDrive.Services
         {
             var query = _context.Accounts.Include(x => x.Role).AsQueryable();
 
+            if (resourceParameters.BirthDate is not null)
+            {
+                query = query.Where(x => x.Bithdate.Date == resourceParameters.BirthDate.Value.Date);
+            }
             if (resourceParameters.Login is not null)
             {
                 query = query.Where(x => x.Login == resourceParameters.Login);
