@@ -52,6 +52,19 @@ namespace CheckDrive.Services
             return accountDto;
         }
 
+        public async Task DeleteAccountAsync(int id)
+        {
+            var accountEntity = await _context.Accounts.FindAsync(id);
+
+            if (accountEntity == null)
+                throw new Exception("Account not found");
+
+            await DelteAndCheckAccountRoles(id, accountEntity.RoleId);
+
+            _context.Accounts.Remove(accountEntity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<AccountDto> UpdateAccountAsync(AccountForUpdateDto accountForUpdate)
         {
             var accountEntity = _mapper.Map<Account>(accountForUpdate);
@@ -63,19 +76,81 @@ namespace CheckDrive.Services
 
             return accountDto;
         }
-
-        public async Task DeleteAccountAsync(int id)
+        private async Task DelteAndCheckAccountRoles(int accountId, int role)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (account is not null)
+            switch (role)
             {
-                _context.Accounts.Remove(account);
+                case 2:
+                    var driver = await _context.Drivers
+                               .Include(d => d.DoctorReviews)
+                               .Include(ma => ma.MechanicAcceptance)
+                               .Include(mh => mh.MechanicHandovers)
+                               .Include(dr => dr.DispetcherReviews)
+                               .Include(o => o.OperatorReviews)
+                               .SingleOrDefaultAsync(d => d.AccountId == accountId);
+                    if (driver != null)
+                    {
+                        _context.OperatorReviews.RemoveRange(driver.OperatorReviews);
+                        _context.DoctorReviews.RemoveRange(driver.DoctorReviews);
+                        _context.MechanicsAcceptances.RemoveRange(driver.MechanicAcceptance);
+                        _context.MechanicsHandovers.RemoveRange(driver.MechanicHandovers);
+                        _context.DispatchersReviews.RemoveRange(driver.DispetcherReviews);
+                        _context.Drivers.Remove(driver);
+                        await _context.SaveChangesAsync();
+                    }
+                    break;
+                case 3:
+                    var doctor = await _context.Doctors
+                               .Include(d => d.DoctorReviews)
+                               .SingleOrDefaultAsync(d => d.AccountId == accountId);
+                    if (doctor != null)
+                    {
+                        _context.DoctorReviews.RemoveRange(doctor.DoctorReviews);
+                        _context.Doctors.Remove(doctor);
+                        await _context.SaveChangesAsync();
+                    }
+                    break;
+                case 4:
+                    var _operator = await _context.Operators
+                               .Include(o => o.OperatorReviews)
+                               .Include(d => d.DispetcherReviews)
+                               .SingleOrDefaultAsync(d => d.AccountId == accountId);
+                    if (_operator != null)
+                    {
+                        _context.DispatchersReviews.RemoveRange(_operator.DispetcherReviews);
+                        _context.OperatorReviews.RemoveRange(_operator.OperatorReviews);
+                        _context.Operators.Remove(_operator);
+                        await _context.SaveChangesAsync();
+                    }
+                    break;
+                case 5:
+                    var dispatcher = await _context.Dispatchers
+                               .Include(o => o.DispetcherReviews)
+                               .SingleOrDefaultAsync(d => d.AccountId == accountId);
+                    if (dispatcher != null)
+                    {
+                        _context.DispatchersReviews.RemoveRange(dispatcher.DispetcherReviews);
+                        _context.Dispatchers.Remove(dispatcher);
+                        await _context.SaveChangesAsync();
+                    }
+                    break;
+                case 6:
+                    var mechanic = await _context.Mechanics
+                               .Include(o => o.MechanicAcceptance)
+                               .Include(o => o.MechanicHandovers)
+                               .Include(d => d.DispetcherReviews)
+                               .SingleOrDefaultAsync(d => d.AccountId == accountId);
+                    if (mechanic != null)
+                    {
+                        _context.MechanicsAcceptances.RemoveRange(mechanic.MechanicAcceptance);
+                        _context.MechanicsHandovers.RemoveRange(mechanic.MechanicHandovers);
+                        _context.DispatchersReviews.RemoveRange(mechanic.DispetcherReviews);
+                        _context.Mechanics.Remove(mechanic);
+                        await _context.SaveChangesAsync();
+                    }
+                    break;
             }
-
-            await _context.SaveChangesAsync();
         }
-
         private async Task<Account> CreateAndCheckAccountRoles(AccountForCreateDto accountForCreate)
         {
             var accountEntity = _mapper.Map<Account>(accountForCreate);
