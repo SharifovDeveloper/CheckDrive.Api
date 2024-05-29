@@ -4,13 +4,14 @@ using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace CheckDrive.Api.Controllers;
+
+[Authorize(Policy = "AdminOrMechanic")]
 [ApiController]
 [Route("api/mechanics")]
-
 public class MechanicsController : Controller
 {
     private readonly IMechanicService _mechanicService;

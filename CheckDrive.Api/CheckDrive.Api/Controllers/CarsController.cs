@@ -1,10 +1,12 @@
 ﻿using CheckDrive.ApiContracts.Car;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/cars")]
 public class CarsController : Controller

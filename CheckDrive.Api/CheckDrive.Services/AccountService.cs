@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Account;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -14,11 +15,13 @@ namespace CheckDrive.Services
     {
         private readonly IMapper _mapper;
         private readonly CheckDriveDbContext _context;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public AccountService(IMapper mapper, CheckDriveDbContext context)
+        public AccountService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
         }
 
         public async Task<GetBaseResponse<AccountDto>> GetAccountsAsync(AccountResourceParameters resourceParameters)
@@ -45,6 +48,8 @@ namespace CheckDrive.Services
 
         public async Task<AccountDto> CreateAccountAsync(AccountForCreateDto accountForCreate)
         {
+            accountForCreate.Password = _passwordHasher.Generate(accountForCreate.Password);
+
             var createdAccount = await CreateAndCheckAccountRoles(accountForCreate);
 
             var accountDto = _mapper.Map<AccountDto>(createdAccount);
@@ -76,6 +81,7 @@ namespace CheckDrive.Services
 
             return accountDto;
         }
+
         private async Task DelteAndCheckAccountRoles(int accountId, int role)
         {
             switch (role)
@@ -151,6 +157,7 @@ namespace CheckDrive.Services
                     break;
             }
         }
+
         private async Task<Account> CreateAndCheckAccountRoles(AccountForCreateDto accountForCreate)
         {
             var accountEntity = _mapper.Map<Account>(accountForCreate);
@@ -184,6 +191,7 @@ namespace CheckDrive.Services
 
             return accountEntity;
         }
+
         private IQueryable<Account> GetQueryAccountResParameters(
           AccountResourceParameters resourceParameters)
         {

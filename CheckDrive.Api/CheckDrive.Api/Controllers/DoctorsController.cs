@@ -3,10 +3,12 @@ using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize(Policy = "AdminOrDoctor")]
 [ApiController]
 [Route("api/doctors")]
 public class DoctorsController : Controller
@@ -71,7 +73,6 @@ public class DoctorsController : Controller
 
         return NoContent();
     }
-
 
     [HttpGet("reviews")]
     public async Task<ActionResult<IEnumerable<DoctorReviewDto>>> GetDoctorReviewsAsync(

@@ -3,10 +3,12 @@ using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.ApiContracts.DispatcherReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize(Policy = "AdminOrDispatcher")]
 [ApiController]
 [Route("api/dispatchers")]
 public class DispatchersController : Controller
