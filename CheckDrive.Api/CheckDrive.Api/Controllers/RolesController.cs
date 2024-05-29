@@ -1,10 +1,12 @@
 ﻿using CheckDrive.ApiContracts.Role;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize(Policy = "Admin")]
 [ApiController]
 [Route("api/roles")]
 public class RolesController : Controller

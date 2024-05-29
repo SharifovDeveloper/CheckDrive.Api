@@ -1,16 +1,17 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize(Policy = "Admin")]
 [ApiController]
 [Route("api/accounts")]
 public class AccountsController : Controller
 {
     private readonly IAccountService _accountService;
-
     public AccountsController(IAccountService accountService)
     {
         _accountService = accountService;

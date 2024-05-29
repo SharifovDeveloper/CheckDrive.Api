@@ -3,12 +3,14 @@ using CheckDrive.ApiContracts.Operator;
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
+
+[Authorize(Policy = "AdminOrOperator")]
 [ApiController]
 [Route("api/operators")]
-
 public class OperatorsController : Controller
 {
     private readonly IOperatorService _operatorService;
