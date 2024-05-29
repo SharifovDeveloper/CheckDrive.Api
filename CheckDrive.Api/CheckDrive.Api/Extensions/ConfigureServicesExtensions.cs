@@ -1,10 +1,16 @@
-﻿using CheckDrive.Domain.Interfaces.Repositories;
+﻿using CheckDrive.Domain.Interfaces.Auth;
+using CheckDrive.Domain.Interfaces.Repositories;
 using CheckDrive.Domain.Interfaces.Services;
+using CheckDrive.Infrastructure.JwtToken;
+using CheckDrive.Infrastructure.PasswordHash;
 using CheckDrive.Infrastructure.Persistence;
 using CheckDrive.Infrastructure.Persistence.Repositories;
 using CheckDrive.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 namespace CheckDrive.Api.Extensions
 {
@@ -27,6 +33,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorReviewRepository, OperatorReviewRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IDispatcherService, DispatcherService>();
             services.AddScoped<IDispatcherReviewService, DispatcherReviewService>();
@@ -39,6 +46,9 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOperatorReviewService, OperatorReviewService>();
+
+            services.AddScoped<IJwtProvider, JwtProvider>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>
@@ -67,6 +77,83 @@ namespace CheckDrive.Api.Extensions
                 .CreateLogger();
 
             return services;
+        }
+
+        public static void AddApiAuthentication(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var JwtOption = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = true;
+
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(JwtOption!.SecretKey))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["tasty-cookies"];
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.RequireClaim("Admin", "true");
+                });
+
+                options.AddPolicy("AdminOrDriver", policy =>
+                {
+                    policy.RequireClaim("Driver", "true");
+                    policy.RequireClaim("Admin", "true");
+                });
+
+                options.AddPolicy("AdminOrDoctor", policy =>
+                {
+                    policy.RequireClaim("Doctor", "true");
+                    policy.RequireClaim("Admin", "true");
+                });
+
+                options.AddPolicy("AdminOrOperator", policy =>
+                {
+                    policy.RequireClaim("Operator", "true");
+                    policy.RequireClaim("Admin", "true");
+                });
+
+                options.AddPolicy("AdminOrDispatcher", policy =>
+                {
+                    policy.RequireClaim("Admin", "true");
+                    policy.RequireClaim("Dispatcher", "true");
+                });
+
+                options.AddPolicy("AdminOrMechanic", policy =>
+                {
+                    policy.RequireClaim("Mechanic", "true");
+                    policy.RequireClaim("Admin", "true");
+                });
+            });
         }
     }
 }
