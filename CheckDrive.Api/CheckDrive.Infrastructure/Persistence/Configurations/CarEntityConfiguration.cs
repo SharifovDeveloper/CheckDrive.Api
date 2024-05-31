@@ -32,6 +32,9 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
             builder.Property(x => x.FuelTankCapacity)
                 .IsRequired();
 
+            builder.Property(x => x.RemainingFuel)
+                .IsRequired();
+
             builder.HasMany(c => c.MechanicHandovers)
                 .WithOne(m => m.Car)
                 .HasForeignKey(m => m.CarId);
