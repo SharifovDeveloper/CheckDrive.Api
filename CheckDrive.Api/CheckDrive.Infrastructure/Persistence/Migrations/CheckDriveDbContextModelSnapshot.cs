@@ -100,6 +100,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<double>("RemainingFuel")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.ToTable("Car", (string)null);
@@ -368,6 +371,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Comments")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -392,6 +398,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("DriverId");
 
@@ -594,6 +602,12 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.OperatorReview", b =>
                 {
+                    b.HasOne("CheckDrive.Domain.Entities.Car", "Car")
+                        .WithMany("OperatorReviews")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("CheckDrive.Domain.Entities.Driver", "Driver")
                         .WithMany("OperatorReviews")
                         .HasForeignKey("DriverId")
@@ -605,6 +619,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         .HasForeignKey("OperatorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Car");
 
                     b.Navigation("Driver");
 
@@ -629,6 +645,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Navigation("MechanicAcceptance");
 
                     b.Navigation("MechanicHandovers");
+
+                    b.Navigation("OperatorReviews");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Dispatcher", b =>
