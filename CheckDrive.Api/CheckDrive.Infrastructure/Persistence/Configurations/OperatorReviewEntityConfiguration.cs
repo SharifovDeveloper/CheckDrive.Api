@@ -21,6 +21,10 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
                 .HasMaxLength(255)
                 .IsRequired();
 
+            builder.Property(x => x.OilMarks)
+                .HasMaxLength(255)
+                .IsRequired();
+
             builder.HasOne(o => o.Operator)
                 .WithMany(x => x.OperatorReviews)
                 .HasForeignKey(o => o.OperatorId)

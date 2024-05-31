@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(CheckDriveDbContext))]
-    [Migration("20240531114348_Initial_Create")]
+    [Migration("20240531125528_Initial_Create")]
     partial class Initial_Create
     {
         /// <inheritdoc />
@@ -392,6 +392,10 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     b.Property<double>("OilAmount")
                         .HasColumnType("float");
+
+                    b.Property<int>("OilMarks")
+                        .HasMaxLength(255)
+                        .HasColumnType("int");
 
                     b.Property<int>("OperatorId")
                         .HasColumnType("int");
