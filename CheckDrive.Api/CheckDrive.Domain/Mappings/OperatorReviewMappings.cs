@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.OperatorReview;
+using CheckDrive.Domain.Entities;
 
 
 namespace CheckDrive.Domain.Mappings
@@ -13,7 +13,7 @@ namespace CheckDrive.Domain.Mappings
             CreateMap<OperatorReview, OperatorReviewDto>()
                 .ForMember(x => x.DriverName, f => f.MapFrom(e => $"{e.Driver.Account.FirstName} {e.Driver.Account.LastName}"))
                 .ForMember(x => x.OperatorName, f => f.MapFrom(e => $"{e.Operator.Account.FirstName} {e.Operator.Account.LastName}"))
-                .ForMember(x => x.Ca)
+                .ForMember(x => x.CarName, f => f.MapFrom(e => $"{e.Car.Model} {e.Car.Number}"));
             
             CreateMap<OperatorReviewForCreateDto, OperatorReview>();
             CreateMap<OperatorReviewForUpdateDto, OperatorReview>();

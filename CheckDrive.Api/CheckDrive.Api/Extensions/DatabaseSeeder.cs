@@ -107,6 +107,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 8.2,
                     FuelTankCapacity = 60,
                     ManufacturedYear = 2019,
+                    RemainingFuel = 12,
                 },
                 new Car()
                 {
@@ -116,6 +117,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 6.4,
                     FuelTankCapacity = 35,
                     ManufacturedYear = 2015,
+                    RemainingFuel = 14,
                 },
                 new Car()
                 {
@@ -125,6 +127,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 8.2,
                     FuelTankCapacity = 45,
                     ManufacturedYear = 2018,
+                    RemainingFuel = 25,
                 },
                 new Car()
                 {
@@ -134,6 +137,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 6.6,
                     FuelTankCapacity = 35,
                     ManufacturedYear = 2019,
+                    RemainingFuel = 10,
                 },
                 new Car()
                 {
@@ -143,6 +147,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 11.4,
                     FuelTankCapacity = 90,
                     ManufacturedYear = 2019,
+                    RemainingFuel = 6,
                 },
                 new Car()
                 {
@@ -152,6 +157,7 @@ namespace CheckDrive.Api.Extensions
                     MeduimFuelConsumption = 10.7,
                     FuelTankCapacity = 117,
                     ManufacturedYear = 2019,
+                    RemainingFuel = 11,
                 },
             };
 
@@ -356,6 +362,7 @@ namespace CheckDrive.Api.Extensions
 
             var operators = context.Operators.ToList();
             var drivers = context.Drivers.ToList();
+            var cars = context.Cars.ToList();
             List<OperatorReview> operatorReviews = new();
 
             foreach (var operatorr in operators)
@@ -364,6 +371,7 @@ namespace CheckDrive.Api.Extensions
                 for (int i = 0; i < operatorReviewsCount; i++)
                 {
                     var randomDriver = _faker.PickRandom(drivers);
+                    var randomCar = _faker.PickRandom(cars);
                     var status = _faker.Random.Enum<Status>();
                     var isGiven = _faker.Random.Bool();
                     var comments = isGiven ? "" : _faker.Lorem.Sentence();
@@ -376,7 +384,8 @@ namespace CheckDrive.Api.Extensions
                         IsGiven = isGiven,
                         Comments = comments,
                         OperatorId = operatorr.Id,
-                        DriverId = randomDriver.Id
+                        DriverId = randomDriver.Id,
+                        CarId = randomCar.Id
                     });
                 }
             }

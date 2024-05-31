@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
-    public partial class Updated : Migration
+    /// <inheritdoc />
+    public partial class Initial_Create : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -20,6 +22,7 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     Number = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     MeduimFuelConsumption = table.Column<double>(type: "float", nullable: false),
                     FuelTankCapacity = table.Column<double>(type: "float", nullable: false),
+                    RemainingFuel = table.Column<double>(type: "float", nullable: false),
                     ManufacturedYear = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -308,11 +311,17 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OperatorId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OperatorReview", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OperatorReview_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OperatorReview_Driver_DriverId",
                         column: x => x.DriverId,
@@ -416,6 +425,11 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OperatorReview_CarId",
+                table: "OperatorReview",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OperatorReview_DriverId",
                 table: "OperatorReview",
                 column: "DriverId");
@@ -451,10 +465,10 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "Doctor");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "Mechanic");
 
             migrationBuilder.DropTable(
-                name: "Mechanic");
+                name: "Car");
 
             migrationBuilder.DropTable(
                 name: "Driver");
