@@ -13,7 +13,10 @@ namespace CheckDrive.Domain.Mappings
             CreateMap<OperatorReview, OperatorReviewDto>()
                 .ForMember(x => x.DriverName, f => f.MapFrom(e => $"{e.Driver.Account.FirstName} {e.Driver.Account.LastName}"))
                 .ForMember(x => x.OperatorName, f => f.MapFrom(e => $"{e.Operator.Account.FirstName} {e.Operator.Account.LastName}"))
-                .ForMember(x => x.CarName, f => f.MapFrom(e => $"{e.Car.Model} {e.Car.Number}"));
+                .ForMember(x => x.CarModel, f => f.MapFrom(e => e.Car.Model))
+                .ForMember(x => x.CarNumber, f => f.MapFrom(e => e.Car.Number))
+                .ForMember(x => x.CarOilCapacity, f => f.MapFrom(e => e.Car.FuelTankCapacity))
+                .ForMember(x => x.CarOilRemainig, f => f.MapFrom(e => e.Car.RemainingFuel));
             
             CreateMap<OperatorReviewForCreateDto, OperatorReview>();
             CreateMap<OperatorReviewForUpdateDto, OperatorReview>();

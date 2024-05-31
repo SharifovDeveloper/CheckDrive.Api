@@ -308,6 +308,7 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     IsGiven = table.Column<bool>(type: "bit", nullable: false),
                     OilAmount = table.Column<double>(type: "float", nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    OilMarks = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Status = table.Column<int>(type: "int", maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OperatorId = table.Column<int>(type: "int", nullable: false),

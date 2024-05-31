@@ -390,6 +390,10 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Property<double>("OilAmount")
                         .HasColumnType("float");
 
+                    b.Property<int>("OilMarks")
+                        .HasMaxLength(255)
+                        .HasColumnType("int");
+
                     b.Property<int>("OperatorId")
                         .HasColumnType("int");
 

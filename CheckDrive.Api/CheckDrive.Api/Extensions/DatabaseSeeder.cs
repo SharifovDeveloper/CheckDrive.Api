@@ -373,6 +373,7 @@ namespace CheckDrive.Api.Extensions
                     var randomDriver = _faker.PickRandom(drivers);
                     var randomCar = _faker.PickRandom(cars);
                     var status = _faker.Random.Enum<Status>();
+                    var oilMarks = _faker.Random.Enum<OilMarks>();
                     var isGiven = _faker.Random.Bool();
                     var comments = isGiven ? "" : _faker.Lorem.Sentence();
 
@@ -381,6 +382,7 @@ namespace CheckDrive.Api.Extensions
                         OilAmount = _faker.Random.Double(10, 20),
                         Date = _faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now),
                         Status = status,
+                        OilMarks = oilMarks,
                         IsGiven = isGiven,
                         Comments = comments,
                         OperatorId = operatorr.Id,
