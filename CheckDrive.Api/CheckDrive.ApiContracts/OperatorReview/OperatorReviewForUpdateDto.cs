@@ -12,5 +12,6 @@ namespace CheckDrive.ApiContracts.OperatorReview
 
         public int OperatorId { get; set; }
         public int DriverId { get; set; }
+        public int CarId { get; set; }
     }
 }

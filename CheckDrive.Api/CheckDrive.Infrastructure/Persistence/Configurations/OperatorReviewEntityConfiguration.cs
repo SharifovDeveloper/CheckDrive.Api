@@ -29,7 +29,12 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
             builder.HasOne(o => o.Driver)
                 .WithMany(x => x.OperatorReviews)
                 .HasForeignKey(o => o.DriverId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(o => o.Car)
+                .WithMany(x => x.OperatorReviews)
+                .HasForeignKey(o => o.CarId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 
