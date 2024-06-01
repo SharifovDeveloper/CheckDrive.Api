@@ -3,6 +3,7 @@ using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -17,17 +18,25 @@ namespace CheckDrive.Services
 
         public async Task<string> Login(string email, string password)
         {
-            var user = await GetByEmailAsync(email);
-
-            var result = _hasher.Verify(password, user.Password);
-
-            if (result == false)
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                throw new Exception("Failed to login");
+                return null;
+            }
+
+            var user = await GetByEmailAsync(email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var isPasswordValid = _hasher.Verify(password, user.Password);
+
+            if (!isPasswordValid)
+            {
+                return null;
             }
 
             var token = _jwtProvider.GenerateToken(user);
-
             return token;
         }
 
@@ -40,7 +49,7 @@ namespace CheckDrive.Services
             if (userEntity == null)
             {
                 return null;
-            }
+            }   
 
             return _mapper.Map<Account>(userEntity);
         }
