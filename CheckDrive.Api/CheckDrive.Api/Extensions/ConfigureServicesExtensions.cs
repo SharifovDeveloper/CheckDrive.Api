@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Domain.Interfaces.Auth;
+using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Repositories;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Infrastructure.JwtToken;
@@ -6,6 +7,7 @@ using CheckDrive.Infrastructure.PasswordHash;
 using CheckDrive.Infrastructure.Persistence;
 using CheckDrive.Infrastructure.Persistence.Repositories;
 using CheckDrive.Services;
+using CheckDrive.Services.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -49,6 +51,8 @@ namespace CheckDrive.Api.Extensions
 
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+            services.AddScoped<IChatHub, ChatHub>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>

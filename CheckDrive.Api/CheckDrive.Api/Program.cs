@@ -3,9 +3,11 @@ using CheckDrive.Api.Middlewares;
 using CheckDrive.Infrastructure.JwtToken;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Configuration;
+using CheckDrive.Services.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -32,6 +34,7 @@ builder.Services.AddEndpointsApiExplorer()
         .ConfigureDatabaseContext()
         .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddSignalR();
 builder.Services.AddApiAuthentication(configuration);
 
 var app = builder.Build();
@@ -63,5 +66,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
