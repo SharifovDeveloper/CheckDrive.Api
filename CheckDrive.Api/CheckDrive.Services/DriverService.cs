@@ -79,7 +79,6 @@ public class DriverService : IDriverService
         {
             query = query.Where(x => x.AccountId == resourceParameters.AccountId);
         }
-
         return query;
     }
 }
