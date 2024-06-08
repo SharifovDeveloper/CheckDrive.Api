@@ -46,6 +46,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOperatorReviewService, OperatorReviewService>();
+            services.AddScoped<IDashboardService,DashboardService>();
 
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();

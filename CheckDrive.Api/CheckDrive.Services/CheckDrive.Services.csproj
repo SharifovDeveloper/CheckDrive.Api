@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CheckDrive.ApiContracts\CheckDrive.ApiContracts.csproj" />
     <ProjectReference Include="..\CheckDrive.Domain\CheckDrive.Domain.csproj" />
     <ProjectReference Include="..\CheckDrive.Infrastructure\CheckDrive.Infrastructure.csproj" />
   </ItemGroup>
