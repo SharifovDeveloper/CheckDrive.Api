@@ -34,8 +34,8 @@ builder.Services.AddEndpointsApiExplorer()
         .ConfigureDatabaseContext()
         .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddSignalR();
 builder.Services.AddApiAuthentication(configuration);
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -65,7 +65,8 @@ app.UseCookiePolicy(new CookiePolicyOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
 app.MapHub<ChatHub>("/chat");
+app.MapControllers();
+
 
 app.Run();
