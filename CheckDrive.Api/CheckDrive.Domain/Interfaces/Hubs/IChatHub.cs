@@ -2,7 +2,7 @@
 {
     public interface IChatHub
     {
-        Task SendPrivateRequest(string userId, string massege);
+        Task SendPrivateRequest(string userId, string message);
 
         Task SendPrivateResponse(string employeeId, bool isApproved);
     }
