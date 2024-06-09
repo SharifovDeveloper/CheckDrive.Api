@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-//[Authorize(Policy = "AdminOrDriver")]
+[Authorize(Policy = "AdminOrDriver")]
 [ApiController]
 [Route("api/drivers")]
 public class DriversController : Controller

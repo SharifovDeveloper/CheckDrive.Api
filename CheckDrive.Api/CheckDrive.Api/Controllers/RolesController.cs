@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-//[Authorize(Policy = "Admin")]
+[Authorize(Policy = "Admin")]
 [ApiController]
 [Route("api/roles")]
 public class RolesController : Controller

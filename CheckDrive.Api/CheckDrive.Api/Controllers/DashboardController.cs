@@ -1,9 +1,11 @@
 ﻿using CheckDrive.ApiContracts.Dashboard;
 using CheckDrive.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
+[Authorize(Policy = "Admin")]
 [Route("api/dashboard")]
 [ApiController]
 public class DashboardController : Controller
