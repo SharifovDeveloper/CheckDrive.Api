@@ -4,6 +4,6 @@
     {
         Task SendPrivateRequest(string userId, string message);
 
-        Task SendPrivateResponse(string employeeId, bool isApproved);
+        Task ReceivePrivateResponse(bool response);
     }
 }

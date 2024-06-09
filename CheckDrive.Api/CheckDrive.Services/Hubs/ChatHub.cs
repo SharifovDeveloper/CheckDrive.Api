@@ -31,10 +31,16 @@ namespace CheckDrive.Services.Hubs
             }
         }
 
-        public async Task SendPrivateResponse(string employeeId, bool isApproved)
+        public async Task ReceivePrivateResponse(bool response)
         {
-            _logger.LogInformation($"SendPrivateResponse: {employeeId}, {isApproved}");
-            await Clients.User(employeeId).SendAsync("ReceiveResponse", isApproved);
+            _logger.LogInformation($"Response received: {response}");
+
+            if (response)
+            {
+            }
+            else
+            {
+            }
         }
 
         public override async Task OnConnectedAsync()
@@ -44,7 +50,6 @@ namespace CheckDrive.Services.Hubs
             _logger.LogInformation($"User connected: {userId}, ConnectionId: {Context.ConnectionId}");
             await base.OnConnectedAsync();
         }
-
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             _logger.LogInformation($"User disconnected: {Context.ConnectionId}");
