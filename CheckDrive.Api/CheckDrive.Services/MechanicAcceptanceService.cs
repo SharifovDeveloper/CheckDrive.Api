@@ -25,7 +25,6 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     {
         var query = GetQueryMechanicAcceptanceResParameters(resourceParameters);
 
-        // Tartiblashni qo'shing
         query = query.OrderByDescending(item => item.Date);
 
         var mechanicAcceptances = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
