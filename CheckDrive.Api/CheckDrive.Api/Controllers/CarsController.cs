@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController]
 [Route("api/cars")]
 public class CarsController : Controller
