@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "AdminOrMechanic")]
+//[Authorize(Policy = "AdminOrMechanic")]
 [ApiController]
 [Route("api/mechanics")]
 public class MechanicsController : Controller
