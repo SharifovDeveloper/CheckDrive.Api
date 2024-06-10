@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "AdminOrDriver")]
+//[Authorize(Policy = "AdminOrDriver")]
 [ApiController]
 [Route("api/drivers")]
 public class DriversController : Controller
@@ -24,6 +24,7 @@ public class DriversController : Controller
     public async Task<ActionResult<IEnumerable<DriverDto>>> GetDriversAsync(
     [FromQuery] DriverResourceParameters driverResource)
     {
+
         var drivers = await _driverService.GetDriversAsync(driverResource);
 
         return Ok(drivers);

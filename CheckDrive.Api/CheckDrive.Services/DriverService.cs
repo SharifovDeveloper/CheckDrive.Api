@@ -75,6 +75,12 @@ public class DriverService : IDriverService
     {
         var query = _context.Drivers.Include(x => x.Account).AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
+        {
+            query = query.Where(x => x.Account.FirstName.Contains(resourceParameters.SearchString)
+            || x.Account.LastName.Contains(resourceParameters.SearchString));
+        }
+
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {
             query = query.Where(x => x.AccountId == resourceParameters.AccountId);

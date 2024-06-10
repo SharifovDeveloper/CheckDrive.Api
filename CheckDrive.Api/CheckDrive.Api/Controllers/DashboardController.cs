@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "Admin")]
+//[Authorize(Policy = "Admin")]
 [Route("api/dashboard")]
 [ApiController]
 public class DashboardController : Controller
