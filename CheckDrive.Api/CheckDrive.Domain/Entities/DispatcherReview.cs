@@ -8,6 +8,8 @@ namespace CheckDrive.Domain.Entities
         public DateTime Date { get; set; }
         public int DispatcherId { get; set; }
         public Dispatcher Dispatcher { get; set; }
+        public int CarId { get; set; }
+        public Car? Car { get; set; }
         public int OperatorId { get; set; }
         public Operator Operator { get; set; }
         public int MechanicId { get; set; }
