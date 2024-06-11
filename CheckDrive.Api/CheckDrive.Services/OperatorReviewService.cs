@@ -41,6 +41,7 @@ namespace CheckDrive.Services
                 .ThenInclude(a => a.Account)
                 .Include(o => o.Operator)
                 .ThenInclude(o => o.Account)
+                .Include(o => o.Car)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return _mapper.Map<OperatorReviewDto>(operatorReview);
@@ -86,6 +87,7 @@ namespace CheckDrive.Services
                 .ThenInclude(a => a.Account)
                 .Include(o => o.Driver)
                 .ThenInclude(o => o.Account)
+                .Include(o => o.Car)
                 .AsQueryable();
 
             if (operatorReviewResource.Date is not null)
@@ -111,6 +113,10 @@ namespace CheckDrive.Services
             if (operatorReviewResource.DriverId is not null)
             {
                 query = query.Where(x => x.DriverId == operatorReviewResource.DriverId);
+            }
+            if (operatorReviewResource.CarId is not null)
+            {
+                query = query.Where(x => x.CarId == operatorReviewResource.CarId);
             }
             if (!string.IsNullOrEmpty(operatorReviewResource.OrderBy))
             {
