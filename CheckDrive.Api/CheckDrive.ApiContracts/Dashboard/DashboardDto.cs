@@ -6,12 +6,19 @@ namespace CheckDrive.ApiContracts.Dashboard
     {
         public Summary Summary { get; set; }
         public IEnumerable<SpliteChartData> SplineCharts { get; set; }
+        public IEnumerable<EmployeesCountByRole> EmployeesCountByRoles { get; set; }
 
-        public DashboardDto(Summary summary, IEnumerable<SpliteChartData> spliteChartDatas)
+        public DashboardDto(Summary summary, IEnumerable<SpliteChartData> spliteChartDatas, IEnumerable<EmployeesCountByRole> employeesCountByRoles)
         {
             Summary = summary;
             SplineCharts = spliteChartDatas;
+            EmployeesCountByRoles = employeesCountByRoles;
         }
+    }
+    public class EmployeesCountByRole
+    {
+        public string RoleName { get; set; }
+        public int CountOfEmployees { get; set; }
     }
     public class Summary
     {
