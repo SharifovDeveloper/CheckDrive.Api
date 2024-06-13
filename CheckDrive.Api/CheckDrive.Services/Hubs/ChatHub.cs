@@ -11,6 +11,7 @@ namespace CheckDrive.Services.Hubs
         private readonly ILogger<ChatHub> _logger;
         private readonly IHubContext<ChatHub> _context;
         private static ConcurrentDictionary<string, string> userConnections = new ConcurrentDictionary<string, string>();
+        private static ConcurrentDictionary<string, List<string>> undeliveredMessages = new ConcurrentDictionary<string, List<string>>();
 
         public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context)
         {
@@ -27,20 +28,15 @@ namespace CheckDrive.Services.Hubs
             }
             else
             {
-                _logger.LogWarning($"User {userId} is not connected.");
+                _logger.LogWarning($"User {userId} is not connected. Storing message.");
+                StoreUndeliveredMessage(userId, message);
             }
         }
 
         public async Task ReceivePrivateResponse(bool response)
         {
             _logger.LogInformation($"Response received: {response}");
-
-            if (response)
-            {
-            }
-            else
-            {
-            }
+            // Обработайте ответ здесь, если необходимо
         }
 
         public override async Task OnConnectedAsync()
@@ -48,12 +44,41 @@ namespace CheckDrive.Services.Hubs
             string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             userConnections[userId] = Context.ConnectionId;
             _logger.LogInformation($"User connected: {userId}, ConnectionId: {Context.ConnectionId}");
+
+            await SendPendingMessages(userId);
+
             await base.OnConnectedAsync();
         }
+
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            _logger.LogInformation($"User disconnected: {Context.ConnectionId}");
+            string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            userConnections.TryRemove(userId, out _);
+            _logger.LogInformation($"User disconnected: {userId}");
             await base.OnDisconnectedAsync(exception);
+        }
+
+        private void StoreUndeliveredMessage(string userId, string message)
+        {
+            undeliveredMessages.AddOrUpdate(userId, new List<string> { message }, (key, existingList) =>
+            {
+                existingList.Add(message);
+                return existingList;
+            });
+        }
+
+        private async Task SendPendingMessages(string userId)
+        {
+            if (undeliveredMessages.TryRemove(userId, out var messages))
+            {
+                foreach (var message in messages)
+                {
+                    if (userConnections.TryGetValue(userId, out var connectionId))
+                    {
+                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+                    }
+                }
+            }
         }
     }
 }
