@@ -23,7 +23,7 @@ namespace CheckDrive.Infrastructure.Persistence
         public CheckDriveDbContext(DbContextOptions<CheckDriveDbContext> options)
             : base(options)
         {
-           //Database.Migrate();
+            //Database.Migrate();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

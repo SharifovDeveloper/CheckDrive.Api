@@ -9,7 +9,7 @@
     <Description>This package contains contracts for CheckDrive projects</Description>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <IsPackable>true</IsPackable>
-    <Version>1.2.1</Version>
+    <Version>1.2.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

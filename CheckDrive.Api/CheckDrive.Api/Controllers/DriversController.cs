@@ -24,6 +24,7 @@ public class DriversController : Controller
     public async Task<ActionResult<IEnumerable<DriverDto>>> GetDriversAsync(
     [FromQuery] DriverResourceParameters driverResource)
     {
+
         var drivers = await _driverService.GetDriversAsync(driverResource);
 
         return Ok(drivers);

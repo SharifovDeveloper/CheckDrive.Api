@@ -23,31 +23,21 @@ namespace CheckDrive.Infrastructure.JwtToken
             {
                 case 1:
                     claimForToken.Add(new Claim("Admin", "true"));
-                    claimForToken.Add(new Claim("Driver", "true"));
-                    claimForToken.Add(new Claim("Doctor", "true"));
-                    claimForToken.Add(new Claim("Operator", "true"));
-                    claimForToken.Add(new Claim("Dispatcher", "true"));
-                    claimForToken.Add(new Claim("Mechanic", "true"));
                     break;
                 case 2:
                     claimForToken.Add(new Claim("Driver", "true"));
-                    claimForToken.Add(new Claim("Admin", "true"));
                     break;
                 case 3:
                     claimForToken.Add(new Claim("Doctor", "true"));
-                    claimForToken.Add(new Claim("Admin", "true"));
                     break;
                 case 4:
                     claimForToken.Add(new Claim("Operator", "true"));
-                    claimForToken.Add(new Claim("Admin", "true"));
                     break;
                 case 5:
                     claimForToken.Add(new Claim("Dispatcher", "true"));
-                    claimForToken.Add(new Claim("Admin", "true"));
                     break;
                 case 6:
                     claimForToken.Add(new Claim("Mechanic", "true"));
-                    claimForToken.Add(new Claim("Admin", "true"));
                     break;
             }
 

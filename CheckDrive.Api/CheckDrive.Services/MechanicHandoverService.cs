@@ -25,6 +25,8 @@ public class MechanicHandoverService : IMechanicHandoverService
     {
         var query = GetQueryMechanicHandoverResParameters(resourceParameters);
 
+        query = query.OrderByDescending(item => item.Date);
+
         var mechanicHandovers = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var mechanicHandoverDtos = _mapper.Map<List<MechanicHandoverDto>>(mechanicHandovers);

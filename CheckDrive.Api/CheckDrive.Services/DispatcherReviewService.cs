@@ -100,6 +100,7 @@ public class DispatcherReviewService : IDispatcherReviewService
             .ThenInclude(d => d.Account)
             .Include(d => d.Dispatcher)
             .ThenInclude(d => d.Account)
+            .Include(d => d.Car)
             .AsQueryable();
 
         //FuelSpended

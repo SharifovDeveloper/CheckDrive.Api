@@ -25,6 +25,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     {
         var query = GetQueryMechanicAcceptanceResParameters(resourceParameters);
 
+        query = query.OrderByDescending(item => item.Date);
+
         var mechanicAcceptances = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var mechanicAcceptanceDtos = _mapper.Map<List<MechanicAcceptanceDto>>(mechanicAcceptances);
@@ -32,6 +34,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         var paginatedResult = new PaginatedList<MechanicAcceptanceDto>(mechanicAcceptanceDtos, mechanicAcceptances.TotalCount, mechanicAcceptances.CurrentPage, mechanicAcceptances.PageSize);
 
         return paginatedResult.ToResponse();
+
     }
 
     public async Task<MechanicAcceptanceDto?> GetMechanicAcceptenceByIdAsync(int id)

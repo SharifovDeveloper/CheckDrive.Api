@@ -12,5 +12,6 @@ namespace CheckDrive.Domain.ResourceParameters
         public DateTime? Date { get; set; }
         public override string OrderBy { get; set; } = "id";
         public int? DriverId { get; set; }
+        public int? CarId { get; set; }
     }
 }

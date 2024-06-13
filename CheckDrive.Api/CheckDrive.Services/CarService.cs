@@ -83,6 +83,11 @@ public class CarService : ICarService
     {
         var query = _context.Cars.AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
+        {
+            query = query.Where(x => x.Model.Contains(resourceParameters.SearchString)
+            || x.Color.Contains(resourceParameters.SearchString));
+        }
         //MeduimFuelConsumption
         if (resourceParameters.MeduimFuelConsumption is not null)
         {

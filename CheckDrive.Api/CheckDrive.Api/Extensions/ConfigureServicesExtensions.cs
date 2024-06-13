@@ -48,6 +48,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOperatorReviewService, OperatorReviewService>();
+            services.AddScoped<IDashboardService,DashboardService>();
 
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -130,32 +131,37 @@ namespace CheckDrive.Api.Extensions
 
                 options.AddPolicy("AdminOrDriver", policy =>
                 {
-                    policy.RequireClaim("Driver", "true");
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Driver" && c.Value == "true") ||
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
 
                 options.AddPolicy("AdminOrDoctor", policy =>
                 {
-                    policy.RequireClaim("Doctor", "true");
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Doctor" && c.Value == "true") ||
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
 
                 options.AddPolicy("AdminOrOperator", policy =>
                 {
-                    policy.RequireClaim("Operator", "true");
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Operator" && c.Value == "true") ||
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
 
                 options.AddPolicy("AdminOrDispatcher", policy =>
                 {
-                    policy.RequireClaim("Admin", "true");
-                    policy.RequireClaim("Dispatcher", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Dispatcher" && c.Value == "true") ||
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
 
                 options.AddPolicy("AdminOrMechanic", policy =>
                 {
-                    policy.RequireClaim("Mechanic", "true");
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Mechanic" && c.Value == "true") ||
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
             });
         }
