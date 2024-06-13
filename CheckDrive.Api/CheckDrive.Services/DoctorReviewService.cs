@@ -7,6 +7,7 @@ using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.Domain.Interfaces.Hubs;
 
 namespace CheckDrive.Services;
 
@@ -14,6 +15,7 @@ public class DoctorReviewService : IDoctorReviewService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
+    private readonly IChatHub _chatHub;
 
     public DoctorReviewService(IMapper mapper, CheckDriveDbContext context)
     {
