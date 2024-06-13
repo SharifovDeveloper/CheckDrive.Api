@@ -16,12 +16,25 @@ public class DashboardService : IDashboardService
     {
         var summary = await GetSummaryAsync();
         var splineChartData = await GetSpliteChartDataAsync();
+        var employeesCountByRole = await GetEmployeesCountAsync();
 
-        return new DashboardDto(summary, splineChartData);
+        return new DashboardDto(summary, splineChartData,employeesCountByRole);
     }
+    private async Task<IEnumerable<EmployeesCountByRole>> GetEmployeesCountAsync()
+    {
+        return await _context.Accounts
+            .GroupBy(a => a.Role.Name)
+            .Select(g => new EmployeesCountByRole
+            {
+                RoleName = g.Key,
+                CountOfEmployees = g.Count()
+            })
+            .ToListAsync();
+    }
+
     private async Task<IEnumerable<SpliteChartData>> GetSpliteChartDataAsync()
     {
-      
+
         var reviews = await _context.OperatorReviews
                                    .GroupBy(r => new { r.Date.Year, r.Date.Month })
                                    .Select(g => new
@@ -49,12 +62,6 @@ public class DashboardService : IDashboardService
 
         return result;
     }
-
-
-
-
-
-
     private async Task<Summary> GetSummaryAsync()
     {
         var carsCount = await _context.Cars.CountAsync();
