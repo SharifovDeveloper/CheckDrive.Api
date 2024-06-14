@@ -16,7 +16,8 @@ namespace CheckDrive.Infrastructure.JwtToken
         {
             var claimForToken = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new Claim(ClaimTypes.Role, account.RoleId.ToString())
             };
 
             switch (account.RoleId)
