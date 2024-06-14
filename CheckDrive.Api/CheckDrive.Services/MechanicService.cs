@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Mechanic;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -14,11 +15,13 @@ public class MechanicService : IMechanicService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public MechanicService(IMapper mapper, CheckDriveDbContext context)
+    public MechanicService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public async Task<GetBaseResponse<MechanicDto>> GetMechanicesAsync(MechanicResourceParameters resourceParameters)
@@ -43,6 +46,7 @@ public class MechanicService : IMechanicService
 
     public async Task<MechanicDto> CreateMechanicAsync(MechanicForCreateDto mechanicForCreate)
     {
+        mechanicForCreate.Password = _passwordHasher.Generate(mechanicForCreate.Password);
         var accountEntity = _mapper.Map<Account>(mechanicForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();

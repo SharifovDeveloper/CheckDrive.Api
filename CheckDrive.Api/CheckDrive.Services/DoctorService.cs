@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -14,11 +15,13 @@ public class DoctorService : IDoctorService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public DoctorService(IMapper mapper, CheckDriveDbContext context)
+    public DoctorService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public async Task<GetBaseResponse<DoctorDto>> GetDoctorsAsync(DoctorResourceParameters resourceParameters)
@@ -45,6 +48,7 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto> CreateDoctorAsync(DoctorForCreateDto doctorForCreate)
     {
+        doctorForCreate.Password = _passwordHasher.Generate(doctorForCreate.Password);
         var accountEntity = _mapper.Map<Account>(doctorForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
