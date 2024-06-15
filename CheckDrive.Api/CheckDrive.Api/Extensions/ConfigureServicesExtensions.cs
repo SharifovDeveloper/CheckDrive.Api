@@ -126,7 +126,8 @@ namespace CheckDrive.Api.Extensions
             {
                 options.AddPolicy("Admin", policy =>
                 {
-                    policy.RequireClaim("Admin", "true");
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
 
                 options.AddPolicy("AdminOrDriver", policy =>
