@@ -20,6 +20,8 @@ public class AuthorizationController(IAuthorizationService authorizationService)
             return Unauthorized("Invalid email or password");
         }
 
+        HttpContext.Response.Cookies.Append("tasty-cookies", token);
+
         return Ok(token);
     }
 }
