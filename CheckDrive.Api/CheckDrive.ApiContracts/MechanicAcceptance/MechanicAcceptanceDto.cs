@@ -16,5 +16,6 @@ namespace CheckDrive.ApiContracts.MechanicAcceptance
         public string MechanicName { get; set; }
         public int CarId { get; set; }
         public string CarName { get; set; }
+        public int AccountDriverId { get; set; }
     }
 }
