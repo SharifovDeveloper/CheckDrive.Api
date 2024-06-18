@@ -11,7 +11,7 @@ namespace CheckDrive.Services.Hubs
         private readonly ILogger<ChatHub> _logger;
         private readonly IHubContext<ChatHub> _context;
         private static ConcurrentDictionary<string, string> userConnections = new ConcurrentDictionary<string, string>();
-        private static ConcurrentDictionary<string, List<string>> undeliveredMessages = new ConcurrentDictionary<string, List<string>>();
+        private static ConcurrentDictionary<string, List<(int, string)>> undeliveredMessages = new ConcurrentDictionary<string, List<(int, string)>>();
 
         public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context)
         {
@@ -19,17 +19,17 @@ namespace CheckDrive.Services.Hubs
             _context = context;
         }
 
-        public async Task SendPrivateRequest(string userId, string message)
+        public async Task SendPrivateRequest(int id, string userId, string message)
         {
             _logger.LogInformation($"SendPrivateMessage: {userId}, {message}");
             if (userConnections.TryGetValue(userId, out var connectionId))
             {
-                await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+                await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", id, message);
             }
             else
             {
                 _logger.LogWarning($"User {userId} is not connected. Storing message.");
-                StoreUndeliveredMessage(userId, message);
+                StoreUndeliveredMessage(id, userId, message);
             }
         }
 
@@ -58,11 +58,11 @@ namespace CheckDrive.Services.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        private void StoreUndeliveredMessage(string userId, string message)
+        private void StoreUndeliveredMessage(int id, string userId, string message)
         {
-            undeliveredMessages.AddOrUpdate(userId, new List<string> { message }, (key, existingList) =>
+            undeliveredMessages.AddOrUpdate(userId, new List<(int, string)> { (id, message) }, (key, existingList) =>
             {
-                existingList.Add(message);
+                existingList.Add((id, message));
                 return existingList;
             });
         }
@@ -73,9 +73,10 @@ namespace CheckDrive.Services.Hubs
             {
                 foreach (var message in messages)
                 {
+                    var (id, context) = message;
                     if (userConnections.TryGetValue(userId, out var connectionId))
                     {
-                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", id, context);
                     }
                 }
             }
