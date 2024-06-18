@@ -7,6 +7,7 @@ using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.Domain.Interfaces.Hubs;
 
 namespace CheckDrive.Services;
 
@@ -14,11 +15,13 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
+    private readonly IChatHub _chatHub;
 
-    public MechanicAcceptanceService(IMapper mapper, CheckDriveDbContext context)
+    public MechanicAcceptanceService(IMapper mapper, CheckDriveDbContext context, IChatHub chatHub)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _chatHub = chatHub ?? throw new ArgumentNullException(nameof(chatHub));
     }
 
     public async Task<GetBaseResponse<MechanicAcceptanceDto>> GetMechanicAcceptencesAsync(MechanicAcceptanceResourceParameters resourceParameters)
@@ -47,7 +50,6 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             .ThenInclude(m => m.Account)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptance);
 
         return mechanicAcceptanceDto;
@@ -59,6 +61,11 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         await _context.MechanicsAcceptances.AddAsync(mechanicAcceptanceEntity);
         await _context.SaveChangesAsync();
 
+        var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
+
+        await _chatHub.SendPrivateRequest
+            (mechanicAcceptanceEntity.Id, data.DriverId.ToString(), $"Siz shu moshinani {data.CarName}, shu voqitta topshirdizmi {data.Date}");
+        
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
 
         return mechanicAcceptanceDto;
