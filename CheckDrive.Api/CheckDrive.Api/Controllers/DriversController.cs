@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-//[Authorize(Policy = "AdminOrDriver")]
+[Authorize]
 [ApiController]
 [Route("api/drivers")]
 public class DriversController : Controller
@@ -20,6 +20,7 @@ public class DriversController : Controller
         _accountService = accountService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DriverDto>>> GetDriversAsync(
     [FromQuery] DriverResourceParameters driverResource)
@@ -30,6 +31,7 @@ public class DriversController : Controller
         return Ok(drivers);
     }
 
+    [Authorize(Policy = "AdminOrDriver")]
     [HttpGet("{id}", Name = "GetDriverById")]
     public async Task<ActionResult<DriverDto>> GetDriverByIdAsync(int id)
     {
@@ -41,6 +43,7 @@ public class DriversController : Controller
         return Ok(driver);
     }
 
+    [Authorize(Policy = "AdminOrDriver")]
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] DriverForCreateDto driverforCreateDto)
     {
@@ -49,6 +52,7 @@ public class DriversController : Controller
         return CreatedAtAction("GetDriverById", new { createdDriver.Id }, createdDriver);
     }
 
+    [Authorize(Policy = "AdminOrDriver")]
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto driverforUpdateDto)
     {
@@ -62,6 +66,7 @@ public class DriversController : Controller
         return Ok(updateDriver);
     }
 
+    [Authorize(Policy = "AdminOrDriver")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
