@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -14,11 +15,13 @@ namespace CheckDrive.Services
     {
         private readonly IMapper _mapper;
         private readonly CheckDriveDbContext _context;
+        private readonly IChatHub _chat;
 
-        public OperatorReviewService(IMapper mapper, CheckDriveDbContext context)
+        public OperatorReviewService(IMapper mapper, CheckDriveDbContext context, IChatHub chatHub)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _chat = chatHub ?? throw new ArgumentNullException(nameof(chatHub));
         }
 
         public async Task<GetBaseResponse<OperatorReviewDto>> GetOperatorReviewsAsync(OperatorReviewResourceParameters resourceParameters)
@@ -53,6 +56,11 @@ namespace CheckDrive.Services
 
             await _context.OperatorReviews.AddAsync(operatorReviewEntity);
             await _context.SaveChangesAsync();
+
+            var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
+
+            await _chat.SendPrivateRequest
+                (operatorReviewEntity.Id, data.DriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
 
             return _mapper.Map<OperatorReviewDto>(operatorReviewEntity);
         }

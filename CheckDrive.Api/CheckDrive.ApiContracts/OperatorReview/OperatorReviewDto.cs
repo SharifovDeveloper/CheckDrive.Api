@@ -21,5 +21,6 @@ namespace CheckDrive.ApiContracts.OperatorReview
         public string CarOilRemainig{ get; set; }
         public int DriverId { get; set; }
         public string DriverName { get; set; }
+        public int AccountDriverId { get; set; }
     }
 }

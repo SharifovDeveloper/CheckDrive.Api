@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -14,11 +15,13 @@ public class MechanicHandoverService : IMechanicHandoverService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
+    private readonly IChatHub _chatHub;
 
-    public MechanicHandoverService(IMapper mapper, CheckDriveDbContext context)
+    public MechanicHandoverService(IMapper mapper, CheckDriveDbContext context, IChatHub chatHub)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _chatHub = chatHub ?? throw new ArgumentNullException(nameof(chatHub));
     }
 
     public async Task<GetBaseResponse<MechanicHandoverDto>> GetMechanicHandoversAsync(MechanicHandoverResourceParameters resourceParameters)
@@ -57,6 +60,10 @@ public class MechanicHandoverService : IMechanicHandoverService
 
         await _context.MechanicsHandovers.AddAsync(mechanicHandoverEntity);
         await _context.SaveChangesAsync();
+
+        var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
+
+        await _chatHub.SendPrivateRequest(mechanicHandoverEntity.Id, data.DriverId.ToString(), $"Siz shu moshinani oldizmi {data.CarName}");
 
         var mechanicHandoverDto = _mapper.Map<MechanicHandoverDto>(mechanicHandoverEntity);
 
