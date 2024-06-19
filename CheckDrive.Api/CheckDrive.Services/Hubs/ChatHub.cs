@@ -1,6 +1,10 @@
-﻿using CheckDrive.Domain.Entities;
+﻿using CheckDrive.ApiContracts;
+using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Hubs;
+using CheckDrive.Domain.Interfaces.Services;
+using CheckDrive.Infrastructure.Persistence;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Security.Claims;
@@ -11,13 +15,15 @@ namespace CheckDrive.Services.Hubs
     {
         private readonly ILogger<ChatHub> _logger;
         private readonly IHubContext<ChatHub> _context;
+        private readonly CheckDriveDbContext _dbContext;
         private static ConcurrentDictionary<string, string> userConnections = new ConcurrentDictionary<string, string>();
         private static ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>> undeliveredMessages = new ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>>();
 
-        public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context)
+        public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context, CheckDriveDbContext checkDriveDbContext)
         {
             _logger = logger;
             _context = context;
+            _dbContext = checkDriveDbContext ?? throw new ArgumentNullException(nameof(checkDriveDbContext));
         }
 
         public async Task SendPrivateRequest(SendingMessageStatus sendingMessageStatus, int reviewId, string userId, string message)
@@ -37,7 +43,28 @@ namespace CheckDrive.Services.Hubs
         public async Task ReceivePrivateResponse(int statusReview, int reviewId, bool response)
         {
             _logger.LogInformation($"Response received:{statusReview} {reviewId} {response}");
-            // Обработайте ответ здесь, если необходимо
+            try
+            {
+                switch (statusReview)
+                {
+                    case 0:
+                        await UpdateStatusForMechanicHandover(reviewId, response); 
+                        break;
+                    case 1:
+                        await UpdateStatusForOperatorReview(reviewId, response);
+                        break;
+                    case 2:
+                        await UpdateStatusForMechanicAcceptances(reviewId, response); 
+                        break;
+                    default:
+                        _logger.LogWarning($"Unknown status review: {statusReview}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while updating status review for reviewId: {reviewId}");
+            }
         }
 
         public override async Task OnConnectedAsync()
@@ -77,10 +104,43 @@ namespace CheckDrive.Services.Hubs
                     var (sendingMessageStatus, reviewId, context) = message;
                     if (userConnections.TryGetValue(userId, out var connectionId))
                     {
-                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", sendingMessageStatus,  reviewId, context);
+                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", sendingMessageStatus, reviewId, context);
                     }
                 }
             }
+        }
+
+        private async Task UpdateStatusForOperatorReview(int reviewId, bool response)
+        {
+            var operatorReview = await _dbContext.OperatorReviews
+                .FirstOrDefaultAsync(x => x.Id == reviewId);
+
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+
+            _dbContext.OperatorReviews.Update(operatorReview);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task UpdateStatusForMechanicHandover(int reviewId, bool response)
+        {
+            var operatorReview = await _dbContext.MechanicsHandovers
+                .FirstOrDefaultAsync(x => x.Id == reviewId);
+
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+
+            _dbContext.MechanicsHandovers.Update(operatorReview);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task UpdateStatusForMechanicAcceptances(int reviewId, bool response)
+        {
+            var operatorReview = await _dbContext.MechanicsAcceptances
+                .FirstOrDefaultAsync(x => x.Id == reviewId);
+
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+
+            _dbContext.MechanicsAcceptances.Update(operatorReview);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
