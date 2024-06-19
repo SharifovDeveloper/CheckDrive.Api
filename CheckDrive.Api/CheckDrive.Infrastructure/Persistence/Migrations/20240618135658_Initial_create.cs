@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Create : Migration
+    public partial class Initial_create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -261,45 +261,6 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DispatcherReview",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FuelSpended = table.Column<double>(type: "float", nullable: false),
-                    DistanceCovered = table.Column<double>(type: "float", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DispatcherId = table.Column<int>(type: "int", nullable: false),
-                    OperatorId = table.Column<int>(type: "int", nullable: false),
-                    MechanicId = table.Column<int>(type: "int", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DispatcherReview", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DispatcherReview_Dispatcher_DispatcherId",
-                        column: x => x.DispatcherId,
-                        principalTable: "Dispatcher",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DispatcherReview_Driver_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Driver",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DispatcherReview_Mechanic_MechanicId",
-                        column: x => x.MechanicId,
-                        principalTable: "Mechanic",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DispatcherReview_Operator_OperatorId",
-                        column: x => x.OperatorId,
-                        principalTable: "Operator",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OperatorReview",
                 columns: table => new
                 {
@@ -335,6 +296,69 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DispatcherReview",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FuelSpended = table.Column<double>(type: "float", nullable: false),
+                    DistanceCovered = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DispatcherId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    OperatorId = table.Column<int>(type: "int", nullable: false),
+                    MechanicId = table.Column<int>(type: "int", nullable: false),
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    OperatorReviewId = table.Column<int>(type: "int", nullable: false),
+                    MechanicHandoverId = table.Column<int>(type: "int", nullable: false),
+                    MechanicAcceptanceId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DispatcherReview", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_Dispatcher_DispatcherId",
+                        column: x => x.DispatcherId,
+                        principalTable: "Dispatcher",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_Driver_DriverId",
+                        column: x => x.DriverId,
+                        principalTable: "Driver",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_MechanicAcceptance_MechanicAcceptanceId",
+                        column: x => x.MechanicAcceptanceId,
+                        principalTable: "MechanicAcceptance",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_MechanicHandover_MechanicHandoverId",
+                        column: x => x.MechanicHandoverId,
+                        principalTable: "MechanicHandover",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_Mechanic_MechanicId",
+                        column: x => x.MechanicId,
+                        principalTable: "Mechanic",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_OperatorReview_OperatorReviewId",
+                        column: x => x.OperatorReviewId,
+                        principalTable: "OperatorReview",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DispatcherReview_Operator_OperatorId",
+                        column: x => x.OperatorId,
+                        principalTable: "Operator",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
                 table: "Account",
@@ -344,6 +368,11 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "IX_Dispatcher_AccountId",
                 table: "Dispatcher",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DispatcherReview_CarId",
+                table: "DispatcherReview",
+                column: "CarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DispatcherReview_DispatcherId",
@@ -356,6 +385,16 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 column: "DriverId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DispatcherReview_MechanicAcceptanceId",
+                table: "DispatcherReview",
+                column: "MechanicAcceptanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DispatcherReview_MechanicHandoverId",
+                table: "DispatcherReview",
+                column: "MechanicHandoverId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DispatcherReview_MechanicId",
                 table: "DispatcherReview",
                 column: "MechanicId");
@@ -364,6 +403,11 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "IX_DispatcherReview_OperatorId",
                 table: "DispatcherReview",
                 column: "OperatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DispatcherReview_OperatorReviewId",
+                table: "DispatcherReview",
+                column: "OperatorReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctor_AccountId",
@@ -451,6 +495,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 name: "DoctorReview");
 
             migrationBuilder.DropTable(
+                name: "Dispatcher");
+
+            migrationBuilder.DropTable(
                 name: "MechanicAcceptance");
 
             migrationBuilder.DropTable(
@@ -458,9 +505,6 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "OperatorReview");
-
-            migrationBuilder.DropTable(
-                name: "Dispatcher");
 
             migrationBuilder.DropTable(
                 name: "Doctor");

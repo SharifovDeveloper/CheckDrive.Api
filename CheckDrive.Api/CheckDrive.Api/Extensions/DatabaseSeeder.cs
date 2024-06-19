@@ -443,6 +443,9 @@ namespace CheckDrive.Api.Extensions
             var drivers = context.Drivers.ToList();
             var operators = context.Operators.ToList();
             var cars = context.Cars.ToList();
+            var mechanicHandovers = context.MechanicsHandovers.ToList();
+            var mechanicAcceptances = context.MechanicsAcceptances.ToList();
+            var operatorReviews = context.OperatorReviews.ToList();
             List<DispatcherReview> dispatcherReviews = new();
 
             foreach (var dispatcher in dispatchers)
@@ -454,6 +457,9 @@ namespace CheckDrive.Api.Extensions
                     var randomOperator = _faker.PickRandom(operators);
                     var randomMechanics = _faker.PickRandom(mechanics);
                     var randomCar = _faker.PickRandom(cars);
+                    var randomMechanicHandover = _faker.PickRandom(mechanicHandovers);
+                    var randomMechanicAcceptance = _faker.PickRandom(mechanicAcceptances);
+                    var randomOperatorReview = _faker.PickRandom(operatorReviews);
 
                     dispatcherReviews.Add(new DispatcherReview()
                     {
@@ -465,6 +471,9 @@ namespace CheckDrive.Api.Extensions
                         OperatorId = randomOperator.Id,
                         MechanicId = randomMechanics.Id,
                         CarId = randomCar.Id,
+                        MechanicAcceptanceId = randomMechanicAcceptance.Id,
+                        MechanicHandoverId = randomMechanicHandover.Id,
+                        OperatorReviewId = randomOperatorReview.Id,
                     });
                 }
             }

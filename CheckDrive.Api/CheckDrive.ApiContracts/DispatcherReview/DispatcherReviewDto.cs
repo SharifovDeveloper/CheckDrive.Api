@@ -8,8 +8,13 @@ namespace CheckDrive.ApiContracts.DispatcherReview
         public double FuelSpended { get; set; }
         public double DistanceCovered { get; set; }
         public DateTime Date { get; set; }
+        public double InitialDistance { get; set; }
+        public int MechanicHandoverId { get; set; }
+        public double FinalDistance { get; set; }
+        public int MechanicAcceptanceId { get; set; }
         public int DispatcherId { get; set; }
         public string DispatcherName { get; set; }
+        public double PouredFuel { get; set; }
         public int OperatorId { get; set; }
         public string OperatorName { get; set; }
         public int MechanicId { get; set; }
