@@ -1,9 +1,11 @@
-﻿namespace CheckDrive.Domain.Interfaces.Hubs
+﻿using CheckDrive.Domain.Entities;
+
+namespace CheckDrive.Domain.Interfaces.Hubs
 {
     public interface IChatHub
     {
-        Task SendPrivateRequest(int id, string userId, string message);
+        Task SendPrivateRequest(SendingMessageStatus sendingMessageStatus, int id, string userId, string message);
 
-        Task ReceivePrivateResponse(bool response);
+        Task ReceivePrivateResponse(int statusReview, int reviewId, bool response);
     }
 }
