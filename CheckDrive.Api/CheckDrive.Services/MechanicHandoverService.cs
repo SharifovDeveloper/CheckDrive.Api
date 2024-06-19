@@ -63,7 +63,8 @@ public class MechanicHandoverService : IMechanicHandoverService
 
         var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
 
-        await _chatHub.SendPrivateRequest(mechanicHandoverEntity.Id, data.DriverId.ToString(), $"Siz shu moshinani oldizmi {data.CarName}");
+        await _chatHub.SendPrivateRequest
+            (SendingMessageStatus.MechanicHandover, mechanicHandoverEntity.Id, data.AccountDriverId.ToString(), $"Siz shu moshinani oldizmi {data.CarName}");
 
         var mechanicHandoverDto = _mapper.Map<MechanicHandoverDto>(mechanicHandoverEntity);
 
