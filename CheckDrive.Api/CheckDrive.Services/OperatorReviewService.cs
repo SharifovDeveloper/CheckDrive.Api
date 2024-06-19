@@ -60,7 +60,7 @@ namespace CheckDrive.Services
             var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
 
             await _chat.SendPrivateRequest
-                (operatorReviewEntity.Id, data.DriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
+                (SendingMessageStatus.OperatorReview , operatorReviewEntity.Id, data.AccountDriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
 
             return _mapper.Map<OperatorReviewDto>(operatorReviewEntity);
         }
