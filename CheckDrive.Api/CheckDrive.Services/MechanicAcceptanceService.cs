@@ -106,6 +106,12 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             .ThenInclude(m => m.Account)
             .AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
+        {
+            query = query.Where(x => x.Driver.Account.FirstName.Contains(resourceParameters.SearchString)
+            || x.Driver.Account.LastName.Contains(resourceParameters.SearchString));
+        }
+
         if (resourceParameters.Date is not null)
         {
             query = query.Where(x => x.Date.Date == resourceParameters.Date.Value.Date);
