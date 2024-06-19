@@ -1,13 +1,11 @@
 using CheckDrive.Api.Extensions;
 using CheckDrive.Api.Middlewares;
 using CheckDrive.Infrastructure.JwtToken;
+using CheckDrive.Services.Hubs;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using System.Configuration;
-using CheckDrive.Services.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

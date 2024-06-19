@@ -96,6 +96,12 @@ public class DoctorReviewService : IDoctorReviewService
             .ThenInclude(a => a.Account)
             .AsQueryable();
 
+
+        if (!string.IsNullOrWhiteSpace(doctorReviewResource.SearchString))
+        {
+            query = query.Where(x => x.Driver.Account.FirstName.Contains(doctorReviewResource.SearchString)
+            || x.Driver.Account.LastName.Contains(doctorReviewResource.SearchString));
+        }
         if (doctorReviewResource.Date is not null)
         {
             query = query.Where(x => x.Date.Date == doctorReviewResource.Date.Value.Date);

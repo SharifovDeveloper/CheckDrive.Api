@@ -2,7 +2,6 @@
 using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.MechanicHandover;
 
-
 namespace CheckDrive.Domain.Mappings
 {
     public class MechanicHandoverMappings : Profile

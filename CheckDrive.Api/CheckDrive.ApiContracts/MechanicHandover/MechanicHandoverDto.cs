@@ -16,5 +16,6 @@ namespace CheckDrive.ApiContracts.MechanicHandover
         public string CarName { get; set; }
         public int DriverId { get; set; }
         public string DriverName { get; set; }
+        public int AccountDriverId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-//[Authorize(Policy = "AdminOrDispatcher")]
+[Authorize(Policy = "AdminOrDispatcher")]
 [ApiController]
 [Route("api/dispatchers")]
 public class DispatchersController : Controller
