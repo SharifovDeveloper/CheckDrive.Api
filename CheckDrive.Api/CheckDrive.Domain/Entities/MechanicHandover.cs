@@ -15,5 +15,7 @@ namespace CheckDrive.Domain.Entities
         public Car Car { get; set; }
         public int DriverId { get; set; }
         public Driver Driver { get; set; }
+
+        public virtual ICollection<DispatcherReview> DispatcherReviews { get; set; }
     }
 }

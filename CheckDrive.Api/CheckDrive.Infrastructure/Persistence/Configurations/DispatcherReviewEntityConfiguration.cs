@@ -42,6 +42,21 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
                 .HasForeignKey(m => m.CarId)
                 .OnDelete(DeleteBehavior.NoAction);
                 
+            builder.HasOne(m => m.MechanicAcceptance)
+                .WithMany(x => x.DispatcherReviews)
+                .HasForeignKey(m => m.MechanicAcceptanceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(m => m.MechanicHandover)
+                .WithMany(x => x.DispatcherReviews)
+                .HasForeignKey(m => m.MechanicHandoverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(m => m.OperatorReview)
+                .WithMany(x => x.DispatcherReviews)
+                .HasForeignKey(m => m.OperatorReviewId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 

@@ -134,6 +134,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -149,21 +152,38 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Property<double>("FuelSpended")
                         .HasColumnType("float");
 
+                    b.Property<int>("MechanicAcceptanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MechanicHandoverId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MechanicId")
                         .HasColumnType("int");
 
                     b.Property<int>("OperatorId")
                         .HasColumnType("int");
 
+                    b.Property<int>("OperatorReviewId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("DispatcherId");
 
                     b.HasIndex("DriverId");
 
+                    b.HasIndex("MechanicAcceptanceId");
+
+                    b.HasIndex("MechanicHandoverId");
+
                     b.HasIndex("MechanicId");
 
                     b.HasIndex("OperatorId");
+
+                    b.HasIndex("OperatorReviewId");
 
                     b.ToTable("DispatcherReview", (string)null);
                 });
@@ -454,6 +474,12 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.DispatcherReview", b =>
                 {
+                    b.HasOne("CheckDrive.Domain.Entities.Car", "Car")
+                        .WithMany("Reviewers")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("CheckDrive.Domain.Entities.Dispatcher", "Dispatcher")
                         .WithMany("DispetcherReviews")
                         .HasForeignKey("DispatcherId")
@@ -463,6 +489,18 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.HasOne("CheckDrive.Domain.Entities.Driver", "Driver")
                         .WithMany("DispetcherReviews")
                         .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CheckDrive.Domain.Entities.MechanicAcceptance", "MechanicAcceptance")
+                        .WithMany("DispatcherReviews")
+                        .HasForeignKey("MechanicAcceptanceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CheckDrive.Domain.Entities.MechanicHandover", "MechanicHandover")
+                        .WithMany("DispatcherReviews")
+                        .HasForeignKey("MechanicHandoverId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -478,13 +516,27 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("CheckDrive.Domain.Entities.OperatorReview", "OperatorReview")
+                        .WithMany("DispatcherReviews")
+                        .HasForeignKey("OperatorReviewId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
                     b.Navigation("Dispatcher");
 
                     b.Navigation("Driver");
 
                     b.Navigation("Mechanic");
 
+                    b.Navigation("MechanicAcceptance");
+
+                    b.Navigation("MechanicHandover");
+
                     b.Navigation("Operator");
+
+                    b.Navigation("OperatorReview");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Doctor", b =>
@@ -651,6 +703,8 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Navigation("MechanicHandovers");
 
                     b.Navigation("OperatorReviews");
+
+                    b.Navigation("Reviewers");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Dispatcher", b =>
@@ -685,11 +739,26 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.Navigation("MechanicHandovers");
                 });
 
+            modelBuilder.Entity("CheckDrive.Domain.Entities.MechanicAcceptance", b =>
+                {
+                    b.Navigation("DispatcherReviews");
+                });
+
+            modelBuilder.Entity("CheckDrive.Domain.Entities.MechanicHandover", b =>
+                {
+                    b.Navigation("DispatcherReviews");
+                });
+
             modelBuilder.Entity("CheckDrive.Domain.Entities.Operator", b =>
                 {
                     b.Navigation("DispetcherReviews");
 
                     b.Navigation("OperatorReviews");
+                });
+
+            modelBuilder.Entity("CheckDrive.Domain.Entities.OperatorReview", b =>
+                {
+                    b.Navigation("DispatcherReviews");
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Role", b =>
