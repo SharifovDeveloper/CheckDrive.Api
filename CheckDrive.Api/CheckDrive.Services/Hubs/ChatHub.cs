@@ -66,7 +66,7 @@ namespace CheckDrive.Services.Hubs
                 _logger.LogError(ex, $"Error occurred while updating status review for reviewId: {reviewId}");
             }
         }
-
+          
         public override async Task OnConnectedAsync()
         {
             string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier).Value;

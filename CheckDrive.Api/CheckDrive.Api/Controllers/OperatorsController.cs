@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "AdminOrOperator")]
+[Authorize]
 [ApiController]
 [Route("api/operators")]
 public class OperatorsController : Controller
@@ -24,6 +24,7 @@ public class OperatorsController : Controller
         _operatorReviewService = operatorReviewService;
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<OperatorDto>>> GetOperatorsAsync(
     [FromQuery] OperatorResourceParameters operatorResource)
@@ -33,6 +34,7 @@ public class OperatorsController : Controller
         return Ok(mechanics);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpGet("{id}", Name = "GetOperatorById")]
     public async Task<ActionResult<OperatorDto>> GetOperatorByIdAsync(int id)
     {
@@ -44,6 +46,7 @@ public class OperatorsController : Controller
         return Ok(_operator);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] OperatorForCreateDto operatorForCreate)
     {
@@ -52,6 +55,7 @@ public class OperatorsController : Controller
         return CreatedAtAction("GetOperatorById", new { createdOperator.Id }, createdOperator);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto operatorForUpdate)
     {
@@ -66,6 +70,7 @@ public class OperatorsController : Controller
         return Ok(updatedOperator);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
@@ -74,6 +79,7 @@ public class OperatorsController : Controller
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("reviews")]
     public async Task<ActionResult<IEnumerable<OperatorReviewDto>>> GetOperatorReviewsAsync(
     [FromQuery] OperatorReviewResourceParameters resourceParameters)
@@ -83,6 +89,7 @@ public class OperatorsController : Controller
         return Ok(operatorReviews);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpGet("review/{id}", Name = "GetOperatorReviewById")]
     public async Task<ActionResult<OperatorReviewDto>> GetOperatorReviewByIdAsync(int id)
     {
@@ -94,6 +101,7 @@ public class OperatorsController : Controller
         return Ok(operatorReview);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpPost("review")]
     public async Task<ActionResult> PostAsync([FromBody] OperatorReviewForCreateDto operatorReview)
     {
@@ -102,6 +110,7 @@ public class OperatorsController : Controller
         return CreatedAtAction("GetOperatorReviewById", new { createdOperatorReview.Id }, createdOperatorReview);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpPut("review/{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] OperatorReviewForUpdateDto operatorReview)
     {
@@ -116,6 +125,7 @@ public class OperatorsController : Controller
         return Ok(updateOreratorReview);
     }
 
+    [Authorize(Policy = "AdminOrOperator")]
     [HttpDelete("review/{id}")]
     public async Task<ActionResult> DeleteReview(int id)
     {
