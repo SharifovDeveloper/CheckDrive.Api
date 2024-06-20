@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "AdminOrDispatcher")]
+[Authorize]
 [ApiController]
 [Route("api/dispatchers")]
 public class DispatchersController : Controller
@@ -24,6 +24,7 @@ public class DispatchersController : Controller
         _accountService = accountService;
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DispatcherDto>>> GetDispatchersAsync(
         [FromQuery] DispatcherResourceParameters dispatcherResource)
@@ -33,6 +34,7 @@ public class DispatchersController : Controller
         return Ok(dispatchers);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpGet("{id}", Name = "GetDispatcherById")]
     public async Task<ActionResult<DispatcherDto>> GetDispatcherByIdAsync(int id)
     {
@@ -44,6 +46,7 @@ public class DispatchersController : Controller
         return Ok(dispatcher);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] DispatcherForCreateDto dispatcherforCreateDto)
     {
@@ -52,6 +55,7 @@ public class DispatchersController : Controller
         return CreatedAtAction("GetDispatcherById", new { id = createdDispatcher.Id }, createdDispatcher);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto dispatcherforUpdateDto)
     {
@@ -66,6 +70,7 @@ public class DispatchersController : Controller
         return Ok(updateDispatcher);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
@@ -74,6 +79,7 @@ public class DispatchersController : Controller
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("reviews")]
     public async Task<ActionResult<IEnumerable<DispatcherReviewDto>>> GetDispatcherReviewsAsync(
         [FromQuery] DispatcherReviewResourceParameters dispatcherReviewResource)
@@ -83,6 +89,7 @@ public class DispatchersController : Controller
         return Ok(dispatcherReviews);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpGet("review/{id}", Name = "GetDispatcherReviewById")]
     public async Task<ActionResult<DispatcherReviewDto>> GetDispatcherReviewByIdAsync(int id)
     {
@@ -94,6 +101,7 @@ public class DispatchersController : Controller
         return Ok(dispatcherReview);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpPost("review")]
     public async Task<ActionResult> PostAsync([FromBody] DispatcherReviewForCreateDto dispatcherReviewforCreateDto)
     {
@@ -102,6 +110,7 @@ public class DispatchersController : Controller
         return CreatedAtAction("GetDispatcherReviewById", new { id = createdDispatcherReview.Id }, createdDispatcherReview);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpPut("review/{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] DispatcherReviewForUpdateDto dispatcherReviewforUpdateDto)
     {
@@ -116,6 +125,7 @@ public class DispatchersController : Controller
         return Ok(updateDispatcherReview);
     }
 
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpDelete("review/{id}")]
     public async Task<ActionResult> DeleteAsyncReview(int id)
     {
