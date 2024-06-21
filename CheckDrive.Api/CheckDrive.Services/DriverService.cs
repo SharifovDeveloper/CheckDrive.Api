@@ -15,13 +15,11 @@ public class DriverService : IDriverService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public DriverService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public DriverService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public async Task<GetBaseResponse<DriverDto>> GetDriversAsync(DriverResourceParameters resourceParameters)
@@ -48,7 +46,6 @@ public class DriverService : IDriverService
 
     public async Task<DriverDto> CreateDriverAsync(DriverForCreateDto driverForCreate)
     {
-        driverForCreate.Password = _passwordHasher.Generate(driverForCreate.Password);
         var accountEntity = _mapper.Map<Account>(driverForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();

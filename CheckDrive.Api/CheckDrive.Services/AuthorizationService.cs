@@ -9,11 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CheckDrive.Services
 {
-    public class AuthorizationService(CheckDriveDbContext context, IMapper mapper, IPasswordHasher hasher, IJwtProvider jwtProvider) : IAuthorizationService
+    public class AuthorizationService(CheckDriveDbContext context, IMapper mapper, IJwtProvider jwtProvider) : IAuthorizationService
     {
         private readonly CheckDriveDbContext _context = context;
         private readonly IMapper _mapper = mapper;
-        private readonly IPasswordHasher _hasher = hasher;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
 
         public async Task<string> Login(string email, string password)
@@ -25,13 +24,6 @@ namespace CheckDrive.Services
 
             var user = await GetByEmailAsync(email);
             if (user == null)
-            {
-                return null;
-            }
-
-            var isPasswordValid = _hasher.Verify(password, user.Password);
-
-            if (!isPasswordValid)
             {
                 return null;
             }

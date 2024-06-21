@@ -3,7 +3,6 @@ using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Repositories;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Infrastructure.JwtToken;
-using CheckDrive.Infrastructure.PasswordHash;
 using CheckDrive.Infrastructure.Persistence;
 using CheckDrive.Infrastructure.Persistence.Repositories;
 using CheckDrive.Services;
@@ -51,7 +50,6 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IDashboardService,DashboardService>();
 
             services.AddScoped<IJwtProvider, JwtProvider>();
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             services.AddScoped<IChatHub, ChatHub>();
 

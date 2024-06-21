@@ -15,13 +15,11 @@ namespace CheckDrive.Services
     {
         private readonly IMapper _mapper;
         private readonly CheckDriveDbContext _context;
-        private readonly IPasswordHasher _passwordHasher;
 
-        public AccountService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+        public AccountService(IMapper mapper, CheckDriveDbContext context)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
         }
 
         public async Task<GetBaseResponse<AccountDto>> GetAccountsAsync(AccountResourceParameters resourceParameters)
@@ -48,8 +46,6 @@ namespace CheckDrive.Services
 
         public async Task<AccountDto> CreateAccountAsync(AccountForCreateDto accountForCreate)
         {
-            accountForCreate.Password = _passwordHasher.Generate(accountForCreate.Password);
-
             var createdAccount = await CreateAndCheckAccountRoles(accountForCreate);
 
             var accountDto = _mapper.Map<AccountDto>(createdAccount);
