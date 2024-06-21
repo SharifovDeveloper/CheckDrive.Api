@@ -14,13 +14,11 @@ public class OperatorService : IOperatorService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public OperatorService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public OperatorService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
     public async Task<GetBaseResponse<OperatorDto>> GetOperatorsAsync(OperatorResourceParameters resourceParameters)
     {
@@ -42,7 +40,6 @@ public class OperatorService : IOperatorService
     }
     public async Task<OperatorDto> CreateOperatorAsync(OperatorForCreateDto operatorForCreate)
     {
-        operatorForCreate.Password = _passwordHasher.Generate(operatorForCreate.Password);
         var accountEntity = _mapper.Map<Account>(operatorForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();

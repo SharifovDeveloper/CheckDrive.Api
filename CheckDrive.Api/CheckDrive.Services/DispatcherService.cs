@@ -16,13 +16,11 @@ public class DispatcherService : IDispatcherService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public DispatcherService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public DispatcherService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
     public async Task<GetBaseResponse<DispatcherDto>> GetDispatchersAsync(DispatcherResourceParameters resourceParameters)
     {
@@ -48,7 +46,6 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto> CreateDispatcherAsync(DispatcherForCreateDto dispatcherForCreate)
     {
-        dispatcherForCreate.Password = _passwordHasher.Generate(dispatcherForCreate.Password);
         var accountEntity = _mapper.Map<Account>(dispatcherForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
