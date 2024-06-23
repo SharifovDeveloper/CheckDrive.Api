@@ -57,10 +57,13 @@ namespace CheckDrive.Services
             await _context.OperatorReviews.AddAsync(operatorReviewEntity);
             await _context.SaveChangesAsync();
 
-            var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
+            if (operatorReviewEntity.IsGiven = true)
+            {
+                var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
 
-            await _chat.SendPrivateRequest
-                (SendingMessageStatus.OperatorReview , operatorReviewEntity.Id, data.AccountDriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
+                await _chat.SendPrivateRequest
+                    (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
+            }
 
             return _mapper.Map<OperatorReviewDto>(operatorReviewEntity);
         }

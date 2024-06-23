@@ -61,10 +61,13 @@ public class MechanicHandoverService : IMechanicHandoverService
         await _context.MechanicsHandovers.AddAsync(mechanicHandoverEntity);
         await _context.SaveChangesAsync();
 
-        var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
+        if (mechanicHandoverEntity.IsHanded == true)
+        {
+            var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
 
-        await _chatHub.SendPrivateRequest
-            (SendingMessageStatus.MechanicHandover, mechanicHandoverEntity.Id, data.AccountDriverId.ToString(), $"Siz shu moshinani oldizmi {data.CarName}");
+            await _chatHub.SendPrivateRequest
+                (SendingMessageStatus.MechanicHandover, mechanicHandoverEntity.Id, data.AccountDriverId.ToString(), $"Siz shu moshinani oldizmi {data.CarName}");
+        }
 
         var mechanicHandoverDto = _mapper.Map<MechanicHandoverDto>(mechanicHandoverEntity);
 
