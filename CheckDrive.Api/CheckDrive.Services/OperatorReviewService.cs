@@ -60,7 +60,7 @@ namespace CheckDrive.Services
             if (operatorReviewEntity.IsGiven = true)
             {
                 var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
-
+                
                 await _chat.SendPrivateRequest
                     (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(), $"Shuncha benzin kuildimi{operatorReviewEntity.OilAmount}, benzin markasi{operatorReviewEntity.OilMarks}");
             }
@@ -100,6 +100,12 @@ namespace CheckDrive.Services
                 .ThenInclude(o => o.Account)
                 .Include(o => o.Car)
                 .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(operatorReviewResource.SearchString))
+            {
+                query = query.Where(x => x.Driver.Account.FirstName.Contains(operatorReviewResource.SearchString)
+                || x.Driver.Account.LastName.Contains(operatorReviewResource.SearchString));
+            }
 
             if (operatorReviewResource.Date is not null)
             {
