@@ -96,7 +96,6 @@ public class DoctorReviewService : IDoctorReviewService
             .ThenInclude(a => a.Account)
             .AsQueryable();
 
-
         if (!string.IsNullOrWhiteSpace(doctorReviewResource.SearchString))
         {
             query = query.Where(x => x.Driver.Account.FirstName.Contains(doctorReviewResource.SearchString)

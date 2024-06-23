@@ -61,6 +61,7 @@ namespace CheckDrive.Api.Extensions
 
             return services;
         }
+
         public static IServiceCollection ConfigureDatabaseContext(this IServiceCollection services)
         {
             var builder = WebApplication.CreateBuilder();
