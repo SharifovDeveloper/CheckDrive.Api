@@ -99,9 +99,10 @@ public class MechanicHandoverService : IMechanicHandoverService
     }
 
     private IQueryable<MechanicHandover> GetQueryMechanicHandoverResParameters(
-   MechanicHandoverResourceParameters resourceParameters)
+        MechanicHandoverResourceParameters resourceParameters)
     {
         var query = _context.MechanicsHandovers
+            .AsNoTracking()
             .Include(d => d.Car)
             .Include(a => a.Driver)
             .ThenInclude(a => a.Account)
@@ -109,46 +110,41 @@ public class MechanicHandoverService : IMechanicHandoverService
             .ThenInclude(m => m.Account)
             .AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
+            query = query.Where(
+                x => x.Driver.Account.FirstName.Contains(resourceParameters.SearchString) ||
+                x.Driver.Account.LastName.Contains(resourceParameters.SearchString) ||
+                x.Mechanic.Account.FirstName.Contains(resourceParameters.SearchString) ||
+                x.Mechanic.Account.LastName.Contains(resourceParameters.SearchString) ||
+                x.Comments.Contains(resourceParameters.SearchString));
+
         if (resourceParameters.Date is not null)
-        {
             query = query.Where(x => x.Date.Date == resourceParameters.Date.Value.Date);
-        }
 
         if (resourceParameters.Status is not null)
-        {
             query = query.Where(x => x.Status == resourceParameters.Status);
-        }
 
         if (resourceParameters.IsHanded is not null)
-        {
             query = query.Where(x => x.IsHanded == resourceParameters.IsHanded);
-        }
+
         if (resourceParameters.DriverId is not null)
-        {
             query = query.Where(x => x.DriverId == resourceParameters.DriverId);
-        }
+
         if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
-        {
             query = resourceParameters.OrderBy.ToLowerInvariant() switch
             {
                 "date" => query.OrderBy(x => x.Date),
                 "datedesc" => query.OrderByDescending(x => x.Date),
                 _ => query.OrderBy(x => x.Id),
             };
-        }
 
         if (resourceParameters.Distance is not null)
-        {
             query = query.Where(x => x.Distance == resourceParameters.Distance);
-        }
         if (resourceParameters.DistanceLessThan is not null)
-        {
             query = query.Where(x => x.Distance < resourceParameters.DistanceLessThan);
-        }
         if (resourceParameters.DistanceGreaterThan is not null)
-        {
             query = query.Where(x => x.Distance > resourceParameters.DistanceGreaterThan);
-        }
+
         return query;
     }
 }
