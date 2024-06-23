@@ -115,7 +115,7 @@ namespace CheckDrive.Services.Hubs
             var operatorReview = await _dbContext.OperatorReviews
                 .FirstOrDefaultAsync(x => x.Id == reviewId);
 
-            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.RejectedByDriver);
 
             _dbContext.OperatorReviews.Update(operatorReview);
             await _dbContext.SaveChangesAsync();
@@ -126,7 +126,7 @@ namespace CheckDrive.Services.Hubs
             var operatorReview = await _dbContext.MechanicsHandovers
                 .FirstOrDefaultAsync(x => x.Id == reviewId);
 
-            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.RejectedByDriver);
 
             _dbContext.MechanicsHandovers.Update(operatorReview);
             await _dbContext.SaveChangesAsync();
@@ -137,7 +137,7 @@ namespace CheckDrive.Services.Hubs
             var operatorReview = await _dbContext.MechanicsAcceptances
                 .FirstOrDefaultAsync(x => x.Id == reviewId);
 
-            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.Rejected);
+            operatorReview.Status = (Status)(response ? StatusForDto.Completed : StatusForDto.RejectedByDriver);
 
             _dbContext.MechanicsAcceptances.Update(operatorReview);
             await _dbContext.SaveChangesAsync();
