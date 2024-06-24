@@ -43,6 +43,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     public async Task<MechanicAcceptanceDto?> GetMechanicAcceptenceByIdAsync(int id)
     {
         var mechanicAcceptance = await _context.MechanicsAcceptances
+            .AsNoTracking()
             .Include(d => d.Car)
             .Include(a => a.Driver)
             .ThenInclude(a => a.Account)
@@ -61,10 +62,13 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         await _context.MechanicsAcceptances.AddAsync(mechanicAcceptanceEntity);
         await _context.SaveChangesAsync();
 
-        var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
+        if (mechanicAcceptanceEntity.IsAccepted == true)
+        {
+            var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
 
-        await _chatHub.SendPrivateRequest
-            (mechanicAcceptanceEntity.Id, data.DriverId.ToString(), $"Siz shu moshinani {data.CarName}, shu voqitta topshirdizmi {data.Date}");
+            await _chatHub.SendPrivateRequest
+                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(), $"Siz shu moshinani {data.CarName}, shu voqitta topshirdizmi {data.Date}");
+        }
         
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
 
@@ -99,7 +103,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
        MechanicAcceptanceResourceParameters resourceParameters)
     {
         var query = _context.MechanicsAcceptances
-           .Include(d => d.Car)
+            .AsNoTracking()
+            .Include(d => d.Car)
             .Include(a => a.Driver)
             .ThenInclude(a => a.Account)
             .Include(m => m.Mechanic)
@@ -107,25 +112,22 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
-        {
-            query = query.Where(x => x.Driver.Account.FirstName.Contains(resourceParameters.SearchString)
-            || x.Driver.Account.LastName.Contains(resourceParameters.SearchString));
-        }
+            query = query.Where(
+                x => x.Driver.Account.FirstName.Contains(resourceParameters.SearchString) ||
+                x.Driver.Account.LastName.Contains(resourceParameters.SearchString) ||
+                x.Mechanic.Account.FirstName.Contains(resourceParameters.SearchString) ||
+                x.Mechanic.Account.LastName.Contains(resourceParameters.SearchString) ||
+                x.Comments.Contains(resourceParameters.SearchString));
 
         if (resourceParameters.Date is not null)
-        {
             query = query.Where(x => x.Date.Date == resourceParameters.Date.Value.Date);
-        }
+
 
         if (resourceParameters.Status is not null)
-        {
             query = query.Where(x => x.Status == resourceParameters.Status);
-        }
 
         if (resourceParameters.IsAccepted is not null)
-        {
             query = query.Where(x => x.IsAccepted == resourceParameters.IsAccepted);
-        }
 
         //Distance
         if (resourceParameters.Distance is not null)

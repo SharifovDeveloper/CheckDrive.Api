@@ -48,7 +48,6 @@ public class DashboardService : IDashboardService
                                    })
                                    .ToListAsync();
 
-        // Отформатируем названия месяцев и вернем результат
         var result = reviews
                      .Select(r => new SpliteChartData
                      {

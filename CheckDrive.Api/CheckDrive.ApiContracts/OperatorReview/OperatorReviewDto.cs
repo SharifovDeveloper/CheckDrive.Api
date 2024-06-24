@@ -5,11 +5,11 @@ namespace CheckDrive.ApiContracts.OperatorReview
     public class OperatorReviewDto
     {
         public int Id { get; set; }
-        public bool? IsGiven { get; set; }
-        public double? OilAmount { get; set; }
+        public bool IsGiven { get; set; }
+        public double OilAmount { get; set; }
         public string Comments { get; set; } = "";
         public StatusForDto Status { get; set; }
-        public OilMarksForDto? OilMarks { get; set; }
+        public OilMarksForDto OilMarks { get; set; }
         public DateTime? Date { get; set; }
 
         public int OperatorId { get; set; }

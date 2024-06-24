@@ -16,13 +16,11 @@ public class DispatcherService : IDispatcherService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public DispatcherService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public DispatcherService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
     public async Task<GetBaseResponse<DispatcherDto>> GetDispatchersAsync(DispatcherResourceParameters resourceParameters)
     {
@@ -39,7 +37,10 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto?> GetDispatcherByIdAsync(int id)
     {
-        var dispatcher = await _context.Dispatchers.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var dispatcher = await _context.Dispatchers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var dispatcherDto = _mapper.Map<DispatcherDto>(dispatcher);
 
@@ -48,7 +49,6 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto> CreateDispatcherAsync(DispatcherForCreateDto dispatcherForCreate)
     {
-        dispatcherForCreate.Password = _passwordHasher.Generate(dispatcherForCreate.Password);
         var accountEntity = _mapper.Map<Account>(dispatcherForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
@@ -89,7 +89,10 @@ public class DispatcherService : IDispatcherService
     private IQueryable<Dispatcher> GetQueryDispatcherResParameters(
            DispatcherResourceParameters resourceParameters)
     {
-        var query = _context.Dispatchers.Include(x => x.Account).AsQueryable();
+        var query = _context.Dispatchers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

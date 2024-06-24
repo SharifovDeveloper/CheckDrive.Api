@@ -5,6 +5,7 @@
         Pending,
         Completed,
         Rejected,
-        Unassigned
+        Unassigned,
+        RejectedByDriver
     }
 }

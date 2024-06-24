@@ -15,13 +15,11 @@ public class DoctorService : IDoctorService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public DoctorService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public DoctorService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public async Task<GetBaseResponse<DoctorDto>> GetDoctorsAsync(DoctorResourceParameters resourceParameters)
@@ -39,7 +37,10 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id)
     {
-        var doctor = await _context.Doctors.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var doctor = await _context.Doctors
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var doctorDto = _mapper.Map<DoctorDto>(doctor);
 
@@ -48,7 +49,6 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto> CreateDoctorAsync(DoctorForCreateDto doctorForCreate)
     {
-        doctorForCreate.Password = _passwordHasher.Generate(doctorForCreate.Password);
         var accountEntity = _mapper.Map<Account>(doctorForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
@@ -77,7 +77,10 @@ public class DoctorService : IDoctorService
     private IQueryable<Doctor> GetQueryDoctorResParameters(
            DoctorResourceParameters resourceParameters)
     {
-        var query = _context.Doctors.Include(x => x.Account).AsQueryable();
+        var query = _context.Doctors 
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

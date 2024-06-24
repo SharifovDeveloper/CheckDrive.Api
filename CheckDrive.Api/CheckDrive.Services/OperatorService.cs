@@ -14,13 +14,11 @@ public class OperatorService : IOperatorService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public OperatorService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public OperatorService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
     public async Task<GetBaseResponse<OperatorDto>> GetOperatorsAsync(OperatorResourceParameters resourceParameters)
     {
@@ -36,13 +34,15 @@ public class OperatorService : IOperatorService
     }
     public async Task<OperatorDto?> GetOperatorByIdAsync(int id)
     {
-        var _operator = await _context.Operators.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var _operator = await _context.Operators
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<OperatorDto>(_operator);
     }
     public async Task<OperatorDto> CreateOperatorAsync(OperatorForCreateDto operatorForCreate)
     {
-        operatorForCreate.Password = _passwordHasher.Generate(operatorForCreate.Password);
         var accountEntity = _mapper.Map<Account>(operatorForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
@@ -70,7 +70,10 @@ public class OperatorService : IOperatorService
     private IQueryable<Operator> GetQueryOperatorResParameters(
        OperatorResourceParameters resourceParameters)
     {
-        var query = _context.Operators.Include(x => x.Account).AsQueryable();
+        var query = _context.Operators
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

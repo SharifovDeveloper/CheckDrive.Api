@@ -15,13 +15,11 @@ public class MechanicService : IMechanicService
 {
     private readonly IMapper _mapper;
     private readonly CheckDriveDbContext _context;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public MechanicService(IMapper mapper, CheckDriveDbContext context, IPasswordHasher passwordHasher)
+    public MechanicService(IMapper mapper, CheckDriveDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public async Task<GetBaseResponse<MechanicDto>> GetMechanicesAsync(MechanicResourceParameters resourceParameters)
@@ -39,14 +37,16 @@ public class MechanicService : IMechanicService
 
     public async Task<MechanicDto?> GetMechanicByIdAsync(int id)
     {
-        var machanic = await _context.Mechanics.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var machanic = await _context.Mechanics
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<MechanicDto>(machanic);
     }
 
     public async Task<MechanicDto> CreateMechanicAsync(MechanicForCreateDto mechanicForCreate)
     {
-        mechanicForCreate.Password = _passwordHasher.Generate(mechanicForCreate.Password);
         var accountEntity = _mapper.Map<Account>(mechanicForCreate);
         await _context.Accounts.AddAsync(accountEntity);
         await _context.SaveChangesAsync();
@@ -74,7 +74,10 @@ public class MechanicService : IMechanicService
     private IQueryable<Mechanic> GetQueryMechanicResParameters(
        MechanicResourceParameters resourceParameters)
     {
-        var query = _context.Mechanics.Include(x => x.Account).AsQueryable();
+        var query = _context.Mechanics
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

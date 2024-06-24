@@ -37,6 +37,7 @@ public class DispatcherReviewService : IDispatcherReviewService
     public async Task<DispatcherReviewDto?> GetDispatcherReviewByIdAsync(int id)
     {
         var dispatcherReview = await _context.DispatchersReviews
+            .AsNoTracking()
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(d => d.Mechanic)
@@ -92,6 +93,7 @@ public class DispatcherReviewService : IDispatcherReviewService
        DispatcherReviewResourceParameters dispatcherReviewParameters)
     {
         var query = _context.DispatchersReviews
+            .AsNoTracking()
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(d => d.Mechanic)
@@ -103,8 +105,21 @@ public class DispatcherReviewService : IDispatcherReviewService
             .Include(d => d.Car)
             .AsQueryable();
 
-        //FuelSpended
+        if (!string.IsNullOrWhiteSpace(dispatcherReviewParameters.SearchString))
+            query = query.Where(
+                x => x.Driver.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.Driver.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.Mechanic.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.Mechanic.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.Operator.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) || 
+                x.Operator.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.Dispatcher.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) || 
+                x.Dispatcher.Account.LastName.Contains(dispatcherReviewParameters.SearchString));
 
+        if (dispatcherReviewParameters.Date is not null)
+            query = query.Where(x => x.Date.Date == dispatcherReviewParameters.Date.Value.Date);
+
+        //FuelSpended
         if (dispatcherReviewParameters.DriverId is not null)
         {
             query = query.Where(x => x.DriverId == dispatcherReviewParameters.DriverId);

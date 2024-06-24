@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize(Policy = "AdminOrMechanic")]
+[Authorize]
 [ApiController]
 [Route("api/mechanics")]
 public class MechanicsController : Controller
@@ -27,6 +27,7 @@ public class MechanicsController : Controller
         _mechanicHandoverService = mechanicHandoverService;
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MechanicDto>>> GetMechanicsAsync(
     [FromQuery] MechanicResourceParameters mechanicResource)
@@ -36,6 +37,7 @@ public class MechanicsController : Controller
         return Ok(mechanics);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpGet("{id}", Name = "GetMechanicById")]
     public async Task<ActionResult<MechanicDto>> GetMechanicByIdAsync(int id)
     {
@@ -47,6 +49,7 @@ public class MechanicsController : Controller
         return Ok(mechanic);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] MechanicForCreateDto mechanicForCreate)
     {
@@ -55,6 +58,7 @@ public class MechanicsController : Controller
         return CreatedAtAction("GetMechanicById", new { createdMechanic.Id }, createdMechanic);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] AccountForUpdateDto mechanicForUpdate)
     {
@@ -69,6 +73,7 @@ public class MechanicsController : Controller
         return Ok(updatedMechanic);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
@@ -77,6 +82,7 @@ public class MechanicsController : Controller
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("acceptances")]
     public async Task<ActionResult<IEnumerable<MechanicAcceptanceDto>>> GetMechanicAcceptancesAsync(
     [FromQuery] MechanicAcceptanceResourceParameters mechanicAcceptanceResource)
@@ -86,6 +92,7 @@ public class MechanicsController : Controller
         return Ok(mechanicAcceptances);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpGet("acceptance/{id}", Name = "GetMechanicAcceptanceById")]
     public async Task<ActionResult<MechanicAcceptanceDto>> GetMechanicAcceptanceByIdAsync(int id)
     {
@@ -97,6 +104,7 @@ public class MechanicsController : Controller
         return Ok(mechanicAcceptance);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPost("acceptance")]
     public async Task<ActionResult> PostAsync([FromBody] MechanicAcceptanceForCreateDto mechanicAcceptanceforCreateDto)
     {
@@ -105,6 +113,7 @@ public class MechanicsController : Controller
         return CreatedAtAction("GetMechanicAcceptanceById", new { createdMechanicAcceptance.Id }, createdMechanicAcceptance);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPut("acceptance/{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] MechanicAcceptanceForUpdateDto mechanicAcceptanceforUpdateDto)
     {
@@ -119,6 +128,7 @@ public class MechanicsController : Controller
         return Ok(updateMechanicAcceptance);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpDelete("acceptance/{id}")]
     public async Task<ActionResult> DeleteAcceptance(int id)
     {
@@ -127,6 +137,7 @@ public class MechanicsController : Controller
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("handovers")]
     public async Task<ActionResult<IEnumerable<MechanicHandoverDto>>> GetMechanichandoversAsync(
     [FromQuery] MechanicHandoverResourceParameters mechanicHandoverResource)
@@ -136,6 +147,7 @@ public class MechanicsController : Controller
         return Ok(mechanicHandovers);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpGet("handover/{id}", Name = "GetMechanicHandoverById")]
     public async Task<ActionResult<MechanicHandoverDto>> GetMechanicHandoverByIdAsync(int id)
     {
@@ -147,6 +159,7 @@ public class MechanicsController : Controller
         return Ok(mechanicHandover);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPost("handover")]
     public async Task<ActionResult> PostAsync([FromBody] MechanicHandoverForCreateDto mechanicHandoverforCreateDto)
     {
@@ -155,6 +168,7 @@ public class MechanicsController : Controller
         return CreatedAtAction("GetMechanicHandoverById", new { createdMechanicHandover.Id }, createdMechanicHandover);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpPut("handover/{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] MechanicHandoverForUpdateDto mechanicHandoverforUpdateDto)
     {
@@ -169,6 +183,7 @@ public class MechanicsController : Controller
         return Ok(updateMechanicHandover);
     }
 
+    [Authorize(Policy = "AdminOrMechanic")]
     [HttpDelete("handover/{id}")]
     public async Task<ActionResult> DeleteHandover(int id)
     {

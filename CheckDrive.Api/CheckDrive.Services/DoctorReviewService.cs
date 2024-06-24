@@ -39,6 +39,7 @@ public class DoctorReviewService : IDoctorReviewService
     public async Task<DoctorReviewDto?> GetDoctorReviewByIdAsync(int id)
     {
         var doctorReview = await _context.DoctorReviews
+            .AsNoTracking()
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(a => a.Doctor)
@@ -90,35 +91,34 @@ public class DoctorReviewService : IDoctorReviewService
        DoctorReviewResourceParameters doctorReviewResource)
     {
         var query = _context.DoctorReviews
+            .AsNoTracking()
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(a => a.Doctor)
             .ThenInclude(a => a.Account)
             .AsQueryable();
 
-
         if (!string.IsNullOrWhiteSpace(doctorReviewResource.SearchString))
-        {
-            query = query.Where(x => x.Driver.Account.FirstName.Contains(doctorReviewResource.SearchString)
-            || x.Driver.Account.LastName.Contains(doctorReviewResource.SearchString));
-        }
+            query = query.Where(
+                x => x.Driver.Account.FirstName.Contains(doctorReviewResource.SearchString) ||
+                x.Driver.Account.LastName.Contains(doctorReviewResource.SearchString) ||
+                x.Doctor.Account.FirstName.Contains(doctorReviewResource.SearchString) ||
+                x.Doctor.Account.LastName.Contains(doctorReviewResource.SearchString) ||
+                x.Comments.Contains(doctorReviewResource.SearchString));
+        
         if (doctorReviewResource.Date is not null)
-        {
             query = query.Where(x => x.Date.Date == doctorReviewResource.Date.Value.Date);
-        }
+        
         if (doctorReviewResource.DriverId is not null)
-        {
             query = query.Where(x => x.DriverId == doctorReviewResource.DriverId);
-        }
+        
         if (!string.IsNullOrEmpty(doctorReviewResource.OrderBy))
-        {
             query = doctorReviewResource.OrderBy.ToLowerInvariant() switch
             {
                 "date" => query.OrderBy(x => x.Date),
                 "datedesc" => query.OrderByDescending(x => x.Date),
                 _ => query.OrderBy(x => x.Id),
             };
-        }
 
         return query;
     }

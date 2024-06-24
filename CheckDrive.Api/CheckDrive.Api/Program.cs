@@ -63,7 +63,7 @@ app.UseCookiePolicy(new CookiePolicyOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("api/chat");
 app.MapControllers();
 
 

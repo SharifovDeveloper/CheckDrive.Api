@@ -81,7 +81,9 @@ public class CarService : ICarService
     private IQueryable<Car> GetQueryCarResParameters(
            CarResourceParameters resourceParameters)
     {
-        var query = _context.Cars.AsQueryable();
+        var query = _context.Cars.
+            AsNoTracking().
+            AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
         {
