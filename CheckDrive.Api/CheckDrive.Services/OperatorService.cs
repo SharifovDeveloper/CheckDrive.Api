@@ -34,7 +34,10 @@ public class OperatorService : IOperatorService
     }
     public async Task<OperatorDto?> GetOperatorByIdAsync(int id)
     {
-        var _operator = await _context.Operators.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var _operator = await _context.Operators
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<OperatorDto>(_operator);
     }
@@ -67,7 +70,10 @@ public class OperatorService : IOperatorService
     private IQueryable<Operator> GetQueryOperatorResParameters(
        OperatorResourceParameters resourceParameters)
     {
-        var query = _context.Operators.Include(x => x.Account).AsQueryable();
+        var query = _context.Operators
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

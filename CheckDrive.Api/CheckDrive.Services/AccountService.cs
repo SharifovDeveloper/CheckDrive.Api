@@ -37,7 +37,9 @@ namespace CheckDrive.Services
 
         public async Task<AccountDto?> GetAccountByIdAsync(int id)
         {
-            var account = await _context.Accounts.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id);
+            var account = await _context.Accounts
+                .AsNoTracking()
+                .Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id);
 
             var accountDto = _mapper.Map<AccountDto>(account);
 
@@ -84,6 +86,7 @@ namespace CheckDrive.Services
             {
                 case 2:
                     var driver = await _context.Drivers
+                               .AsNoTracking()
                                .Include(d => d.DoctorReviews)
                                .Include(ma => ma.MechanicAcceptance)
                                .Include(mh => mh.MechanicHandovers)

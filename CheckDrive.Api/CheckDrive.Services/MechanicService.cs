@@ -37,7 +37,10 @@ public class MechanicService : IMechanicService
 
     public async Task<MechanicDto?> GetMechanicByIdAsync(int id)
     {
-        var machanic = await _context.Mechanics.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var machanic = await _context.Mechanics
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         return _mapper.Map<MechanicDto>(machanic);
     }
@@ -71,7 +74,10 @@ public class MechanicService : IMechanicService
     private IQueryable<Mechanic> GetQueryMechanicResParameters(
        MechanicResourceParameters resourceParameters)
     {
-        var query = _context.Mechanics.Include(x => x.Account).AsQueryable();
+        var query = _context.Mechanics
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

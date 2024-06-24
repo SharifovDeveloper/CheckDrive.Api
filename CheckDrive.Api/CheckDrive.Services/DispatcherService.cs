@@ -37,7 +37,10 @@ public class DispatcherService : IDispatcherService
 
     public async Task<DispatcherDto?> GetDispatcherByIdAsync(int id)
     {
-        var dispatcher = await _context.Dispatchers.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var dispatcher = await _context.Dispatchers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var dispatcherDto = _mapper.Map<DispatcherDto>(dispatcher);
 
@@ -86,7 +89,10 @@ public class DispatcherService : IDispatcherService
     private IQueryable<Dispatcher> GetQueryDispatcherResParameters(
            DispatcherResourceParameters resourceParameters)
     {
-        var query = _context.Dispatchers.Include(x => x.Account).AsQueryable();
+        var query = _context.Dispatchers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {
