@@ -40,6 +40,7 @@ namespace CheckDrive.Services
         public async Task<OperatorReviewDto?> GetOperatorReviewByIdAsync(int id)
         {
             var operatorReview = await _context.OperatorReviews
+                .AsNoTracking()
                 .Include(a => a.Driver)
                 .ThenInclude(a => a.Account)
                 .Include(o => o.Operator)
@@ -94,6 +95,7 @@ namespace CheckDrive.Services
        OperatorReviewResourceParameters operatorReviewResource)
         {
             var query = _context.OperatorReviews
+                .AsNoTracking()
                 .Include(a => a.Operator)
                 .ThenInclude(a => a.Account)
                 .Include(o => o.Driver)
@@ -102,15 +104,16 @@ namespace CheckDrive.Services
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(operatorReviewResource.SearchString))
-            {
-                query = query.Where(x => x.Driver.Account.FirstName.Contains(operatorReviewResource.SearchString)
-                || x.Driver.Account.LastName.Contains(operatorReviewResource.SearchString));
-            }
+                query = query.Where(
+                    x => x.Driver.Account.FirstName.Contains(operatorReviewResource.SearchString) ||
+                    x.Driver.Account.LastName.Contains(operatorReviewResource.SearchString) ||
+                    x.Operator.Account.FirstName.Contains(operatorReviewResource.SearchString) ||
+                    x.Operator.Account.LastName.Contains(operatorReviewResource.SearchString) ||
+                    x.Comments.Contains(operatorReviewResource.SearchString));
 
             if (operatorReviewResource.Date is not null)
-            {
                 query = query.Where(x => x.Date.Date == operatorReviewResource.Date.Value.Date);
-            }
+
             if (operatorReviewResource.OilAmount is not null)
             {
                 query = query.Where(x => x.OilAmount == operatorReviewResource.OilAmount);
