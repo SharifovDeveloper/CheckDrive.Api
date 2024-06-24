@@ -37,7 +37,10 @@ public class DoctorService : IDoctorService
 
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id)
     {
-        var doctor = await _context.Doctors.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var doctor = await _context.Doctors
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var doctorDto = _mapper.Map<DoctorDto>(doctor);
 
@@ -74,7 +77,10 @@ public class DoctorService : IDoctorService
     private IQueryable<Doctor> GetQueryDoctorResParameters(
            DoctorResourceParameters resourceParameters)
     {
-        var query = _context.Doctors.Include(x => x.Account).AsQueryable();
+        var query = _context.Doctors 
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (resourceParameters.AccountId != 0 && resourceParameters.AccountId is not null)
         {

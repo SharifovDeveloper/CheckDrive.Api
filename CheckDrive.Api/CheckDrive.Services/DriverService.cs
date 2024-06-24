@@ -37,7 +37,10 @@ public class DriverService : IDriverService
 
     public async Task<DriverDto?> GetDriverByIdAsync(int id)
     {
-        var driver = await _context.Drivers.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id);
+        var driver = await _context.Drivers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         var driverDto = _mapper.Map<DriverDto>(driver);
 
@@ -74,7 +77,10 @@ public class DriverService : IDriverService
     private IQueryable<Driver> GetQueryDriverResParameters(
        DriverResourceParameters resourceParameters)
     {
-        var query = _context.Drivers.Include(x => x.Account).AsQueryable();
+        var query = _context.Drivers
+            .AsNoTracking()
+            .Include(x => x.Account)
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(resourceParameters.SearchString))
         {
