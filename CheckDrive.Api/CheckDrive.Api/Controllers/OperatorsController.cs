@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/operators")]
 public class OperatorsController : Controller

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheckDrive.Api.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("api/dispatchers")]
 public class DispatchersController : Controller
@@ -89,7 +89,7 @@ public class DispatchersController : Controller
         return Ok(dispatcherReviews);
     }
 
-    [Authorize(Policy = "AdminOrDispatcher")]
+    //[Authorize(Policy = "AdminOrDispatcher")]
     [HttpGet("review/{id}", Name = "GetDispatcherReviewById")]
     public async Task<ActionResult<DispatcherReviewDto>> GetDispatcherReviewByIdAsync(int id)
     {
