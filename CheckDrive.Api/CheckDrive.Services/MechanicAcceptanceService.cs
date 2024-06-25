@@ -55,6 +55,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         return mechanicAcceptanceDto;
     }
+
     public async Task<MechanicAcceptanceDto> CreateMechanicAcceptenceAsync(MechanicAcceptanceForCreateDto acceptanceForCreateDto)
     {
         var mechanicAcceptanceEntity = _mapper.Map<MechanicAcceptance>(acceptanceForCreateDto);
@@ -67,7 +68,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
 
             await _chatHub.SendPrivateRequest
-                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(), $"Siz shu moshinani {data.CarName}, shu voqitta topshirdizmi {data.Date}");
+                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(), 
+                $"Siz shu {data.CarName} rusumli avtomobilni {data.MechanicName} ga topshirdizmi ?");
         }
         
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
