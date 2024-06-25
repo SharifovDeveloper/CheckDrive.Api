@@ -94,6 +94,9 @@ public class DispatcherReviewService : IDispatcherReviewService
     {
         var query = _context.DispatchersReviews
             .AsNoTracking()
+            .Include(ma => ma.MechanicAcceptance)
+            .Include(mh => mh.MechanicHandover)
+            .Include(o => o.OperatorReview)
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(d => d.Mechanic)

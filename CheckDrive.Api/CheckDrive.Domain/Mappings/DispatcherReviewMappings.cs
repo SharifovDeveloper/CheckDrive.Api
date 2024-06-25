@@ -17,10 +17,8 @@ namespace CheckDrive.Domain.Mappings
                 .ForMember(d => d.OperatorName, f => f.MapFrom(e => $"{e.Operator.Account.FirstName} {e.Operator.Account.LastName}"))
                 .ForMember(d => d.InitialDistance, f => f.MapFrom(e => e.MechanicHandover.Distance))
                 .ForMember(d => d.FinalDistance, f => f.MapFrom(e => e.MechanicAcceptance.Distance))
-                .ForMember(d => d.DistanceCovered, f => f.MapFrom(e => (e.MechanicHandover.Distance) - (e.MechanicAcceptance.Distance)))
                 .ForMember(d => d.PouredFuel, f => f.MapFrom(e => e.OperatorReview.OilAmount))
-                .ForMember(d => d.CarMeduimFuelConsumption, f => f.MapFrom(e => e.Car.MeduimFuelConsumption))
-                .ForMember(d => d.FuelSpended, f => f.MapFrom(e => (e.DistanceCovered) / e.Car.MeduimFuelConsumption));
+                .ForMember(d => d.CarMeduimFuelConsumption, f => f.MapFrom(e => e.Car.MeduimFuelConsumption));
                 
             CreateMap<DispatcherReviewForCreateDto, DispatcherReview>();
             CreateMap<DispatcherReviewForUpdateDto, DispatcherReview>();
