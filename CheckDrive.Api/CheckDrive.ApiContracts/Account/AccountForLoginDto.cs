@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CheckDrive.ApiContracts.Account
 {
     public class AccountForLoginDto
     {
+        [Required(ErrorMessage = "Emailni kiritish majburiy")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Login uzunligi 5 dan 100 gacha belgidan iborat bo'lishi kerak")]
         public string Login { get; set; }
+
+        [Required(ErrorMessage = "Parol kiritish majburiy")]
+        [StringLength(8, MinimumLength = 4, ErrorMessage = "Parol uzunligi 4 dan 8 gacha belgidan iborat bo'lishi kerak")]
         public string Password { get; set; }
     }
 }
