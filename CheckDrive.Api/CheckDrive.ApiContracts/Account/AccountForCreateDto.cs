@@ -10,7 +10,7 @@ namespace CheckDrive.ApiContracts.Account
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Parol kiritish majburiy")]
-        [StringLength(8, MinimumLength = 4, ErrorMessage = "Parol uzunligi 4 dan 8 gacha belgidan iborat bo'lishi kerak")]
+        [StringLength(24, MinimumLength = 4, ErrorMessage = "Parol uzunligi 4 dan 24 gacha belgidan iborat bo'lishi kerak")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Telefon raqamni kiritish majburiy")]
