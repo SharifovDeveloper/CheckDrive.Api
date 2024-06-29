@@ -197,6 +197,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             {
                 mechanicAcceptance.Add(new MechanicAcceptanceDto
                 {
+                    CarId = reviewDto.CarId,
+                    CarName = reviewDto.CarName,
                     DriverId = reviewDto.DriverId,
                     DriverName = operatorReviewDto.DriverName,
                     MechanicName = reviewDto.MechanicName,
@@ -212,6 +214,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
                 {
                     DriverId = operatorReviewDto.DriverId,
                     DriverName = operatorReviewDto.DriverName,
+                    CarId = operatorReviewDto.CarId,
+                    CarName = operatorReviewDto.CarModel,
                     MechanicName = "",
                     IsAccepted = false,
                     Distance = 0,
