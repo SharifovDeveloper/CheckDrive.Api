@@ -1,4 +1,6 @@
-﻿namespace CheckDrive.Domain.Interfaces.Services
+﻿using CheckDrive.Domain.Entities;
+
+namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IAuthorizationService
     {

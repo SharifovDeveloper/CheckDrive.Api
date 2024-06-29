@@ -32,7 +32,7 @@ namespace CheckDrive.Services
             return token;
         }
 
-        public async Task<Account> GetByEmailAsync(string email)
+        private async Task<Account> GetByEmailAsync(string email)
         {
             var userEntity = await _context.Accounts
                 .AsNoTracking()
