@@ -4,6 +4,7 @@ using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,7 +88,16 @@ public class MechanicsController : Controller
     public async Task<ActionResult<IEnumerable<MechanicAcceptanceDto>>> GetMechanicAcceptancesAsync(
     [FromQuery] MechanicAcceptanceResourceParameters mechanicAcceptanceResource)
     {
-        var mechanicAcceptances = await _mechanicAcceptanceService.GetMechanicAcceptencesAsync(mechanicAcceptanceResource);
+        var mechanicAcceptances = new GetBaseResponse<MechanicAcceptanceDto>();
+
+        if (mechanicAcceptanceResource.RoleId == 6)
+        {
+            mechanicAcceptances = await _mechanicAcceptanceService.GetMechanicAcceptencesForMechanicAsync(mechanicAcceptanceResource);
+        }
+        else
+        {
+            mechanicAcceptances = await _mechanicAcceptanceService.GetMechanicAcceptencesAsync(mechanicAcceptanceResource);
+        }
 
         return Ok(mechanicAcceptances);
     }
@@ -142,7 +152,16 @@ public class MechanicsController : Controller
     public async Task<ActionResult<IEnumerable<MechanicHandoverDto>>> GetMechanichandoversAsync(
     [FromQuery] MechanicHandoverResourceParameters mechanicHandoverResource)
     {
-        var mechanicHandovers = await _mechanicHandoverService.GetMechanicHandoversAsync(mechanicHandoverResource);
+        var mechanicHandovers = new GetBaseResponse<MechanicHandoverDto>();
+
+        if (mechanicHandoverResource.RoleId == 6)
+        {
+            mechanicHandovers = await _mechanicHandoverService.GetMechanicHandoversForMechanicsAsync(mechanicHandoverResource);
+        }
+        else
+        {
+            mechanicHandovers = await _mechanicHandoverService.GetMechanicHandoversAsync(mechanicHandoverResource);
+        }
 
         return Ok(mechanicHandovers);
     }

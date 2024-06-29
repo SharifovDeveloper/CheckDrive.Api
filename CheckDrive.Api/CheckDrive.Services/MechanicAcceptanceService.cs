@@ -8,6 +8,8 @@ using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.Domain.Interfaces.Hubs;
+using CheckDrive.ApiContracts.OperatorReview;
+using CheckDrive.ApiContracts.MechanicHandover;
 
 namespace CheckDrive.Services;
 
@@ -160,6 +162,104 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         }
 
         return query;
+    }
+
+    public async Task<GetBaseResponse<MechanicAcceptanceDto>> GetMechanicAcceptencesForMechanicAsync(MechanicAcceptanceResourceParameters resourceParameters)
+    {
+        var response = await _context.MechanicsAcceptances
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today)
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .ToListAsync();
+
+        var operatorReviewsResponse = await _context.OperatorReviews
+            .AsNoTracking()
+            .Where(dr => dr.Date.Date == DateTime.Today && dr.IsGiven == true)
+            .Include(x => x.Operator)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .ToListAsync();
+
+        var mechanicAcceptance = new List<MechanicAcceptanceDto>();
+
+        foreach (var operatorr in operatorReviewsResponse)
+        {
+            var review = response.FirstOrDefault(r => r.DriverId == operatorr.DriverId);
+            var reviewDto = _mapper.Map<MechanicAcceptanceDto>(review);
+            var operatorReviewDto = _mapper.Map<OperatorReviewDto>(operatorr);
+            if (review != null)
+            {
+                mechanicAcceptance.Add(new MechanicAcceptanceDto
+                {
+                    DriverId = reviewDto.DriverId,
+                    DriverName = operatorReviewDto.DriverName,
+                    MechanicName = reviewDto.MechanicName,
+                    IsAccepted = reviewDto.IsAccepted,
+                    Distance = reviewDto.Distance,
+                    Comments = reviewDto.Comments,
+                    Date = reviewDto.Date
+                });
+            }
+            else
+            {
+                mechanicAcceptance.Add(new MechanicAcceptanceDto
+                {
+                    DriverId = operatorReviewDto.DriverId,
+                    DriverName = operatorReviewDto.DriverName,
+                    MechanicName = "",
+                    IsAccepted = false,
+                    Distance = 0,
+                    Comments = "",
+                    Date = null
+                });
+            }
+        }
+
+        var filteredReviews = ApplyFilters(resourceParameters, mechanicAcceptance);
+        var paginatedResult = PaginateReviews(filteredReviews, resourceParameters.PageSize, resourceParameters.PageNumber);
+
+        return paginatedResult.ToResponse();
+    }
+
+    private List<MechanicAcceptanceDto> ApplyFilters(MechanicAcceptanceResourceParameters parameters, List<MechanicAcceptanceDto> reviews)
+    {
+        var query = reviews.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.SearchString))
+            query = query.Where(
+                x => x.DriverName.Contains(parameters.SearchString) ||
+                x.MechanicName.Contains(parameters.SearchString) ||
+                x.CarName.Contains(parameters.SearchString) ||
+                x.Comments.Contains(parameters.SearchString));
+
+        if (parameters.Date != null)
+            query = query.Where(x => x.Date.Value.Date == parameters.Date.Value.Date);
+
+        if (parameters.DriverId != null)
+            query = query.Where(x => x.DriverId == parameters.DriverId);
+
+        if (!string.IsNullOrEmpty(parameters.OrderBy))
+            query = parameters.OrderBy.ToLowerInvariant() switch
+            {
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.DriverId),
+            };
+
+        return query.ToList();
+    }
+
+    private PaginatedList<MechanicAcceptanceDto> PaginateReviews(List<MechanicAcceptanceDto> reviews, int pageSize, int pageNumber)
+    {
+        var totalCount = reviews.Count;
+        var items = reviews.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        return new PaginatedList<MechanicAcceptanceDto>(items, totalCount, pageNumber, pageSize);
     }
 }
 

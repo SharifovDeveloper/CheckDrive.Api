@@ -2,6 +2,7 @@
 {
     public class DoctorReviewResourceParameters : ResourceParametersBase
     {
+        public int? RoleId { get; set; }
         public int? DriverId { get; set; }
         public bool? IsHealthy { get; set; }
         public DateTime? Date { get; set; }

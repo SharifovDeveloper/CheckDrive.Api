@@ -1,8 +1,10 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.ApiContracts.DispatcherReview;
+using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,8 +86,16 @@ public class DispatchersController : Controller
     public async Task<ActionResult<IEnumerable<DispatcherReviewDto>>> GetDispatcherReviewsAsync(
         [FromQuery] DispatcherReviewResourceParameters dispatcherReviewResource)
     {
-        var dispatcherReviews = await _reviewService.GetDispatcherReviewsAsync(dispatcherReviewResource);
+        var dispatcherReviews = new GetBaseResponse<DispatcherReviewDto>();
 
+        if (dispatcherReviewResource.RoleId == 5)
+        {
+            dispatcherReviews = await _reviewService.GetDispatcherReviewsForDispatcherAsync(dispatcherReviewResource);
+        }
+        else
+        {
+            dispatcherReviews = await _reviewService.GetDispatcherReviewsAsync(dispatcherReviewResource);
+        }
         return Ok(dispatcherReviews);
     }
 

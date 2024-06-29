@@ -4,6 +4,7 @@ namespace CheckDrive.Domain.ResourceParameters
 {
     public class MechanicHandoverResourceParameters : ResourceParametersBase
     {
+        public int? RoleId { get; set; }
         public bool? IsHanded { get; set; }
         public Status? Status { get; set; }
         public DateTime? Date { get; set; }

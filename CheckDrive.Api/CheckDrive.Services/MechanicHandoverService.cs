@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Doctor;
+using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Hubs;
@@ -147,6 +150,119 @@ public class MechanicHandoverService : IMechanicHandoverService
             query = query.Where(x => x.Distance > resourceParameters.DistanceGreaterThan);
 
         return query;
+    }
+
+    public async Task<GetBaseResponse<MechanicHandoverDto>> GetMechanicHandoversForMechanicsAsync(MechanicHandoverResourceParameters resourceParameters)
+    {
+        var response = await _context.MechanicsHandovers
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today)
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .ToListAsync();
+
+        var doctorReviewsResponse = await _context.DoctorReviews
+            .AsNoTracking()
+            .Where(x => x.IsHealthy == true && x.Date.Date == DateTime.Today)
+            .Include(x => x.Doctor)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .ToListAsync();
+
+        var mechanicHandovers = new List<MechanicHandoverDto>();
+
+        foreach (var doctor in doctorReviewsResponse)
+        {
+            var review = response.FirstOrDefault(r => r.DriverId == doctor.DriverId);
+            var doctorDto = _mapper.Map<DoctorReviewDto>(doctor);
+            var reviewDto = _mapper.Map<MechanicHandoverDto>(review);
+            if (review != null)
+            {
+                mechanicHandovers.Add(new MechanicHandoverDto
+                {
+                    Id = reviewDto.Id,
+                    DriverId = reviewDto.DriverId,
+                    DriverName = doctorDto.DriverName,
+                    MechanicName = reviewDto.MechanicName,
+                    IsHanded = reviewDto.IsHanded,
+                    Distance = reviewDto.Distance,
+                    Comments = reviewDto.Comments,
+                    Date = reviewDto.Date,
+                    CarId = reviewDto.CarId,
+                    CarName = reviewDto.CarName,
+                    MechanicId = reviewDto.MechanicId,
+                    Status = reviewDto.Status,
+                });
+            }
+            else
+            {
+                mechanicHandovers.Add(new MechanicHandoverDto
+                {
+                    DriverId = doctorDto.DriverId,
+                    DriverName = doctorDto.DriverName,
+                    CarName = "",
+                    MechanicName = "",
+                    IsHanded = false,
+                    Distance = 0,
+                    Comments = "",
+                    Date = DateTime.Today
+                });
+            }
+        }
+
+        var filteredReviews = ApplyFilters(resourceParameters, mechanicHandovers);
+        var paginatedResult = PaginateReviews(filteredReviews, resourceParameters.PageSize, resourceParameters.PageNumber);
+
+        return paginatedResult.ToResponse();
+    }
+
+    private List<MechanicHandoverDto> ApplyFilters(MechanicHandoverResourceParameters parameters, List<MechanicHandoverDto> reviews)
+    {
+        var query = reviews.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.SearchString))
+            query = query.Where(
+                x => x.DriverName.Contains(parameters.SearchString) ||
+                x.MechanicName.Contains(parameters.SearchString) ||
+                x.CarName.Contains(parameters.SearchString) ||
+                x.Comments.Contains(parameters.SearchString));
+
+        if (parameters.Date is not null)
+            query = query.Where(x => x.Date.Date == parameters.Date.Value.Date);
+
+        if (parameters.IsHanded is not null)
+            query = query.Where(x => x.IsHanded == parameters.IsHanded);
+
+        if (parameters.DriverId is not null)
+            query = query.Where(x => x.DriverId == parameters.DriverId);
+
+        if (!string.IsNullOrEmpty(parameters.OrderBy))
+            query = parameters.OrderBy.ToLowerInvariant() switch
+            {
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.Id),
+            };
+
+        if (parameters.Distance is not null)
+            query = query.Where(x => x.Distance == parameters.Distance);
+        if (parameters.DistanceLessThan is not null)
+            query = query.Where(x => x.Distance < parameters.DistanceLessThan);
+        if (parameters.DistanceGreaterThan is not null)
+            query = query.Where(x => x.Distance > parameters.DistanceGreaterThan);
+
+        return query.ToList();
+    }
+
+    private PaginatedList<MechanicHandoverDto> PaginateReviews(List<MechanicHandoverDto> reviews, int pageSize, int pageNumber)
+    {
+        var totalCount = reviews.Count;
+        var items = reviews.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        return new PaginatedList<MechanicHandoverDto>(items, totalCount, pageNumber, pageSize);
     }
 }
 

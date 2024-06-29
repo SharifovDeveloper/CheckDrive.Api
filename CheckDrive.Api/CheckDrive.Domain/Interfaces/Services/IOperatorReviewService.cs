@@ -6,6 +6,7 @@ namespace CheckDrive.Domain.Interfaces.Services
 {
     public interface IOperatorReviewService
     {
+        Task<GetBaseResponse<OperatorReviewDto>> GetOperatorReviewsForOperatorAsync(OperatorReviewResourceParameters resourceParameters);
         Task<GetBaseResponse<OperatorReviewDto>> GetOperatorReviewsAsync(OperatorReviewResourceParameters resourceParameters);
         Task<OperatorReviewDto?> GetOperatorReviewByIdAsync(int id);
         Task<OperatorReviewDto> CreateOperatorReviewAsync(OperatorReviewForCreateDto reviewForCreateDto);

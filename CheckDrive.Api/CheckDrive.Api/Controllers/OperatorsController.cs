@@ -1,8 +1,10 @@
 ﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.ApiContracts.Operator;
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,7 +86,16 @@ public class OperatorsController : Controller
     public async Task<ActionResult<IEnumerable<OperatorReviewDto>>> GetOperatorReviewsAsync(
     [FromQuery] OperatorReviewResourceParameters resourceParameters)
     {
-        var operatorReviews = await _operatorReviewService.GetOperatorReviewsAsync(resourceParameters);
+        var operatorReviews = new GetBaseResponse<OperatorReviewDto>();
+
+        if (resourceParameters.RoleId == 4)
+        {
+            operatorReviews = await _operatorReviewService.GetOperatorReviewsForOperatorAsync(resourceParameters);
+        }
+        else
+        {
+            operatorReviews = await _operatorReviewService.GetOperatorReviewsAsync(resourceParameters);
+        }
 
         return Ok(operatorReviews);
     }

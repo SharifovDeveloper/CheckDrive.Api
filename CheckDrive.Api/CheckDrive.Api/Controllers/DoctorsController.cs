@@ -3,6 +3,7 @@ using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,7 +85,16 @@ public class DoctorsController : Controller
     public async Task<ActionResult<IEnumerable<DoctorReviewDto>>> GetDoctorReviewsAsync(
         [FromQuery] DoctorReviewResourceParameters resourceParameters)
     {
-        var doctorReviews = await _reviewService.GetDoctorReviewsAsync(resourceParameters);
+        var doctorReviews = new GetBaseResponse<DoctorReviewDto>();
+
+        if (resourceParameters.RoleId == 3)
+        {
+            doctorReviews = await _reviewService.GetDoctorReviewsForDoctorAsync(resourceParameters);
+        }
+        else
+        {
+            doctorReviews = await _reviewService.GetDoctorReviewsAsync(resourceParameters);
+        }
 
         return Ok(doctorReviews);
     }

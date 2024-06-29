@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Car;
 using CheckDrive.ApiContracts.DispatcherReview;
+using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.ApiContracts.MechanicHandover;
+using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -165,5 +169,180 @@ public class DispatcherReviewService : IDispatcherReviewService
         }
         return query;
     }
+
+    public async Task<GetBaseResponse<DispatcherReviewDto>> GetDispatcherReviewsForDispatcherAsync(DispatcherReviewResourceParameters resourceParameters)
+    {
+        var reviewsResponse = await _context.DispatchersReviews
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today)
+            .Include(x => x.Car)
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Operator)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.MechanicAcceptance)
+            .Include(x => x.MechanicHandover)
+            .ToListAsync();
+
+        var mechanicAcceptanceResponse = await _context.MechanicsAcceptances
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today && x.IsAccepted == true)
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .ToListAsync();
+
+        var mechanicHandoverResponse = await _context.MechanicsHandovers
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today && x.IsHanded == true)
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .ToListAsync();
+
+        var operatorResponse = await _context.OperatorReviews
+            .AsNoTracking()
+            .Where(x => x.Date.Date == DateTime.Today && x.IsGiven == true)
+            .Include(x => x.Operator)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .ToListAsync();
+
+        var carResponse = await _context.Cars
+            .ToListAsync();
+
+        var dispatchers = new List<DispatcherReviewDto>();
+
+        foreach (var mechanicAcceptance in mechanicAcceptanceResponse)
+        {
+            var mechanicHandoverReview = mechanicHandoverResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.Today);
+            var operatorReview = operatorResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.Today);
+            var carReview = carResponse.FirstOrDefault(c => c.Id == mechanicAcceptance.CarId);
+            var review = reviewsResponse.FirstOrDefault(r => r.DriverId == mechanicAcceptance.DriverId);
+
+            var mechanicHandoverReviewDto = _mapper.Map<MechanicHandoverDto>(mechanicHandoverReview);
+            var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptance);
+            var operatorReviewDto = _mapper.Map<OperatorReviewDto>(operatorReview);
+            var carReviewDto = _mapper.Map<CarDto>(carReview);
+            var reviewDto = _mapper.Map<DispatcherReviewDto>(review);
+
+            if (review != null)
+            {
+                dispatchers.Add(new DispatcherReviewDto
+                {
+                    DriverId = reviewDto.DriverId,
+                    DriverName = mechanicAcceptanceDto.DriverName,
+                    CarId = reviewDto.CarId,
+                    CarName = reviewDto.CarName,
+                    CarMeduimFuelConsumption = reviewDto.CarMeduimFuelConsumption,
+                    FuelSpended = reviewDto.FuelSpended,
+                    DistanceCovered = reviewDto.DistanceCovered,
+                    InitialDistance = reviewDto.InitialDistance,
+                    FinalDistance = reviewDto.FinalDistance,
+                    PouredFuel = reviewDto.PouredFuel,
+                    OperatorName = reviewDto.OperatorName,
+                    OperatorReviewId = reviewDto.OperatorReviewId,
+                    DispatcherName = reviewDto.DispatcherName,
+                    MechanicName = reviewDto.MechanicName,
+                    Date = reviewDto.Date,
+                    DispatcherId = reviewDto.DispatcherId,
+                    MechanicAcceptanceId = reviewDto.MechanicAcceptanceId,
+                    MechanicHandoverId = reviewDto.MechanicHandoverId,
+                    OperatorId = reviewDto.OperatorId,
+                    MechanicId = reviewDto.MechanicId,
+                });
+            }
+            else
+            {
+                dispatchers.Add(new DispatcherReviewDto
+                {
+                    DriverId = mechanicAcceptanceDto.DriverId,
+                    DriverName = mechanicAcceptanceDto.DriverName,
+                    CarId = mechanicAcceptanceDto.CarId,
+                    CarName = mechanicAcceptanceDto.CarName,
+                    CarMeduimFuelConsumption = carReviewDto.MeduimFuelConsumption,
+                    FuelSpended = (mechanicAcceptanceDto.Distance - mechanicHandoverReviewDto.Distance) / carReviewDto.MeduimFuelConsumption,
+                    DistanceCovered = mechanicAcceptanceDto.Distance - mechanicHandoverReviewDto.Distance,
+                    InitialDistance = mechanicHandoverReviewDto.Distance,
+                    FinalDistance = mechanicAcceptanceDto.Distance,
+                    PouredFuel = operatorReviewDto.OilAmount ?? 0,
+                    OperatorName = operatorReviewDto.OperatorName,
+                    OperatorReviewId = operatorReviewDto.Id,
+                    DispatcherName = "",
+                    MechanicName = mechanicAcceptanceDto.MechanicName,
+                    Date = DateTime.Today,
+                    MechanicAcceptanceId = mechanicAcceptanceDto.Id,
+                    MechanicHandoverId = mechanicHandoverReviewDto.Id,
+                    OperatorId = operatorReviewDto.OperatorId,
+                    MechanicId = mechanicAcceptanceDto.MechanicId
+                });
+            }
+        }
+
+        var filteredReviews = ApplyFilters(resourceParameters, dispatchers);
+        var paginatedResult = PaginateReviews(filteredReviews, resourceParameters.PageSize, resourceParameters.PageNumber);
+
+        return paginatedResult.ToResponse();
+    }
+
+    private List<DispatcherReviewDto> ApplyFilters(DispatcherReviewResourceParameters dispatcherReviewParameters, List<DispatcherReviewDto> reviews)
+    {
+        var query = reviews.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(dispatcherReviewParameters.SearchString))
+            query = query.Where(
+                x => x.DriverName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.MechanicName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.OperatorName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.DispatcherName.Contains(dispatcherReviewParameters.SearchString) ||
+                x.CarName.Contains(dispatcherReviewParameters.SearchString));
+
+        if (dispatcherReviewParameters.Date is not null)
+            query = query.Where(x => x.Date.Date == dispatcherReviewParameters.Date.Value.Date);
+
+        if (dispatcherReviewParameters.DriverId is not null)
+            query = query.Where(x => x.DriverId == dispatcherReviewParameters.DriverId);
+        if (dispatcherReviewParameters.FuelSpended is not null)
+            query = query.Where(x => x.FuelSpended == dispatcherReviewParameters.FuelSpended);
+        if (dispatcherReviewParameters.FuelSpendedLessThan is not null)
+            query = query.Where(x => x.FuelSpended < dispatcherReviewParameters.FuelSpendedLessThan);
+        if (dispatcherReviewParameters.FuelSpendedGreaterThan is not null)
+            query = query.Where(x => x.FuelSpended > dispatcherReviewParameters.FuelSpendedGreaterThan);
+
+        if (dispatcherReviewParameters.DistanceCovered is not null)
+            query = query.Where(x => x.DistanceCovered == dispatcherReviewParameters.DistanceCovered);
+        if (dispatcherReviewParameters.DistanceCoveredLessThan is not null)
+            query = query.Where(x => x.DistanceCovered < dispatcherReviewParameters.DistanceCoveredLessThan);
+        if (dispatcherReviewParameters.DistanceCoveredGreaterThan is not null)
+            query = query.Where(x => x.DistanceCovered > dispatcherReviewParameters.DistanceCoveredGreaterThan);
+
+        if (!string.IsNullOrEmpty(dispatcherReviewParameters.OrderBy))
+        {
+            query = dispatcherReviewParameters.OrderBy.ToLowerInvariant() switch
+            {
+                "date" => query.OrderBy(x => x.Date),
+                "datedesc" => query.OrderByDescending(x => x.Date),
+                _ => query.OrderBy(x => x.DriverId),
+            };
+        }
+
+        return query.ToList();
+    }
+
+    private PaginatedList<DispatcherReviewDto> PaginateReviews(List<DispatcherReviewDto> reviews, int pageSize, int pageNumber)
+    {
+        var totalCount = reviews.Count;
+        var items = reviews.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        return new PaginatedList<DispatcherReviewDto>(items, totalCount, pageNumber, pageSize);
+    }
+
 }
 
