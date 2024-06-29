@@ -80,6 +80,11 @@ namespace CheckDrive.Services
             return accountDto;
         }
 
+        public async Task<Account> FindAccount(string login)
+        {
+            return await _context.Accounts.FirstOrDefaultAsync(u => u.Login == login);
+        }
+
         private async Task DelteAndCheckAccountRoles(int accountId, int role)
         {
             switch (role)
