@@ -183,27 +183,39 @@ public class DoctorReviewService : IDoctorReviewService
 
     private List<DoctorReviewDto> ApplyFilters(DoctorReviewResourceParameters parameters, List<DoctorReviewDto> reviews)
     {
+        if (parameters == null || reviews == null)
+            return new List<DoctorReviewDto>();
+
         var query = reviews.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(parameters.SearchString))
-            query = query.Where(
-                x => x.DriverName.Contains(parameters.SearchString) ||
-                x.DoctorName.Contains(parameters.SearchString) ||
-                x.Comments.Contains(parameters.SearchString));
+        {
+            var searchString = parameters.SearchString.ToLowerInvariant();
+            query = query.Where(x =>
+                (!string.IsNullOrEmpty(x.DriverName) && x.DriverName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.DoctorName) && x.DoctorName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.Comments) && x.Comments.ToLowerInvariant().Contains(searchString)));
+        }
 
-        if (parameters.Date != null)
+        if (parameters.Date.HasValue)
+        {
             query = query.Where(x => x.Date.Date == parameters.Date.Value.Date);
+        }
 
-        if (parameters.DriverId != null)
-            query = query.Where(x => x.DriverId == parameters.DriverId);
+        if (parameters.DriverId.HasValue)
+        {
+            query = query.Where(x => x.DriverId == parameters.DriverId.Value);
+        }
 
         if (!string.IsNullOrEmpty(parameters.OrderBy))
+        {
             query = parameters.OrderBy.ToLowerInvariant() switch
             {
                 "date" => query.OrderBy(x => x.Date),
                 "datedesc" => query.OrderByDescending(x => x.Date),
                 _ => query.OrderBy(x => x.DriverId),
             };
+        }
 
         return query.ToList();
     }
