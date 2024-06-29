@@ -1,6 +1,7 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ public class AccountsController : Controller
 
         return Ok(accounts);
     }
+
     [HttpGet("{id}", Name = "GetAccountById")]
     public async Task<ActionResult<AccountDto>> GetAccountByIdAsync(int id)
     {
@@ -35,9 +37,16 @@ public class AccountsController : Controller
 
         return Ok(account);
     }
+
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] AccountForCreateDto forCreateDto)
     {
+        var existingUser = await _accountService.FindAccount(forCreateDto.Login);
+        if (existingUser != null)
+        {
+            return Conflict("Bu loginga ega foydalanuvchi allaqachon mavjud.");
+        }
+
         var createdAccount = await _accountService.CreateAccountAsync(forCreateDto);
 
         return CreatedAtAction("GetAccountById", new { id = createdAccount.Id }, createdAccount);
