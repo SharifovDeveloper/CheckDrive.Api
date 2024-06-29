@@ -225,11 +225,14 @@ public class MechanicHandoverService : IMechanicHandoverService
         var query = reviews.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(parameters.SearchString))
-            query = query.Where(
-                x => x.DriverName.Contains(parameters.SearchString) ||
-                x.MechanicName.Contains(parameters.SearchString) ||
-                x.CarName.Contains(parameters.SearchString) ||
-                x.Comments.Contains(parameters.SearchString));
+        {
+            var searchString = parameters.SearchString.ToLowerInvariant();
+            query = query.Where(x =>
+                (!string.IsNullOrEmpty(x.DriverName) && x.DriverName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.MechanicName) && x.MechanicName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.CarName) && x.CarName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.Comments) && x.Comments.ToLowerInvariant().Contains(searchString)));
+        }
 
         if (parameters.Date is not null)
             query = query.Where(x => x.Date.Date == parameters.Date.Value.Date);

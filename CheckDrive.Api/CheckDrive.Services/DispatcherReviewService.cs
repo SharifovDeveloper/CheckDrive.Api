@@ -298,12 +298,15 @@ public class DispatcherReviewService : IDispatcherReviewService
         var query = reviews.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(dispatcherReviewParameters.SearchString))
-            query = query.Where(
-                x => x.DriverName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.MechanicName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.OperatorName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.DispatcherName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.CarName.Contains(dispatcherReviewParameters.SearchString));
+        {
+            var searchString = dispatcherReviewParameters.SearchString.ToLowerInvariant();
+            query = query.Where(x =>
+                (!string.IsNullOrEmpty(x.DriverName) && x.DriverName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.MechanicName) && x.MechanicName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.OperatorName) && x.OperatorName.ToLowerInvariant().Contains(searchString)) ||
+                (!string.IsNullOrEmpty(x.DispatcherName) && x.DispatcherName.ToLowerInvariant().Contains(searchString) ||
+                (!string.IsNullOrEmpty(x.CarName) && x.CarName.ToLowerInvariant().Contains(searchString))));
+        }
 
         if (dispatcherReviewParameters.Date is not null)
             query = query.Where(x => x.Date.Date == dispatcherReviewParameters.Date.Value.Date);
