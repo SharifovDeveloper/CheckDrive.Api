@@ -77,7 +77,7 @@ namespace CheckDrive.Api.Extensions
         {
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.Information()
-                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning) // Adjust EF Core SQL logs
+                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning) 
                  .Enrich.FromLogContext()
                  .WriteTo.Console(new RenderedCompactJsonFormatter())
                  .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)
