@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
 using System.Text;
 
 namespace CheckDrive.Api.Extensions
@@ -74,11 +76,14 @@ namespace CheckDrive.Api.Extensions
         public static IServiceCollection ConfigureLogger(this IServiceCollection services)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.Console()
-                .WriteTo.File("logs/logs.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.File("logs/error_.txt", Serilog.Events.LogEventLevel.Error, rollingInterval: RollingInterval.Day)
-                .CreateLogger();
+                 .MinimumLevel.Information()
+                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning) 
+                 .Enrich.FromLogContext()
+                 .WriteTo.Console(new RenderedCompactJsonFormatter())
+                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)
+                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/error_.txt", Serilog.Events.LogEventLevel.Error, rollingInterval: RollingInterval.Day)
+                 .CreateLogger();
+
 
             return services;
         }
