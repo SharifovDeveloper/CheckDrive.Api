@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts;
 using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.ApiContracts.Driver;
@@ -31,11 +32,15 @@ public class MechanicHandoverService : IMechanicHandoverService
     {
         var query = GetQueryMechanicHandoverResParameters(resourceParameters);
 
-        query = query.OrderByDescending(item => item.Date);
-
         var mechanicHandovers = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var mechanicHandoverDtos = _mapper.Map<List<MechanicHandoverDto>>(mechanicHandovers);
+
+        if (resourceParameters.Status == Status.Completed)
+        {
+            var countOfHealthyDrivers = query.Count();
+            mechanicHandovers.PageSize = countOfHealthyDrivers;
+        }
 
         var paginatedResult = new PaginatedList<MechanicHandoverDto>(mechanicHandoverDtos, mechanicHandovers.TotalCount, mechanicHandovers.CurrentPage, mechanicHandovers.PageSize);
 
@@ -209,7 +214,8 @@ public class MechanicHandoverService : IMechanicHandoverService
                     IsHanded = false,
                     Distance = 0,
                     Comments = "",
-                    Date = DateTime.Today
+                    Date = DateTime.Today,
+                    Status = ApiContracts.StatusForDto.Unassigned,
                 });
             }
         }
@@ -239,6 +245,9 @@ public class MechanicHandoverService : IMechanicHandoverService
 
         if (parameters.IsHanded is not null)
             query = query.Where(x => x.IsHanded == parameters.IsHanded);
+
+        if (parameters.Status is not null)
+            query = query.Where(x => x.Status == (StatusForDto)parameters.Status);
 
         if (parameters.DriverId is not null)
             query = query.Where(x => x.DriverId == parameters.DriverId);

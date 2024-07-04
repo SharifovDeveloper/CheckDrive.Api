@@ -188,7 +188,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var mechanicAcceptanceResponse = await _context.MechanicsAcceptances
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.IsAccepted == true)
+            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -198,7 +198,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var mechanicHandoverResponse = await _context.MechanicsHandovers
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.IsHanded == true)
+            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -208,7 +208,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var operatorResponse = await _context.OperatorReviews
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.IsGiven == true)
+            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
             .Include(x => x.Operator)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)

@@ -10,6 +10,7 @@ using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.ApiContracts.MechanicHandover;
+using CheckDrive.ApiContracts;
 
 namespace CheckDrive.Services;
 
@@ -35,6 +36,12 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         var mechanicAcceptances = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var mechanicAcceptanceDtos = _mapper.Map<List<MechanicAcceptanceDto>>(mechanicAcceptances);
+
+        if (resourceParameters.Status == Status.Completed)
+        {
+            var countOfHealthyDrivers = query.Count();
+            mechanicAcceptances.PageSize = countOfHealthyDrivers;
+        }
 
         var paginatedResult = new PaginatedList<MechanicAcceptanceDto>(mechanicAcceptanceDtos, mechanicAcceptances.TotalCount, mechanicAcceptances.CurrentPage, mechanicAcceptances.PageSize);
 
@@ -135,22 +142,17 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         //Distance
         if (resourceParameters.Distance is not null)
-        {
             query = query.Where(x => x.Distance == resourceParameters.Distance);
-        }
+
         if (resourceParameters.DistanceLessThan is not null)
-        {
             query = query.Where(x => x.Distance < resourceParameters.DistanceLessThan);
-        }
+
         if (resourceParameters.DistanceGreaterThan is not null)
-        {
             query = query.Where(x => x.Distance > resourceParameters.DistanceGreaterThan);
-        }
 
         if (resourceParameters.DriverId is not null)
-        {
             query = query.Where(x => x.DriverId == resourceParameters.DriverId);
-        }
+
         if (!string.IsNullOrEmpty(resourceParameters.OrderBy))
         {
             query = resourceParameters.OrderBy.ToLowerInvariant() switch
@@ -178,7 +180,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         var operatorReviewsResponse = await _context.OperatorReviews
             .AsNoTracking()
-            .Where(dr => dr.Date.Date == DateTime.Today && dr.IsGiven == true)
+            .Where(dr => dr.Date.Date == DateTime.Today && dr.Status == Status.Completed)
             .Include(x => x.Operator)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)
@@ -215,12 +217,13 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
                     DriverId = operatorReviewDto.DriverId,
                     DriverName = operatorReviewDto.DriverName,
                     CarId = operatorReviewDto.CarId,
-                    CarName = operatorReviewDto.CarModel,
+                    CarName = $"{operatorReviewDto.CarModel} ({operatorReviewDto.CarNumber})" ,
                     MechanicName = "",
                     IsAccepted = false,
                     Distance = 0,
                     Comments = "",
-                    Date = null
+                    Date = null,
+                    Status = ApiContracts.StatusForDto.Unassigned,
                 });
             }
         }
@@ -250,6 +253,9 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         if (parameters.DriverId != null)
             query = query.Where(x => x.DriverId == parameters.DriverId);
+
+        if (parameters.Status is not null)
+            query = query.Where(x => x.Status == (StatusForDto)parameters.Status);
 
         if (!string.IsNullOrEmpty(parameters.OrderBy))
             query = parameters.OrderBy.ToLowerInvariant() switch

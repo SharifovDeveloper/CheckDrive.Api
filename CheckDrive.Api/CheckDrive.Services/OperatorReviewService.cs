@@ -35,6 +35,12 @@ namespace CheckDrive.Services
 
             var operatorReviewsDto = _mapper.Map<List<OperatorReviewDto>>(operatorReviews);
 
+            if (resourceParameters.Status == Status.Completed)
+            {
+                var countOfHealthyDrivers = query.Count();
+                operatorReviews.PageSize = countOfHealthyDrivers;
+            }
+
             var paginatedResult = new PaginatedList<OperatorReviewDto>(operatorReviewsDto, operatorReviews.TotalCount, operatorReviews.CurrentPage, operatorReviews.PageSize);
 
             return paginatedResult.ToResponse();
@@ -119,29 +125,23 @@ namespace CheckDrive.Services
                 query = query.Where(x => x.Date.Date == operatorReviewResource.Date.Value.Date);
 
             if (operatorReviewResource.OilAmount is not null)
-            {
                 query = query.Where(x => x.OilAmount == operatorReviewResource.OilAmount);
-            }
+
             if (operatorReviewResource.OilAmountLessThan is not null)
-            {
                 query = query.Where(x => x.OilAmount < operatorReviewResource.OilAmountLessThan);
-            }
+
             if (operatorReviewResource.OilAmountGreaterThan is not null)
-            {
                 query = query.Where(x => x.OilAmount > operatorReviewResource.OilAmountGreaterThan);
-            }
+
             if (operatorReviewResource.IsGiven is not null)
-            {
                 query = query.Where(x => x.IsGiven == operatorReviewResource.IsGiven);
-            }
+
             if (operatorReviewResource.DriverId is not null)
-            {
                 query = query.Where(x => x.DriverId == operatorReviewResource.DriverId);
-            }
+
             if (operatorReviewResource.CarId is not null)
-            {
                 query = query.Where(x => x.CarId == operatorReviewResource.CarId);
-            }
+
             if (!string.IsNullOrEmpty(operatorReviewResource.OrderBy))
             {
                 query = operatorReviewResource.OrderBy.ToLowerInvariant() switch
@@ -169,7 +169,7 @@ namespace CheckDrive.Services
 
             var mechanicHandoverResponse = await _context.MechanicsHandovers
                 .AsNoTracking()
-                .Where(x => x.Date.Date == DateTime.Today && x.IsHanded == true)
+                .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
                 .Include(x => x.Mechanic)
                 .ThenInclude(x => x.Account)
                 .Include(x => x.Car)
@@ -253,6 +253,9 @@ namespace CheckDrive.Services
 
             if (parameters.Date is not null)
                 query = query.Where(x => x.Date.Value.Date == parameters.Date.Value.Date);
+
+            if (parameters.Status is not null)
+                query = query.Where(x => x.Status == (StatusForDto)parameters.Status);
 
             if (parameters.OilAmount is not null)
                 query = query.Where(x => x.OilAmount == parameters.OilAmount);

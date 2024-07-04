@@ -32,6 +32,12 @@ public class DoctorReviewService : IDoctorReviewService
 
         var doctorReviewsDto = _mapper.Map<List<DoctorReviewDto>>(doctorReviews);
 
+        if (resourceParameters.IsHealthy == true)
+        {
+            var countOfHealthyDrivers = query.Count();
+            doctorReviews.PageSize = countOfHealthyDrivers;
+        }
+
         var paginatedResult = new PaginatedList<DoctorReviewDto>(doctorReviewsDto, doctorReviews.TotalCount, doctorReviews.CurrentPage, doctorReviews.PageSize);
 
         return paginatedResult.ToResponse();
