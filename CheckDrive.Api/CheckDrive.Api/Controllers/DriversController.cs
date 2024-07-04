@@ -31,6 +31,14 @@ public class DriversController : Controller
         return Ok(drivers);
     }
 
+    [HttpGet("driverHistories")]
+    public async Task<ActionResult<IEnumerable<DriverHistoryDto>>> GetDriverHistory(int driverId)
+    {
+        var historyDrivers = await _driverService.GetDriverHistories(driverId);
+
+        return Ok(historyDrivers);
+    }
+
     [Authorize(Policy = "AdminOrDriver")]
     [HttpGet("{id}", Name = "GetDriverById")]
     public async Task<ActionResult<DriverDto>> GetDriverByIdAsync(int id)

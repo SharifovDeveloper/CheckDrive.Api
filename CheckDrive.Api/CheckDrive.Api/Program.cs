@@ -10,34 +10,40 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()  
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CustomJsonFormatter())
+    .WriteTo.File(new CustomJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File(new CustomJsonFormatter(), "logs/error_.txt", Serilog.Events.LogEventLevel.Error, rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
 builder.Host.UseSerilog();
-// Add services to the container.
 
 builder.Services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
 builder.Services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                })
-                .AddXmlSerializerFormatters();
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    })
+    .AddXmlSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer()
-        .AddEndpointsApiExplorer()
-        .AddSwaggerGen()
-        .AddSingleton<FileExtensionContentTypeProvider>()
-        .ConfigureLogger()
-        .ConfigureRepositories()
-        .ConfigureDatabaseContext()
-        .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    .AddSwaggerGen()
+    .AddSingleton<FileExtensionContentTypeProvider>()
+    .ConfigureLogger()
+    .ConfigureRepositories()
+    .ConfigureDatabaseContext()
+    .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddApiAuthentication(configuration);
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,11 +66,11 @@ app.UseCookiePolicy(new CookiePolicyOptions
     HttpOnly = HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always,
 });
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapHub<ChatHub>("api/chat");
 app.MapControllers();
-
 
 app.Run();
