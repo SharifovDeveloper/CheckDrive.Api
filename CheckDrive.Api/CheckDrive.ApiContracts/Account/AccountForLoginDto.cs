@@ -4,8 +4,8 @@ namespace CheckDrive.ApiContracts.Account
 {
     public class AccountForLoginDto
     {
-        [Required(ErrorMessage = "Emailni kiritish majburiy")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Login uzunligi 5 dan 100 gacha belgidan iborat bo'lishi kerak")]
+        [Required(ErrorMessage = "Loginni kiritish majburiy")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Login uzunligi 5 dan 30 gacha belgidan iborat bo'lishi kerak")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Parol kiritish majburiy")]

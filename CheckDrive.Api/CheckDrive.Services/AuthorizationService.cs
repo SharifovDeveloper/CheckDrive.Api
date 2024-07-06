@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Auth;
-using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -15,14 +14,14 @@ namespace CheckDrive.Services
         private readonly IMapper _mapper = mapper;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string> Login(string login, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 return null;
             }
 
-            var user = await GetByEmailAsync(email);
+            var user = await GetByEmailAsync(login, password);
             if (user == null)
             {
                 return null;
@@ -32,11 +31,11 @@ namespace CheckDrive.Services
             return token;
         }
 
-        private async Task<Account> GetByEmailAsync(string email)
+        private async Task<Account> GetByEmailAsync(string login, string password)
         {
             var userEntity = await _context.Accounts
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Login == email);
+                .FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
 
             if (userEntity == null)
             {
