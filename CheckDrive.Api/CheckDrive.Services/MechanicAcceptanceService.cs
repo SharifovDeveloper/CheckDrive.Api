@@ -207,7 +207,8 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
                     IsAccepted = reviewDto.IsAccepted,
                     Distance = reviewDto.Distance,
                     Comments = reviewDto.Comments,
-                    Date = reviewDto.Date
+                    Date = reviewDto.Date,
+                    Status = reviewDto.Status
                 });
             }
             else
