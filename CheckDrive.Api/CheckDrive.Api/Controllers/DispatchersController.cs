@@ -99,7 +99,7 @@ public class DispatchersController : Controller
         return Ok(dispatcherReviews);
     }
 
-    //[Authorize(Policy = "AdminOrDispatcher")]
+    [Authorize(Policy = "AdminOrDispatcher")]
     [HttpGet("review/{id}", Name = "GetDispatcherReviewById")]
     public async Task<ActionResult<DispatcherReviewDto>> GetDispatcherReviewByIdAsync(int id)
     {
