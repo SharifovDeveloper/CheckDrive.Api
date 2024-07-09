@@ -39,11 +39,11 @@ namespace CheckDrive.Api.Extensions
                 },
                 new Role()
                 {
-                    Name = "Driver"
+                    Name = "Haydovchi"
                 },
                 new Role()
                 {
-                    Name = "Doctor"
+                    Name = "Shifokor"
                 },
                 new Role()
                 {
@@ -51,11 +51,11 @@ namespace CheckDrive.Api.Extensions
                 },
                 new Role()
                 {
-                    Name = "Dispatcher"
+                    Name = "Dispetcher"
                 },
                 new Role()
                 {
-                    Name = "Mechanic"
+                    Name = "Mexanik"
                 }
             };
 
@@ -175,7 +175,7 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var account in accounts)
             {
-                var driverRole = roles.FirstOrDefault(r => r.Name == "Driver");
+                var driverRole = roles.FirstOrDefault(r => r.Name == "Haydovchi");
                 if (driverRole != null && account.RoleId == driverRole.Id)
                 {
                     drivers.Add(new Driver()
@@ -199,7 +199,7 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var account in accounts)
             {
-                var doctorRole = roles.FirstOrDefault(r => r.Name == "Doctor");
+                var doctorRole = roles.FirstOrDefault(r => r.Name == "Shifokor");
                 if (doctorRole != null && account.RoleId == doctorRole.Id)
                 {
                     doctors.Add(new Doctor()
@@ -247,7 +247,7 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var account in accounts)
             {
-                var dispatcherRole = roles.FirstOrDefault(r => r.Name == "Dispatcher");
+                var dispatcherRole = roles.FirstOrDefault(r => r.Name == "Dispetcher");
                 if (dispatcherRole != null && account.RoleId == dispatcherRole.Id)
                 {
                     dispatchers.Add(new Dispatcher()
@@ -271,7 +271,7 @@ namespace CheckDrive.Api.Extensions
 
             foreach (var account in accounts)
             {
-                var mechanicRole = roles.FirstOrDefault(r => r.Name == "Mechanic");
+                var mechanicRole = roles.FirstOrDefault(r => r.Name == "Mexanik");
                 if (mechanicRole != null && account.RoleId == mechanicRole.Id)
                 {
                     mechanics.Add(new Mechanic()
