@@ -1,7 +1,7 @@
-﻿using CheckDrive.Domain.ResourceParameters;
+﻿using CheckDrive.ApiContracts.Driver;
+using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
-using CheckDrive.ApiContracts.Driver;
-using System.Data;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {
@@ -11,6 +11,7 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<DriverDto?> GetDriverByIdAsync(int id);
         Task<DriverDto> CreateDriverAsync(DriverForCreateDto driverForCreate);
         Task DeleteDriverAsync(int id);
-        Task<IEnumerable<DriverHistoryDto>> GetDriverHistories(int Id);
+        Task<IEnumerable<DriverHistoryDto>> GetDriverHistories(int? Id);
+        Task<Driver?> GetDriverIdByAccountId(int accountId);
     }
 }
