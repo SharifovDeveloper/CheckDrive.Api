@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CheckDrive.ApiContracts;
 using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
@@ -46,7 +45,14 @@ public class DriverService : IDriverService
 
         return driverDto;
     }
+    public async Task<Driver?> GetDriverIdByAccountId(int accountId)
+    {
+        var driver = await _context.Drivers
+            .Where(x => x.AccountId == accountId)
+            .FirstOrDefaultAsync();
 
+        return driver;
+    }
     public async Task<DriverDto> CreateDriverAsync(DriverForCreateDto driverForCreate)
     {
         var accountEntity = _mapper.Map<Account>(driverForCreate);
@@ -95,99 +101,99 @@ public class DriverService : IDriverService
         return query;
     }
 
-    public async Task<IEnumerable<DriverHistoryDto>> GetDriverHistories(int driverId)
+    public async Task<IEnumerable<DriverHistoryDto>> GetDriverHistories(int? driverId)
     {
 
         var driverHistory = new List<DriverHistoryDto>();
 
-        var doctorReview =await _context.DoctorReviews
-            .AsNoTracking()
-            .Where(x => x.DriverId == driverId)
-            .OrderByDescending(x => x.Date)
-            .Take(20)
-            .ToArrayAsync();
-            
-
-        var mechanicHandovers =await _context.MechanicsHandovers
+        var doctorReview = await _context.DoctorReviews
             .AsNoTracking()
             .Where(x => x.DriverId == driverId)
             .OrderByDescending(x => x.Date)
             .Take(20)
             .ToArrayAsync();
 
-        var operatorReviews =await _context.OperatorReviews
+
+        var mechanicHandovers = await _context.MechanicsHandovers
             .AsNoTracking()
             .Where(x => x.DriverId == driverId)
             .OrderByDescending(x => x.Date)
             .Take(20)
             .ToArrayAsync();
 
-        var mechanicAcceptance =await _context.MechanicsAcceptances
+        var operatorReviews = await _context.OperatorReviews
             .AsNoTracking()
             .Where(x => x.DriverId == driverId)
             .OrderByDescending(x => x.Date)
             .Take(20)
             .ToArrayAsync();
 
-            foreach (var item in doctorReview)
+        var mechanicAcceptance = await _context.MechanicsAcceptances
+            .AsNoTracking()
+            .Where(x => x.DriverId == driverId)
+            .OrderByDescending(x => x.Date)
+            .Take(20)
+            .ToArrayAsync();
+
+        foreach (var item in doctorReview)
+        {
+            bool mechanicHandover = false;
+            bool operatorReview = false;
+            bool mechanicAccept = false;
+            int mechanichandOverId = 0;
+            int operatorId = 0;
+            int mechanicAcceptId = 0;
+
+            if (item.Date.Date == DateTime.Today)
             {
-                bool mechanicHandover = false;
-                bool operatorReview = false;
-                bool mechanicAccept = false;
-                int mechanichandOverId = 0;
-                int operatorId = 0;
-                int mechanicAcceptId = 0;
-
-                if (item.Date.Date == DateTime.Today)
-                {
-                        continue;
-                }
-                var mechanicHandoverThisDay = mechanicHandovers.FirstOrDefault(m => m.Date.Date == item.Date.Date);
-                if (mechanicHandoverThisDay != null && mechanicHandoverThisDay.Status == Status.Completed)
-                {
-                    mechanichandOverId = mechanicHandoverThisDay.Id;
-                    mechanicHandover = true;
-                }
-                else if(mechanicHandoverThisDay != null)
-                {
-                    mechanichandOverId = mechanicHandoverThisDay.Id;
-                }
-                var operatorReviewThisDay = operatorReviews.FirstOrDefault(o => o.Date.Date == item.Date.Date);
-                if (operatorReviewThisDay != null && operatorReviewThisDay.Status == Status.Completed)
-                {
-                    operatorId = operatorReviewThisDay.Id;
-                    operatorReview = true;
-                }
-                else if(operatorReviewThisDay != null)
-                {
-                    operatorId = operatorReviewThisDay.Id;
-                }
-
-                var mechanicAcceptThisDay = mechanicAcceptance.FirstOrDefault(o => o.Date.Date == item.Date.Date);
-                if (mechanicAcceptThisDay != null && mechanicAcceptThisDay.Status == Status.Completed)
-                {
-                    mechanicAcceptId = mechanicAcceptThisDay.Id;
-                    mechanicAccept = true;
-                }
-                else if(mechanicAcceptThisDay != null)
-                {
-                    mechanicAcceptId = mechanicAcceptThisDay.Id;
-                }
-
-                driverHistory.Add(new DriverHistoryDto()
-                {
-                    Date = item.Date,
-                    DoctorReviewId = item.Id,
-                    IsHealthy = item.IsHealthy,
-                    IsHanded = mechanicHandover,
-                    MechanicHandoverId = mechanichandOverId,
-                    IsGiven = operatorReview,
-                    OperatorReviewId = operatorId,
-                    IsAccepted = mechanicAccept,
-                    MechanicAcceptanceId = mechanicAcceptId,
-                });
+                continue;
             }
-            return driverHistory;
+            var mechanicHandoverThisDay = mechanicHandovers.FirstOrDefault(m => m.Date.Date == item.Date.Date);
+            if (mechanicHandoverThisDay != null && mechanicHandoverThisDay.Status == Status.Completed)
+            {
+                mechanichandOverId = mechanicHandoverThisDay.Id;
+                mechanicHandover = true;
+            }
+            else if (mechanicHandoverThisDay != null)
+            {
+                mechanichandOverId = mechanicHandoverThisDay.Id;
+            }
+            var operatorReviewThisDay = operatorReviews.FirstOrDefault(o => o.Date.Date == item.Date.Date);
+            if (operatorReviewThisDay != null && operatorReviewThisDay.Status == Status.Completed)
+            {
+                operatorId = operatorReviewThisDay.Id;
+                operatorReview = true;
+            }
+            else if (operatorReviewThisDay != null)
+            {
+                operatorId = operatorReviewThisDay.Id;
+            }
+
+            var mechanicAcceptThisDay = mechanicAcceptance.FirstOrDefault(o => o.Date.Date == item.Date.Date);
+            if (mechanicAcceptThisDay != null && mechanicAcceptThisDay.Status == Status.Completed)
+            {
+                mechanicAcceptId = mechanicAcceptThisDay.Id;
+                mechanicAccept = true;
+            }
+            else if (mechanicAcceptThisDay != null)
+            {
+                mechanicAcceptId = mechanicAcceptThisDay.Id;
+            }
+
+            driverHistory.Add(new DriverHistoryDto()
+            {
+                Date = item.Date,
+                DoctorReviewId = item.Id,
+                IsHealthy = item.IsHealthy,
+                IsHanded = mechanicHandover,
+                MechanicHandoverId = mechanichandOverId,
+                IsGiven = operatorReview,
+                OperatorReviewId = operatorId,
+                IsAccepted = mechanicAccept,
+                MechanicAcceptanceId = mechanicAcceptId,
+            });
+        }
+        return driverHistory;
     }
 }
 
