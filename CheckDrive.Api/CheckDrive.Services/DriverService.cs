@@ -26,9 +26,17 @@ public class DriverService : IDriverService
     {
         var query = GetQueryDriverResParameters(resourceParameters);
 
+        if (resourceParameters.RoleId == 1)
+        {
+            var countOfDrivers = query.Count();
+            resourceParameters.PageSize = countOfDrivers;
+        }
+
         var drivers = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var driverDtos = _mapper.Map<List<DriverDto>>(drivers);
+
+        
 
         var paginatedResult = new PaginatedList<DriverDto>(driverDtos, drivers.TotalCount, drivers.CurrentPage, drivers.PageSize);
 

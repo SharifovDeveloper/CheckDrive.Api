@@ -2,6 +2,7 @@
 {
     public class CarResourceParameters : ResourceParametersBase
     {
+        public int? RoleId { get; set; }
         public double? MeduimFuelConsumption { get; set; }
         public double? MeduimFuelConsumptionLessThan { get; set; }
         public double? MeduimFuelConsumptionGreaterThan { get; set; }

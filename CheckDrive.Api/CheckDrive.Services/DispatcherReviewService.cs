@@ -42,6 +42,7 @@ public class DispatcherReviewService : IDispatcherReviewService
     {
         var dispatcherReview = await _context.DispatchersReviews
             .AsNoTracking()
+            .Include(x => x.Car)
             .Include(d => d.Driver)
             .ThenInclude(d => d.Account)
             .Include(d => d.Mechanic)
