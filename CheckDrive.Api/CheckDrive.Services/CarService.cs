@@ -24,6 +24,12 @@ public class CarService : ICarService
     {
         var query = GetQueryCarResParameters(resourceParameters);
 
+        if (resourceParameters.RoleId == 1)
+        {
+            var countOfCars = query.Count();
+            resourceParameters.PageSize = countOfCars;
+        }
+
         var cars = await query.ToPaginatedListAsync(resourceParameters.PageSize, resourceParameters.PageNumber);
 
         var carDtos = _mapper.Map<List<CarDto>>(cars);

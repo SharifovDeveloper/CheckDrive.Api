@@ -19,12 +19,14 @@ namespace CheckDrive.Services
         private readonly IMapper _mapper;
         private readonly CheckDriveDbContext _context;
         private readonly IChatHub _chat;
+        private readonly ICarService _carService;
 
-        public OperatorReviewService(IMapper mapper, CheckDriveDbContext context, IChatHub chatHub)
+        public OperatorReviewService(IMapper mapper, CheckDriveDbContext context, IChatHub chatHub, ICarService carService)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _chat = chatHub ?? throw new ArgumentNullException(nameof(chatHub));
+            _carService = carService ?? throw new ArgumentNullException(nameof(carService));
         }
 
         public async Task<GetBaseResponse<OperatorReviewDto>> GetOperatorReviewsAsync(OperatorReviewResourceParameters resourceParameters)
@@ -70,7 +72,7 @@ namespace CheckDrive.Services
             if (operatorReviewEntity.IsGiven = true)
             {
                 var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
-                
+
                 await _chat.SendPrivateRequest
                     (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(), 
                     $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?");
@@ -84,6 +86,7 @@ namespace CheckDrive.Services
             var operatorReviewEntity = _mapper.Map<OperatorReview>(reviewForUpdateDto);
 
             _context.OperatorReviews.Update(operatorReviewEntity);
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<OperatorReviewDto>(operatorReviewEntity);
