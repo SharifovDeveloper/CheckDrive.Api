@@ -18,6 +18,7 @@ public class CarsController : Controller
         _carService = carService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarDto>>> GetCarsAsync(
         [FromQuery] CarResourceParameters carResource)
@@ -27,6 +28,7 @@ public class CarsController : Controller
         return Ok(cars);
     }
 
+    [Authorize]
     [HttpGet("{id}", Name = "GetCarById")]
     public async Task<ActionResult<CarDto>> GetCarByIdAsync(int id)
     {
@@ -37,6 +39,8 @@ public class CarsController : Controller
 
         return Ok(car);
     }
+
+    [Authorize(Policy = "Admin")]
     [HttpPost]
     public async Task<ActionResult> PostAsync([FromBody] CarForCreateDto forCreateDto)
     {
@@ -44,6 +48,8 @@ public class CarsController : Controller
 
         return CreatedAtAction("GetCarById", new { id = createdCar.Id }, createdCar);
     }
+
+    [Authorize(Policy = "Admin")]
     [HttpPut("{id}")]
     public async Task<ActionResult> PutAsync(int id, [FromBody] CarForUpdateDto forUpdateDto)
     {
@@ -58,6 +64,7 @@ public class CarsController : Controller
         return Ok(updateCar);
     }
 
+    [Authorize(Policy = "Admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
