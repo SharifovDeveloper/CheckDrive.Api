@@ -3,8 +3,6 @@ using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.Operator;
 using CheckDrive.ApiContracts.Account;
 
-
-
 namespace CheckDrive.Domain.Mappings
 {
     public class OperatorMappings : Profile

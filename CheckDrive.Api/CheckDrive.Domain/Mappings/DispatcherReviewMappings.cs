@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.DispatcherReview;
+using CheckDrive.Domain.Entities;
 
 namespace CheckDrive.Domain.Mappings
 {
@@ -19,7 +19,7 @@ namespace CheckDrive.Domain.Mappings
                 .ForMember(d => d.FinalDistance, f => f.MapFrom(e => e.MechanicAcceptance.Distance))
                 .ForMember(d => d.PouredFuel, f => f.MapFrom(e => e.OperatorReview.OilAmount))
                 .ForMember(d => d.CarMeduimFuelConsumption, f => f.MapFrom(e => e.Car.MeduimFuelConsumption));
-                
+
             CreateMap<DispatcherReviewForCreateDto, DispatcherReview>();
             CreateMap<DispatcherReviewForUpdateDto, DispatcherReview>();
         }

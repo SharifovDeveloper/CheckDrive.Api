@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.Domain.Entities;
-using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
@@ -77,7 +76,7 @@ public class DoctorService : IDoctorService
     private IQueryable<Doctor> GetQueryDoctorResParameters(
            DoctorResourceParameters resourceParameters)
     {
-        var query = _context.Doctors 
+        var query = _context.Doctors
             .AsNoTracking()
             .Include(x => x.Account)
             .AsQueryable();

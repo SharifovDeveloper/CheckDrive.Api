@@ -13,7 +13,7 @@ namespace CheckDrive.Domain.Entities
 
         public int OperatorId { get; set; }
         public Operator Operator { get; set; }
-        public int CarId {get; set; }
+        public int CarId { get; set; }
         public Car Car { get; set; }
         public int DriverId { get; set; }
         public Driver Driver { get; set; }

@@ -24,7 +24,7 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
             builder.HasOne(m => m.Mechanic)
                 .WithMany(x => x.MechanicHandovers)
                 .HasForeignKey(m => m.MechanicId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(m => m.Car)
                 .WithMany(x => x.MechanicHandovers)

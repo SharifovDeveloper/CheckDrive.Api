@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts;
+using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.MechanicAcceptance;
-using CheckDrive.Domain.Interfaces.Hubs;
-using CheckDrive.ApiContracts.OperatorReview;
-using CheckDrive.ApiContracts.MechanicHandover;
-using CheckDrive.ApiContracts;
 
 namespace CheckDrive.Services;
 
@@ -77,10 +76,10 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
             var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
 
             await _chatHub.SendPrivateRequest
-                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(), 
+                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(),
                 $"Siz shu {data.CarName} rusumli avtomobilni {data.MechanicName} ga topshirdizmi ?");
         }
-        
+
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
 
         return mechanicAcceptanceDto;
@@ -140,7 +139,6 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         if (resourceParameters.IsAccepted is not null)
             query = query.Where(x => x.IsAccepted == resourceParameters.IsAccepted);
 
-        //Distance
         if (resourceParameters.Distance is not null)
             query = query.Where(x => x.Distance == resourceParameters.Distance);
 
@@ -218,7 +216,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
                     DriverId = operatorReviewDto.DriverId,
                     DriverName = operatorReviewDto.DriverName,
                     CarId = operatorReviewDto.CarId,
-                    CarName = $"{operatorReviewDto.CarModel} ({operatorReviewDto.CarNumber})" ,
+                    CarName = $"{operatorReviewDto.CarModel} ({operatorReviewDto.CarNumber})",
                     MechanicName = "",
                     IsAccepted = false,
                     Distance = 0,

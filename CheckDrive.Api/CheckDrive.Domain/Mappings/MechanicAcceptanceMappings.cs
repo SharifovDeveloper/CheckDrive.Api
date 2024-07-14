@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.Domain.Entities;
 
 namespace CheckDrive.Domain.Mappings
 {

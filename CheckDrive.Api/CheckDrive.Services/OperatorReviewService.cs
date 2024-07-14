@@ -74,7 +74,7 @@ namespace CheckDrive.Services
                 var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
 
                 await _chat.SendPrivateRequest
-                    (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(), 
+                    (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(),
                     $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?");
             }
 
@@ -123,6 +123,9 @@ namespace CheckDrive.Services
                     x.Operator.Account.FirstName.Contains(operatorReviewResource.SearchString) ||
                     x.Operator.Account.LastName.Contains(operatorReviewResource.SearchString) ||
                     x.Comments.Contains(operatorReviewResource.SearchString));
+
+            if (operatorReviewResource.Status is not null)
+                query = query.Where(x => x.Status == operatorReviewResource.Status);
 
             if (operatorReviewResource.Date is not null)
                 query = query.Where(x => x.Date.Date == operatorReviewResource.Date.Value.Date);

@@ -18,7 +18,7 @@ public class DashboardService : IDashboardService
         var splineChartData = await GetSpliteChartDataAsync();
         var employeesCountByRole = await GetEmployeesCountAsync();
 
-        return new DashboardDto(summary, splineChartData,employeesCountByRole);
+        return new DashboardDto(summary, splineChartData, employeesCountByRole);
     }
     private async Task<IEnumerable<EmployeesCountByRole>> GetEmployeesCountAsync()
     {

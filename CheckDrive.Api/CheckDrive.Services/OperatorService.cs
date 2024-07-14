@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Operator;
 using CheckDrive.Domain.Entities;
-using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;

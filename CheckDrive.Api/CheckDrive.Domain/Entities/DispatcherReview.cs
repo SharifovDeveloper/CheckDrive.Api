@@ -19,7 +19,7 @@ namespace CheckDrive.Domain.Entities
         public int OperatorReviewId { get; set; }
         public OperatorReview OperatorReview { get; set; }
         public int MechanicHandoverId { get; set; }
-        public MechanicHandover MechanicHandover { get; set;}
+        public MechanicHandover MechanicHandover { get; set; }
         public int MechanicAcceptanceId { get; set; }
         public MechanicAcceptance MechanicAcceptance { get; set; }
     }

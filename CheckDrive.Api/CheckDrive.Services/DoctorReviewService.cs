@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.DoctorReview;
-using CheckDrive.Domain.Interfaces.Hubs;
-using CheckDrive.ApiContracts.Driver;
 
 namespace CheckDrive.Services;
 
@@ -169,13 +169,13 @@ public class DoctorReviewService : IDoctorReviewService
                 x.Doctor.Account.FirstName.Contains(doctorReviewResource.SearchString) ||
                 x.Doctor.Account.LastName.Contains(doctorReviewResource.SearchString) ||
                 x.Comments.Contains(doctorReviewResource.SearchString));
-        
+
         if (doctorReviewResource.Date is not null)
             query = query.Where(x => x.Date.Date == doctorReviewResource.Date.Value.Date);
-        
+
         if (doctorReviewResource.DriverId is not null)
             query = query.Where(x => x.DriverId == doctorReviewResource.DriverId);
-        
+
         if (!string.IsNullOrEmpty(doctorReviewResource.OrderBy))
             query = doctorReviewResource.OrderBy.ToLowerInvariant() switch
             {

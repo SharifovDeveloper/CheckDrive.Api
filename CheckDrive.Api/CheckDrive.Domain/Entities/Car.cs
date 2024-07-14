@@ -9,7 +9,7 @@ namespace CheckDrive.Domain.Entities
         public string Number { get; set; }
         public double MeduimFuelConsumption { get; set; }
         public double FuelTankCapacity { get; set; }
-        public double RemainingFuel {  get; set; }
+        public double RemainingFuel { get; set; }
         public int ManufacturedYear { get; set; }
 
         public virtual ICollection<DispatcherReview> Reviewers { get; set; }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CheckDrive.Domain.Entities;
 using CheckDrive.ApiContracts.Account;
+using CheckDrive.Domain.Entities;
 
 namespace CheckDrive.Domain.Mappings
 {
@@ -10,7 +10,7 @@ namespace CheckDrive.Domain.Mappings
         {
             CreateMap<AccountDto, Account>();
             CreateMap<Account, AccountDto>()
-                .ForMember(x=>x.RoleName,e=>e.MapFrom(d=>d.Role.Name));
+                .ForMember(x => x.RoleName, e => e.MapFrom(d => d.Role.Name));
             CreateMap<AccountForCreateDto, Account>();
             CreateMap<AccountForCreateDto, Driver>();
             CreateMap<AccountForUpdateDto, Account>();

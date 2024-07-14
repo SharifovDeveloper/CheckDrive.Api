@@ -1,6 +1,6 @@
-﻿using CheckDrive.Domain.ResourceParameters;
+﻿using CheckDrive.ApiContracts.DispatcherReview;
+using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
-using CheckDrive.ApiContracts.DispatcherReview;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {
