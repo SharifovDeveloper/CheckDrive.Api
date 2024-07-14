@@ -40,7 +40,7 @@ namespace CheckDrive.Services
             if (userEntity == null)
             {
                 return null;
-            }   
+            }
 
             return _mapper.Map<Account>(userEntity);
         }

@@ -1,6 +1,6 @@
-﻿using CheckDrive.Domain.ResourceParameters;
+﻿using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
-using CheckDrive.ApiContracts.MechanicAcceptance;
 
 namespace CheckDrive.Domain.Interfaces.Services
 {

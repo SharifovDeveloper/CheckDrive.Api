@@ -28,7 +28,7 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
             builder.HasOne(o => o.Operator)
                 .WithMany(x => x.OperatorReviews)
                 .HasForeignKey(o => o.OperatorId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(o => o.Driver)
                 .WithMany(x => x.OperatorReviews)

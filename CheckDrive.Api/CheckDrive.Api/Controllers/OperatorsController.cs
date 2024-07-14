@@ -1,5 +1,4 @@
 ﻿using CheckDrive.ApiContracts.Account;
-using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.ApiContracts.Operator;
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Interfaces.Services;

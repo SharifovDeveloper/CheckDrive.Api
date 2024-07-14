@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CheckDrive.ApiContracts.Role;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -6,7 +7,6 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using CheckDrive.ApiContracts.Role;
 
 namespace CheckDrive.Services;
 

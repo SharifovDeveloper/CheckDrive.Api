@@ -1,7 +1,6 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.ApiContracts.DispatcherReview;
-using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;

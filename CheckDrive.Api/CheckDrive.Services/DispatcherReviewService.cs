@@ -119,9 +119,9 @@ public class DispatcherReviewService : IDispatcherReviewService
                 x.Driver.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
                 x.Mechanic.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) ||
                 x.Mechanic.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.Operator.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) || 
+                x.Operator.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) ||
                 x.Operator.Account.LastName.Contains(dispatcherReviewParameters.SearchString) ||
-                x.Dispatcher.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) || 
+                x.Dispatcher.Account.FirstName.Contains(dispatcherReviewParameters.SearchString) ||
                 x.Dispatcher.Account.LastName.Contains(dispatcherReviewParameters.SearchString));
 
         if (dispatcherReviewParameters.Date is not null)
@@ -164,7 +164,7 @@ public class DispatcherReviewService : IDispatcherReviewService
             query = dispatcherReviewParameters.OrderBy.ToLowerInvariant() switch
             {
                 "date" => query.OrderBy(x => x.Date),
-                "datedesc" => query.OrderByDescending(x=>x.Date),
+                "datedesc" => query.OrderByDescending(x => x.Date),
                 _ => query.OrderBy(x => x.Id),
             };
         }

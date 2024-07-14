@@ -1,7 +1,6 @@
 ﻿using CheckDrive.ApiContracts;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Hubs;
-using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -48,13 +47,13 @@ namespace CheckDrive.Services.Hubs
                 switch (statusReview)
                 {
                     case 0:
-                        await UpdateStatusForMechanicHandover(reviewId, response); 
+                        await UpdateStatusForMechanicHandover(reviewId, response);
                         break;
                     case 1:
                         await UpdateStatusForOperatorReview(reviewId, response);
                         break;
                     case 2:
-                        await UpdateStatusForMechanicAcceptances(reviewId, response); 
+                        await UpdateStatusForMechanicAcceptances(reviewId, response);
                         break;
                     default:
                         _logger.LogWarning($"Unknown status review: {statusReview}");
@@ -66,7 +65,7 @@ namespace CheckDrive.Services.Hubs
                 _logger.LogError(ex, $"Error occurred while updating status review for reviewId: {reviewId}");
             }
         }
-          
+
         public override async Task OnConnectedAsync()
         {
             string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier).Value;

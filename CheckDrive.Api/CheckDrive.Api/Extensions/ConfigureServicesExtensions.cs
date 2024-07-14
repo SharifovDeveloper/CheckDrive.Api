@@ -49,7 +49,7 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorService, OperatorService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOperatorReviewService, OperatorReviewService>();
-            services.AddScoped<IDashboardService,DashboardService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddScoped<IJwtProvider, JwtProvider>();
 
@@ -77,7 +77,7 @@ namespace CheckDrive.Api.Extensions
         {
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.Information()
-                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning) 
+                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
                  .Enrich.FromLogContext()
                  .WriteTo.Console(new RenderedCompactJsonFormatter())
                  .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)

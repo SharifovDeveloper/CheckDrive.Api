@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose()  
+    .MinimumLevel.Verbose()
     .Enrich.FromLogContext()
     .WriteTo.Console(new CustomJsonFormatter())
     .WriteTo.File(new CustomJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)

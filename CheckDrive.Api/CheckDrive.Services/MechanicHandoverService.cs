@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts;
-using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.ApiContracts.DoctorReview;
-using CheckDrive.ApiContracts.Driver;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Hubs;
@@ -74,7 +72,7 @@ public class MechanicHandoverService : IMechanicHandoverService
             var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
 
             await _chatHub.SendPrivateRequest
-                (SendingMessageStatus.MechanicHandover, mechanicHandoverEntity.Id, data.AccountDriverId.ToString(), 
+                (SendingMessageStatus.MechanicHandover, mechanicHandoverEntity.Id, data.AccountDriverId.ToString(),
                 $"Sizga {data.MechanicName} shu {data.CarName} ni topshirdimi ?");
         }
 

@@ -2,7 +2,6 @@
 using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.Entities;
 
-
 namespace CheckDrive.Domain.Mappings
 {
     public class OperatorReviewMappings : Profile

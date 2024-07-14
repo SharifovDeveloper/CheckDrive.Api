@@ -35,7 +35,7 @@ public class DriverService : IDriverService
 
         var driverDtos = _mapper.Map<List<DriverDto>>(drivers);
 
-        
+
 
         var paginatedResult = new PaginatedList<DriverDto>(driverDtos, drivers.TotalCount, drivers.CurrentPage, drivers.PageSize);
 

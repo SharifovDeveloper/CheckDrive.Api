@@ -1,7 +1,7 @@
-﻿using CheckDrive.Domain.ResourceParameters;
-using CheckDrive.Domain.Responses;
-using CheckDrive.ApiContracts.Account;
+﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.Domain.Entities;
+using CheckDrive.Domain.ResourceParameters;
+using CheckDrive.Domain.Responses;
 
 
 namespace CheckDrive.Domain.Interfaces.Services

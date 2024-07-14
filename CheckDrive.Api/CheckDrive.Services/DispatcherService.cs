@@ -2,7 +2,6 @@
 using CheckDrive.ApiContracts.Account;
 using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.Domain.Entities;
-using CheckDrive.Domain.Interfaces.Auth;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
