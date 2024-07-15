@@ -65,6 +65,14 @@ public class MechanicHandoverService : IMechanicHandoverService
         var mechanicHandoverEntity = _mapper.Map<MechanicHandover>(handoverForCreateDto);
 
         await _context.MechanicsHandovers.AddAsync(mechanicHandoverEntity);
+        var car = _context.Cars.FirstOrDefault(x => x.Id == mechanicHandoverEntity.CarId);
+
+        if (car != null)
+        {
+            car.Mileage = (int)mechanicHandoverEntity.Distance;
+            _context.Cars.Update(car);
+
+        }
         await _context.SaveChangesAsync();
 
         if (mechanicHandoverEntity.IsHanded == true)
@@ -86,6 +94,14 @@ public class MechanicHandoverService : IMechanicHandoverService
         var mechanicHandoverEntity = _mapper.Map<MechanicHandover>(handoverForUpdateDto);
 
         _context.MechanicsHandovers.Update(mechanicHandoverEntity);
+        var car = _context.Cars.FirstOrDefault(x => x.Id == mechanicHandoverEntity.CarId);
+
+        if (car != null)
+        {
+            car.Mileage = (int)mechanicHandoverEntity.Distance;
+            _context.Cars.Update(car);
+
+        }
         await _context.SaveChangesAsync();
 
         var mechanicHandoverDto = _mapper.Map<MechanicHandoverDto>(mechanicHandoverEntity);

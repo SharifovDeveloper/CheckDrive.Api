@@ -4,7 +4,7 @@ namespace CheckDrive.ApiContracts.Mechanic
 {
     public class MechanicHistororiesDto
     {
-        public bool? IsHanded { get; set; }
+        public bool? IsChecked { get; set; }
         public string Position { get; set; }
         public string CarName { get; set; }
         public DateTime? Date { get; set; }

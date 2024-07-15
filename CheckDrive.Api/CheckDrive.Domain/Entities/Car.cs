@@ -7,6 +7,7 @@ namespace CheckDrive.Domain.Entities
         public string Model { get; set; }
         public string Color { get; set; }
         public string Number { get; set; }
+        public int Mileage { get; set; }
         public double MeduimFuelConsumption { get; set; }
         public double FuelTankCapacity { get; set; }
         public double RemainingFuel { get; set; }

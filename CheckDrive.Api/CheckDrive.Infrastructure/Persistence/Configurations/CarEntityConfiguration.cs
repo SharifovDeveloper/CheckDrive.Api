@@ -23,6 +23,9 @@ namespace CheckDrive.Infrastructure.Persistence.Configurations
                 .HasMaxLength(10)
                 .IsRequired();
 
+            builder.Property(x => x.Mileage)
+                .IsRequired();
+
             builder.Property(x => x.ManufacturedYear)
                 .IsRequired();
 

@@ -115,7 +115,7 @@ public class MechanicService : IMechanicService
             mechanicHistories.Add(new MechanicHistororiesDto
             {
                 Date = item.Date,
-                IsHanded = item.IsHanded,
+                IsChecked = item.IsHanded,
                 Position = "handover",
                 CarName = item.CarName,
                 Distance = item.Distance,
@@ -142,7 +142,7 @@ public class MechanicService : IMechanicService
             mechanicHistories.Add(new MechanicHistororiesDto
             {
                 Date = item.Date,
-                IsHanded = item.IsAccepted,
+                IsChecked = item.IsAccepted,
                 Position = "acceptance",
                 CarName = item.CarName,
                 Distance = item.Distance,

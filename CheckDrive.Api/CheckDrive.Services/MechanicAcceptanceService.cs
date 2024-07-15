@@ -69,6 +69,14 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         var mechanicAcceptanceEntity = _mapper.Map<MechanicAcceptance>(acceptanceForCreateDto);
 
         await _context.MechanicsAcceptances.AddAsync(mechanicAcceptanceEntity);
+        var car = _context.Cars.FirstOrDefault(x => x.Id == mechanicAcceptanceEntity.CarId);
+
+        if (car != null)
+        {
+            car.Mileage = (int)mechanicAcceptanceEntity.Distance;
+            _context.Cars.Update(car);
+
+        }
         await _context.SaveChangesAsync();
 
         if (mechanicAcceptanceEntity.IsAccepted == true)
@@ -90,6 +98,14 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         var mechanicAcceptanceEntity = _mapper.Map<MechanicAcceptance>(acceptanceForUpdateDto);
 
         _context.MechanicsAcceptances.Update(mechanicAcceptanceEntity);
+        var car = _context.Cars.FirstOrDefault(x => x.Id == mechanicAcceptanceEntity.CarId);
+
+        if (car != null)
+        {
+            car.Mileage = (int)mechanicAcceptanceEntity.Distance;
+            _context.Cars.Update(car);
+
+        }
         await _context.SaveChangesAsync();
 
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
