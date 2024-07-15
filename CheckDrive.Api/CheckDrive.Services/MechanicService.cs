@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CheckDrive.ApiContracts.Mechanic;
+using CheckDrive.ApiContracts.MechanicAcceptance;
+using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.Pagniation;
@@ -84,6 +86,72 @@ public class MechanicService : IMechanicService
         }
 
         return query;
+    }
+
+    public async Task<IEnumerable<MechanicHistororiesDto?>> GetMechanicHistories(int? Id)
+    {
+        var mechanicHistories = new List<MechanicHistororiesDto>();
+
+        var mechanic = await _context.Mechanics
+            .Where(x => x.AccountId == Id)
+            .FirstOrDefaultAsync();
+
+        var mechanicHandoverHistories = _context.MechanicsHandovers
+            .AsNoTracking()
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .Where(m => m.MechanicId == mechanic.Id)
+            .OrderByDescending(d => d.Date)
+            .AsQueryable();
+
+        var mechanicHandoverDtos = _mapper.Map<List<MechanicHandoverDto>>(mechanicHandoverHistories);
+
+
+        foreach (var item in mechanicHandoverDtos)
+        {
+            mechanicHistories.Add(new MechanicHistororiesDto
+            {
+                Date = item.Date,
+                IsHanded = item.IsHanded,
+                Position = "handover",
+                CarName = item.CarName,
+                Distance = item.Distance,
+                DriverName = item.DriverName,
+                Comments = item.Comments,
+            });
+        };
+
+        var mechanicAcceptanceHistories = _context.MechanicsAcceptances
+            .AsNoTracking()
+            .Include(x => x.Mechanic)
+            .ThenInclude(x => x.Account)
+            .Include(x => x.Car)
+            .Include(x => x.Driver)
+            .ThenInclude(x => x.Account)
+            .Where(m => m.MechanicId == mechanic.Id)
+            .OrderByDescending(d => d.Date)
+            .AsQueryable();
+
+        var mechanicAcceptanceDtos = _mapper.Map<List<MechanicAcceptanceDto>>(mechanicAcceptanceHistories);
+
+        foreach (var item in mechanicAcceptanceDtos)
+        {
+            mechanicHistories.Add(new MechanicHistororiesDto
+            {
+                Date = item.Date,
+                IsHanded = item.IsAccepted,
+                Position = "acceptance",
+                CarName = item.CarName,
+                Distance = item.Distance,
+                DriverName = item.DriverName,
+                Comments = item.Comments,
+            });
+        }
+
+        return mechanicHistories;
     }
 }
 

@@ -111,7 +111,6 @@ public class DriverService : IDriverService
 
     public async Task<IEnumerable<DriverHistoryDto>> GetDriverHistories(int? driverId)
     {
-
         var driverHistory = new List<DriverHistoryDto>();
 
         var doctorReview = await _context.DoctorReviews

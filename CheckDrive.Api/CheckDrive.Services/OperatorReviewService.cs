@@ -298,5 +298,27 @@ namespace CheckDrive.Services
             var items = reviews.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PaginatedList<OperatorReviewDto>(items, totalCount, pageNumber, pageSize);
         }
+
+        public async Task<IEnumerable<OperatorReviewDto>> GetOpearatorHistories(int? Id)
+        {
+            var _operator = await _context.Operators
+                .Where(x => x.AccountId == Id)
+                .FirstOrDefaultAsync();
+
+            var operatorHistories = _context.OperatorReviews
+                .AsNoTracking()
+                .Include(o => o.Operator)
+                .ThenInclude(a => a.Account)
+                .Include(d => d.Driver)
+                .ThenInclude(a => a.Account)
+                .Include(c => c.Car)
+                .Where(x => x.OperatorId == _operator.Id)
+                .OrderByDescending(x => x.Date)
+                .AsQueryable();
+
+            var operatorReviewDto = _mapper.Map<IEnumerable<OperatorReviewDto>>(operatorHistories);
+
+            return operatorReviewDto;
+        }
     }
 }

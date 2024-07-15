@@ -6,6 +6,6 @@
         public string? Login { get; set; }
         public string? Pasword { get; set; }
         public int? RoleId { get; set; }
-        public override string OrderBy { get; set; } = "firstname";
+        public override string OrderBy { get; set; } = "idDesc";
     }
 }

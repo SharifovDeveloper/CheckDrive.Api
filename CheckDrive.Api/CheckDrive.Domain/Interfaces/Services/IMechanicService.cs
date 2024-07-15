@@ -10,5 +10,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<MechanicDto?> GetMechanicByIdAsync(int id);
         Task<MechanicDto> CreateMechanicAsync(MechanicForCreateDto mechanicForCreate);
         Task DeleteMechanicAsync(int id);
+        Task<IEnumerable<MechanicHistororiesDto?>> GetMechanicHistories(int? Id);
     }
 }

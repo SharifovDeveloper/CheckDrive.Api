@@ -1,4 +1,5 @@
-﻿using CheckDrive.ApiContracts.OperatorReview;
+﻿using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.ApiContracts.OperatorReview;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 
@@ -12,5 +13,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<OperatorReviewDto> CreateOperatorReviewAsync(OperatorReviewForCreateDto reviewForCreateDto);
         Task<OperatorReviewDto> UpdateOperatorReviewAsync(OperatorReviewForUpdateDto reviewForUpdateDto);
         Task DeleteOperatorReviewAsync(int id);
+        Task<IEnumerable<OperatorReviewDto>> GetOpearatorHistories(int? Id);
     }
 }

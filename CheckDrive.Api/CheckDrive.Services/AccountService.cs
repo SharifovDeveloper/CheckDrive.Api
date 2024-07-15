@@ -231,6 +231,7 @@ namespace CheckDrive.Services
                 {
                     "firstname" => query.OrderBy(x => x.FirstName),
                     "firstnamedesc" => query.OrderByDescending(x => x.FirstName),
+                    "iddesc" => query.OrderByDescending(x => x.Id),
                     "lastname" => query.OrderBy(x => x.LastName),
                     "lastnamedesc" => query.OrderByDescending(x => x.LastName),
                     "login" => query.OrderBy(x => x.Login),
