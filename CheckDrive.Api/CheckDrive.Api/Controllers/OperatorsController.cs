@@ -99,6 +99,14 @@ public class OperatorsController : Controller
         return Ok(operatorReviews);
     }
 
+    [HttpGet("review/operatorHistories")]
+    public async Task<ActionResult<IEnumerable<DoctorReviewDto>>> GetOperatorHistory(int accountId)
+    {
+        var historyDrivers = await _operatorReviewService.GetOpearatorHistories(accountId);
+
+        return Ok(historyDrivers);
+    }
+
     [Authorize(Policy = "AdminOrOperator")]
     [HttpGet("review/{id}", Name = "GetOperatorReviewById")]
     public async Task<ActionResult<OperatorReviewDto>> GetOperatorReviewByIdAsync(int id)

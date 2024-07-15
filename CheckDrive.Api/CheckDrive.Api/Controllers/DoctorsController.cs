@@ -1,9 +1,11 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.ApiContracts.Doctor;
 using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
+using CheckDrive.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -118,6 +120,14 @@ public class DoctorsController : Controller
         var createdDoctorReview = await _reviewService.CreateDoctorReviewAsync(doctorReview);
 
         return CreatedAtAction("GetDoctorReviewById", new { createdDoctorReview.Id }, createdDoctorReview);
+    }
+
+    [HttpGet("review/doctorHistories")]
+    public async Task<ActionResult<IEnumerable<DoctorReviewDto>>> GetOperatorHistory(int accountId)
+    {
+        var historyDrivers = await _reviewService.GetDoctorHistories(accountId);
+
+        return Ok(historyDrivers);
     }
 
     [Authorize(Policy = "AdminOrDoctor")]

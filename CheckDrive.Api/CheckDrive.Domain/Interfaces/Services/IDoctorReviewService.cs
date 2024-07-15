@@ -12,5 +12,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<DoctorReviewDto> CreateDoctorReviewAsync(DoctorReviewForCreateDto doctorReviewForCreate);
         Task<DoctorReviewDto> UpdateDoctorReviewAsync(DoctorReviewForUpdateDto doctorReviewForUpdate);
         Task DeleteDoctorReviewAsync(int id);
+        Task<IEnumerable<DoctorReviewDto>> GetDoctorHistories(int? Id);
     }
 }

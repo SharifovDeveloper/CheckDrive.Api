@@ -1,10 +1,12 @@
 ﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.DoctorReview;
 using CheckDrive.ApiContracts.Mechanic;
 using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
+using CheckDrive.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,15 @@ public class MechanicsController : Controller
         _accountService = accountService;
         _mechanicAcceptanceService = mechanicAcceptanceService;
         _mechanicHandoverService = mechanicHandoverService;
+    }
+
+
+    [HttpGet("mechanicHistories")]
+    public async Task<ActionResult<IEnumerable<MechanicHistororiesDto>>> GetOperatorHistory(int accountId)
+    {
+        var historymechanics = await _mechanicService.GetMechanicHistories(accountId);
+
+        return Ok(historymechanics);
     }
 
     [Authorize(Policy = "AdminOrMechanic")]

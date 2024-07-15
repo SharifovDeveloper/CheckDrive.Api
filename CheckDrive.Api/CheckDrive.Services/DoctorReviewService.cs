@@ -9,6 +9,10 @@ using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.Domain.Interfaces.Hubs;
+using CheckDrive.ApiContracts.Driver;
+using Microsoft.Identity.Client;
 
 namespace CheckDrive.Services;
 
@@ -231,6 +235,27 @@ public class DoctorReviewService : IDoctorReviewService
         var totalCount = reviews.Count;
         var items = reviews.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         return new PaginatedList<DoctorReviewDto>(items, totalCount, pageNumber, pageSize);
+    }
+
+    public async Task<IEnumerable<DoctorReviewDto>> GetDoctorHistories(int? Id)
+    {
+        var doctor = await _context.Doctors
+            .Where(x => x.AccountId == Id)
+            .FirstOrDefaultAsync();
+
+        var doctorHistories = _context.DoctorReviews
+            .AsNoTracking()
+            .Include(d => d.Driver)
+            .ThenInclude(a => a.Account)
+            .Include(d => d.Doctor)
+            .ThenInclude(a => a.Account)
+            .Where(x => x.DoctorId == doctor.Id)
+            .OrderByDescending(x => x.Date)
+            .AsQueryable();
+
+        var doctorReviewDto = _mapper.Map<IEnumerable<DoctorReviewDto>>(doctorHistories);
+
+        return doctorReviewDto;
     }
 }
 
