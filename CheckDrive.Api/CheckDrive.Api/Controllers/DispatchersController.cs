@@ -1,9 +1,12 @@
 ﻿using CheckDrive.ApiContracts.Account;
 using CheckDrive.ApiContracts.Dispatcher;
 using CheckDrive.ApiContracts.DispatcherReview;
+using CheckDrive.ApiContracts.DoctorReview;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Domain.Interfaces.Services;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
+using CheckDrive.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +26,13 @@ public class DispatchersController : Controller
         _dispatcherService = dispatcherService;
         _reviewService = reviewService;
         _accountService = accountService;
+    }
+    [HttpGet("dispatcherHistories")]
+    public async Task<ActionResult<IEnumerable<DispatcherReviewDto>>> GetDriverHistory(int accountId)
+    {
+        var dispatcherHistories = await _reviewService.GetDispatcherHistories(accountId);
+
+        return Ok(dispatcherHistories);
     }
 
     [Authorize(Policy = "AdminOrDispatcher")]
