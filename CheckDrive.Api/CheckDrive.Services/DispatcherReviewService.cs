@@ -348,5 +348,33 @@ public class DispatcherReviewService : IDispatcherReviewService
         return new PaginatedList<DispatcherReviewDto>(items, totalCount, pageNumber, pageSize);
     }
 
+    public async Task<IEnumerable<DispatcherReviewDto>> GetDispatcherHistories(int? Id)
+    {
+        var dispatcher = await _context.Dispatchers
+                .Where(x => x.AccountId == Id)
+                .FirstOrDefaultAsync();
+
+        var dispatcherHistories = _context.DispatchersReviews
+            .AsNoTracking()
+            .Include(ma => ma.MechanicAcceptance)
+            .Include(mh => mh.MechanicHandover)
+            .Include(o => o.OperatorReview)
+            .Include(d => d.Driver)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Mechanic)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Operator)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Dispatcher)
+            .ThenInclude(d => d.Account)
+            .Include(d => d.Car)
+            .Where(x => x.DispatcherId == dispatcher.Id)
+            .OrderByDescending(x => x.Date)
+            .AsQueryable();
+
+        var dispatcherReviewDto = _mapper.Map<IEnumerable<DispatcherReviewDto>>(dispatcherHistories);
+
+        return dispatcherReviewDto;
+    }
 }
 

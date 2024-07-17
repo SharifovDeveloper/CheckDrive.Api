@@ -116,7 +116,7 @@ public class MechanicService : IMechanicService
             {
                 Date = item.Date,
                 IsChecked = item.IsHanded,
-                Position = "handover",
+                Position = "Topshiruvchi",
                 CarName = item.CarName,
                 Distance = item.Distance,
                 DriverName = item.DriverName,
@@ -143,7 +143,7 @@ public class MechanicService : IMechanicService
             {
                 Date = item.Date,
                 IsChecked = item.IsAccepted,
-                Position = "acceptance",
+                Position = "Qabul qiluvchi",
                 CarName = item.CarName,
                 Distance = item.Distance,
                 DriverName = item.DriverName,

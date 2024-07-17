@@ -12,5 +12,6 @@ namespace CheckDrive.Domain.Interfaces.Services
         Task<DispatcherReviewDto> CreateDispatcherReviewAsync(DispatcherReviewForCreateDto dispatcherReviewForCreate);
         Task<DispatcherReviewDto> UpdateDispatcherReviewAsync(DispatcherReviewForUpdateDto dispatcherReviewForUpdate);
         Task DeleteDispatcherReviewAsync(int id);
+        Task<IEnumerable<DispatcherReviewDto>> GetDispatcherHistories(int? Id);
     }
 }
