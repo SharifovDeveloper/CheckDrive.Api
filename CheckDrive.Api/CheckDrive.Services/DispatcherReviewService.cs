@@ -185,6 +185,7 @@ public class DispatcherReviewService : IDispatcherReviewService
             .ThenInclude(x => x.Account)
             .Include(x => x.MechanicAcceptance)
             .Include(x => x.MechanicHandover)
+            .Include(x => x.OperatorReview)
             .ToListAsync();
 
         var mechanicAcceptanceResponse = await _context.MechanicsAcceptances
