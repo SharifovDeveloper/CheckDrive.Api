@@ -151,10 +151,6 @@ public class DriverService : IDriverService
             int operatorId = 0;
             int mechanicAcceptId = 0;
 
-            if (item.Date.Date == DateTime.Today)
-            {
-                continue;
-            }
             var mechanicHandoverThisDay = mechanicHandovers.FirstOrDefault(m => m.Date.Date == item.Date.Date);
             if (mechanicHandoverThisDay != null && mechanicHandoverThisDay.Status == Status.Completed)
             {
