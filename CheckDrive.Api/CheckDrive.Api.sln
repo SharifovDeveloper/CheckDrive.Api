@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Api", "CheckDrive.Api\CheckDrive.Api.csproj", "{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Domain", "CheckDrive.Domain\CheckDrive.Domain.csproj", "{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Infrastructure", "CheckDrive.Infrastructure\CheckDrive.Infrastructure.csproj", "{5D2E618A-505E-4885-819B-44D7ABA9BC92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Services", "CheckDrive.Services\CheckDrive.Services.csproj", "{16FF0A5A-4264-4926-B680-C84D79D51CD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.ApiContracts", "CheckDrive.ApiContracts\CheckDrive.ApiContracts.csproj", "{8224CB2C-5AF4-4824-8363-CDA51B0C1130}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F05BF7C-04C1-4CA2-87CF-F162771CEE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C320A8CA-CF00-46DB-ADF2-CD4CC46FBF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D2E618A-505E-4885-819B-44D7ABA9BC92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16FF0A5A-4264-4926-B680-C84D79D51CD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8224CB2C-5AF4-4824-8363-CDA51B0C1130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8224CB2C-5AF4-4824-8363-CDA51B0C1130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8224CB2C-5AF4-4824-8363-CDA51B0C1130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8224CB2C-5AF4-4824-8363-CDA51B0C1130}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
