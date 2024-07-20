@@ -16,7 +16,6 @@ namespace CheckDrive.Services.Hubs
         private readonly IHubContext<ChatHub> _context;
         private readonly CheckDriveDbContext _dbContext;
         private static ConcurrentDictionary<string, string> userConnections = new ConcurrentDictionary<string, string>();
-        private static ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>> undeliveredMessages = new ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>>();
 
         public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context, CheckDriveDbContext checkDriveDbContext)
         {
