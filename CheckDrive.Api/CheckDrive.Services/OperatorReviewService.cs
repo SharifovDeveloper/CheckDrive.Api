@@ -10,6 +10,7 @@ using CheckDrive.Domain.Pagniation;
 using CheckDrive.Domain.ResourceParameters;
 using CheckDrive.Domain.Responses;
 using CheckDrive.Infrastructure.Persistence;
+using CheckDrive.Services.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CheckDrive.Services
@@ -73,9 +74,13 @@ namespace CheckDrive.Services
             {
                 var data = await GetOperatorReviewByIdAsync(operatorReviewEntity.Id);
 
-                await _chat.SendPrivateRequest
-                    (SendingMessageStatus.OperatorReview, operatorReviewEntity.Id, data.AccountDriverId.ToString(),
-                    $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?");
+                await _chat.SendPrivateRequest(new UndeliveredMessageForDto
+                {
+                    SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicHandover,
+                    ReviewId = operatorReviewEntity.Id,
+                    UserId = data.AccountDriverId.ToString(),
+                    Message = $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?"
+                });
             }
 
             return _mapper.Map<OperatorReviewDto>(operatorReviewEntity);

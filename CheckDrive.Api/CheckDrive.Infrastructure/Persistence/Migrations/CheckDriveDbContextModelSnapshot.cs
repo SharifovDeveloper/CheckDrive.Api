@@ -453,6 +453,36 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.ToTable("Role", (string)null);
                 });
 
+            modelBuilder.Entity("CheckDrive.Domain.Entities.UndeliveredMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ReviewId")
+                        .HasMaxLength(255)
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendingMessageStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UndeliveredMessage", (string)null);
+                });
+
             modelBuilder.Entity("CheckDrive.Domain.Entities.Account", b =>
                 {
                     b.HasOne("CheckDrive.Domain.Entities.Role", "Role")

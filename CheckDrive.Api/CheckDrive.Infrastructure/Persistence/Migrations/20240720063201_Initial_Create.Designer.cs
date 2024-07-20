@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(CheckDriveDbContext))]
-    [Migration("20240715131931_Add_new_property_for_Cars")]
-    partial class Add_new_property_for_Cars
+    [Migration("20240720063201_Initial_Create")]
+    partial class Initial_Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -454,6 +454,36 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role", (string)null);
+                });
+
+            modelBuilder.Entity("CheckDrive.Domain.Entities.UndeliveredMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("ReviewId")
+                        .HasMaxLength(255)
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendingMessageStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UndeliveredMessage", (string)null);
                 });
 
             modelBuilder.Entity("CheckDrive.Domain.Entities.Account", b =>

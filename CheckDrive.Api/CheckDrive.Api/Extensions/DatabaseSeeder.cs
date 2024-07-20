@@ -112,6 +112,17 @@ namespace CheckDrive.Api.Extensions
                 },
                 new Car()
                 {
+                    Model = "Cobalt",
+                    Color = "Black",
+                    Number = "01 312 PBA",
+                    Mileage = 157,
+                    MeduimFuelConsumption = 8.2,
+                    FuelTankCapacity = 60,
+                    ManufacturedYear = 2019,
+                    RemainingFuel = 12,
+                },
+                new Car()
+                {
                     Model = "Matiz",
                     Color = "White",
                     Number = "01 146 PBA",

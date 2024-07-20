@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CheckDrive.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_create : Migration
+    public partial class Initial_Create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,7 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                     Model = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Color = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Number = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Mileage = table.Column<int>(type: "int", nullable: false),
                     MeduimFuelConsumption = table.Column<double>(type: "float", nullable: false),
                     FuelTankCapacity = table.Column<double>(type: "float", nullable: false),
                     RemainingFuel = table.Column<double>(type: "float", nullable: false),
@@ -41,6 +42,22 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UndeliveredMessage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SendingMessageStatus = table.Column<int>(type: "int", nullable: false),
+                    ReviewId = table.Column<int>(type: "int", maxLength: 255, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UndeliveredMessage", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,6 +510,9 @@ namespace CheckDrive.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "DoctorReview");
+
+            migrationBuilder.DropTable(
+                name: "UndeliveredMessage");
 
             migrationBuilder.DropTable(
                 name: "Dispatcher");

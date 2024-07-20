@@ -19,6 +19,7 @@ namespace CheckDrive.Infrastructure.Persistence
         public virtual DbSet<MechanicHandover> MechanicsHandovers { get; set; }
         public virtual DbSet<MechanicAcceptance> MechanicsAcceptances { get; set; }
         public virtual DbSet<DispatcherReview> DispatchersReviews { get; set; }
+        public virtual DbSet<UndeliveredMessage> UndeliveredMessages { get; set; }
 
         public CheckDriveDbContext(DbContextOptions<CheckDriveDbContext> options)
             : base(options)

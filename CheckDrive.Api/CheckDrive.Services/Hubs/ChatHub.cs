@@ -1,4 +1,5 @@
-﻿using CheckDrive.ApiContracts;
+﻿using AutoMapper;
+using CheckDrive.ApiContracts;
 using CheckDrive.Domain.Entities;
 using CheckDrive.Domain.Interfaces.Hubs;
 using CheckDrive.Infrastructure.Persistence;
@@ -13,29 +14,30 @@ namespace CheckDrive.Services.Hubs
     public class ChatHub : Hub, IChatHub
     {
         private readonly ILogger<ChatHub> _logger;
+        private readonly IMapper _mapper;
         private readonly IHubContext<ChatHub> _context;
         private readonly CheckDriveDbContext _dbContext;
         private static ConcurrentDictionary<string, string> userConnections = new ConcurrentDictionary<string, string>();
-        private static ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>> undeliveredMessages = new ConcurrentDictionary<string, List<(SendingMessageStatus sendingMessageStatus, int, string)>>();
 
-        public ChatHub(ILogger<ChatHub> logger, IHubContext<ChatHub> context, CheckDriveDbContext checkDriveDbContext)
+        public ChatHub(ILogger<ChatHub> logger, IMapper mapper, IHubContext<ChatHub> context, CheckDriveDbContext checkDriveDbContext)
         {
             _logger = logger;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context;
             _dbContext = checkDriveDbContext ?? throw new ArgumentNullException(nameof(checkDriveDbContext));
         }
 
-        public async Task SendPrivateRequest(SendingMessageStatus sendingMessageStatus, int reviewId, string userId, string message)
+        public async Task SendPrivateRequest(UndeliveredMessageForDto undeliveredMessageForDto)
         {
-            _logger.LogInformation($"SendPrivateMessage: {userId}, {message}");
-            if (userConnections.TryGetValue(userId, out var connectionId))
+            _logger.LogInformation($"SendPrivateMessage: {undeliveredMessageForDto.UserId}, {undeliveredMessageForDto.Message}");
+            if (userConnections.TryGetValue(undeliveredMessageForDto.UserId, out var connectionId))
             {
-                await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", sendingMessageStatus, reviewId, message);
+                await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", undeliveredMessageForDto.SendingMessageStatus, undeliveredMessageForDto.ReviewId, undeliveredMessageForDto.Message);
             }
             else
             {
-                _logger.LogWarning($"User {userId} is not connected. Storing message.");
-                StoreUndeliveredMessage(sendingMessageStatus, reviewId, userId, message);
+                _logger.LogWarning($"User {undeliveredMessageForDto.UserId} is not connected. Storing message.");
+                StoreUndeliveredMessage(undeliveredMessageForDto);
             }
         }
 
@@ -85,26 +87,47 @@ namespace CheckDrive.Services.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        private void StoreUndeliveredMessage(SendingMessageStatus sendingMessageStatus, int reviewId, string userId, string message)
+        private async Task StoreUndeliveredMessage(UndeliveredMessageForDto undeliveredMessageForDto)
         {
-            undeliveredMessages.AddOrUpdate(userId, new List<(SendingMessageStatus sendingMessageStatus, int, string)> { (sendingMessageStatus, reviewId, message) }, (key, existingList) =>
-            {
-                existingList.Add((sendingMessageStatus, reviewId, message));
-                return existingList;
-            });
+            var undeliveredMassage = _mapper.Map<UndeliveredMessage>(undeliveredMessageForDto);
+
+            _dbContext.UndeliveredMessages.Add(undeliveredMassage);
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task SendPendingMessages(string userId)
         {
-            if (undeliveredMessages.TryRemove(userId, out var messages))
+            var messages = await _dbContext.UndeliveredMessages
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
+            if (messages.Any())
             {
-                foreach (var message in messages)
+                var messageDtos = _mapper.Map<List<UndeliveredMessageForDto>>(messages);
+                var messagesToRemove = new List<UndeliveredMessage>();
+
+                foreach (var messageDto in messageDtos)
                 {
-                    var (sendingMessageStatus, reviewId, context) = message;
+                    var sendingMessageStatus = messageDto.SendingMessageStatus;
+                    var reviewId = messageDto.ReviewId;
+                    var messageContent = messageDto.Message;
+
                     if (userConnections.TryGetValue(userId, out var connectionId))
                     {
-                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", sendingMessageStatus, reviewId, context);
+                        await _context.Clients.Client(connectionId).SendAsync("ReceiveMessage", sendingMessageStatus, reviewId, messageContent);
+
+                        var messageToRemove = messages.FirstOrDefault(m => _mapper.Map<UndeliveredMessageForDto>(m).ReviewId == reviewId);
+                        if (messageToRemove != null)
+                        {
+                            messagesToRemove.Add(messageToRemove);
+                        }
                     }
+                }
+
+                if (messagesToRemove.Any())
+                {
+                    _dbContext.UndeliveredMessages.RemoveRange(messagesToRemove);
+                    await _dbContext.SaveChangesAsync();
                 }
             }
         }
