@@ -22,7 +22,7 @@ builder.Services
 
 var app = builder.Build();
 
-if (app.Environment.IsProduction())
+if (!app.Environment.IsProduction())
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
