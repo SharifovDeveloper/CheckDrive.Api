@@ -83,9 +83,13 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
         {
             var data = await GetMechanicAcceptenceByIdAsync(mechanicAcceptanceEntity.Id);
 
-            await _chatHub.SendPrivateRequest
-                (SendingMessageStatus.MechanicAcceptance, mechanicAcceptanceEntity.Id, data.AccountDriverId.ToString(),
-                $"Siz shu {data.CarName} rusumli avtomobilni {data.MechanicName} ga topshirdizmi ?");
+            await _chatHub.SendPrivateRequest(new UndeliveredMessageForDto
+            {
+                SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicAcceptance,
+                ReviewId = mechanicAcceptanceEntity.Id,
+                UserId = data.AccountDriverId.ToString(),
+                Message = $"Siz shu {data.CarName} rusumli avtomobilni {data.MechanicName} ga topshirdizmi ?"
+            });
         }
 
         var mechanicAcceptanceDto = _mapper.Map<MechanicAcceptanceDto>(mechanicAcceptanceEntity);
