@@ -78,13 +78,14 @@ public class MechanicHandoverService : IMechanicHandoverService
         if (mechanicHandoverEntity.IsHanded == true)
         {
             var data = await GetMechanicHandoverByIdAsync(mechanicHandoverEntity.Id);
+            var carData = await _context.Cars.FirstOrDefaultAsync(x => x.Id == data.CarId);
 
             await _chatHub.SendPrivateRequest(new UndeliveredMessageForDto
             {
                 SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicHandover,
                 ReviewId = mechanicHandoverEntity.Id,
                 UserId = data.AccountDriverId.ToString(),
-                Message = $"Sizga {data.MechanicName} shu {data.CarName} ni topshirdimi ?"
+                Message = $"Sizga {data.MechanicName} {data.CarName} ni {carData.RemainingFuel} l yoqilg'isi va {carData.Mileage} km bosib o'tilgan masofasi bilan topshirdimi ?"
             });
         }
 
