@@ -76,7 +76,7 @@ namespace CheckDrive.Services
 
                 await _chat.SendPrivateRequest(new UndeliveredMessageForDto
                 {
-                    SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicHandover,
+                    SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.OperatorReview,
                     ReviewId = operatorReviewEntity.Id,
                     UserId = data.AccountDriverId.ToString(),
                     Message = $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?"
