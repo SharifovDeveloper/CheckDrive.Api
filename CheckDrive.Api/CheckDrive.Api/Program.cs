@@ -1,10 +1,6 @@
 using CheckDrive.Api.Extensions;
-using CheckDrive.Api.Middlewares;
-using CheckDrive.Infrastructure.JwtToken;
 using CheckDrive.Services.Hubs;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.StaticFiles;
-using Newtonsoft.Json.Serialization;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,43 +16,23 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
-
-builder.Services.AddControllers()
-    .AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-    })
-    .AddXmlSerializerFormatters();
-
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen()
-    .AddSingleton<FileExtensionContentTypeProvider>()
-    .ConfigureLogger()
-    .ConfigureRepositories()
-    .ConfigureDatabaseContext()
-    .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddApiAuthentication(configuration);
-builder.Services.AddSignalR();
+builder.Services
+    .AddConfigurationOptions(configuration)
+    .ConfigureServices(configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsProduction())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-using (var scope = app.Services.CreateScope())
-{
+    using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     builder.Services.SeedDatabase(services);
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseErrorHandler();
 
 app.UseHttpsRedirection();
 
@@ -68,9 +44,11 @@ app.UseCookiePolicy(new CookiePolicyOptions
 });
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapHub<ChatHub>("api/chat");
+
 app.MapControllers();
 
 app.Run();

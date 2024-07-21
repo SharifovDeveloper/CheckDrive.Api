@@ -8,18 +8,47 @@ using CheckDrive.Infrastructure.Persistence.Repositories;
 using CheckDrive.Services;
 using CheckDrive.Services.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Compact;
+using Newtonsoft.Json.Serialization;
 using System.Text;
 
 namespace CheckDrive.Api.Extensions
 {
-    public static class ConfigureServicesExtensions
+    public static class DependencyInjection
     {
-        public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration) 
+        {
+            AddProviders(services);
+            AddDatabaseContext(services, configuration);
+            AddRepositories(services);
+            AddAutoMapper(services);
+            AddServices(services);
+            AddRealTimeHub(services);
+            AddContentFormats(services);
+            AddSwagger(services);
+            AddAuthentication(services, configuration);
+            AddAuthorization(services);
+
+            return services;
+        }
+
+        private static void AddProviders(this IServiceCollection services)
+        {
+            services.AddScoped<IJwtProvider, JwtProvider>();
+            services.AddSingleton<FileExtensionContentTypeProvider>();
+        }
+
+        private static void AddDatabaseContext(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("CheckDriveConnection");
+
+            services.AddDbContext<CheckDriveDbContext>(options =>
+                options.UseSqlServer(connectionString));
+        }
+
+        private static void AddRepositories(IServiceCollection services)
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
@@ -34,7 +63,15 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IOperatorRepository, OperatorRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IOperatorReviewRepository, OperatorReviewRepository>();
+        }
 
+        private static void AddAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<ICarService, CarService>();
@@ -50,51 +87,39 @@ namespace CheckDrive.Api.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOperatorReviewService, OperatorReviewService>();
             services.AddScoped<IDashboardService, DashboardService>();
+        }
 
-            services.AddScoped<IJwtProvider, JwtProvider>();
-
+        private static void AddRealTimeHub(IServiceCollection services)
+        {
             services.AddScoped<IChatHub, ChatHub>();
-
-            services.AddControllers()
-              .AddNewtonsoftJson(options =>
-                  options.SerializerSettings.ReferenceLoopHandling =
-                    Newtonsoft.Json.ReferenceLoopHandling.Ignore
-               );
-
-            return services;
+            services.AddSignalR();
         }
 
-        public static IServiceCollection ConfigureDatabaseContext(this IServiceCollection services)
+        private static void AddContentFormats(IServiceCollection services)
         {
-            var builder = WebApplication.CreateBuilder();
-
-            services.AddDbContext<CheckDriveDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("CheckDriveConection")));
-
-            return services;
-        }
-        public static IServiceCollection ConfigureLogger(this IServiceCollection services)
-        {
-            Log.Logger = new LoggerConfiguration()
-                 .MinimumLevel.Information()
-                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
-                 .Enrich.FromLogContext()
-                 .WriteTo.Console(new RenderedCompactJsonFormatter())
-                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/logs.txt", rollingInterval: RollingInterval.Day)
-                 .WriteTo.File(new RenderedCompactJsonFormatter(), "logs/error_.txt", Serilog.Events.LogEventLevel.Error, rollingInterval: RollingInterval.Day)
-                 .CreateLogger();
-
-
-            return services;
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                })
+                .AddXmlSerializerFormatters();
         }
 
-        public static void AddApiAuthentication(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        private static void AddSwagger(IServiceCollection services)
         {
-            var JwtOption = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+            services
+                .AddEndpointsApiExplorer()
+                .AddSwaggerGen();
+        }
 
-            services.AddAuthentication(options =>
+        private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+
+            services
+                .AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -112,7 +137,7 @@ namespace CheckDrive.Api.Extensions
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(JwtOption!.SecretKey))
+                            Encoding.UTF8.GetBytes(jwtOptions!.SecretKey))
                     };
 
                     options.Events = new JwtBearerEvents
@@ -125,49 +150,46 @@ namespace CheckDrive.Api.Extensions
                         }
                     };
                 });
+        }
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy =>
+        private static void AddAuthorization(IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder()
+                .AddPolicy("Admin", policy =>
                 {
                     policy.RequireClaim("Admin", "true");
-                });
-
-                options.AddPolicy("AdminOrDriver", policy =>
+                })
+                .AddPolicy("AdminOrDriver", policy =>
                 {
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c => c.Type == "Driver" && c.Value == "true") ||
                         context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
-                });
-
-                options.AddPolicy("AdminOrDoctor", policy =>
+                })
+                .AddPolicy("AdminOrDoctor", policy =>
                 {
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c => c.Type == "Doctor" && c.Value == "true") ||
                         context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
-                });
-
-                options.AddPolicy("AdminOrOperator", policy =>
+                })
+                .AddPolicy("AdminOrOperator", policy =>
                 {
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c => c.Type == "Operator" && c.Value == "true") ||
                         context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
-                });
-
-                options.AddPolicy("AdminOrDispatcher", policy =>
+                })
+                .AddPolicy("AdminOrDispatcher", policy =>
                 {
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c => c.Type == "Dispatcher" && c.Value == "true") ||
                         context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
-                });
-
-                options.AddPolicy("AdminOrMechanic", policy =>
+                })
+                .AddPolicy("AdminOrMechanic", policy =>
                 {
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c => c.Type == "Mechanic" && c.Value == "true") ||
                         context.User.HasClaim(c => c.Type == "Admin" && c.Value == "true"));
                 });
-            });
         }
+
     }
 }
