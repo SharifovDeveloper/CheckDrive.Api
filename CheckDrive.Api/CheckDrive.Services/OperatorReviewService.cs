@@ -38,7 +38,7 @@ namespace CheckDrive.Services
 
             var operatorReviewsDto = _mapper.Map<List<OperatorReviewDto>>(operatorReviews);
 
-            if (resourceParameters.Status == Status.Completed)
+            if (resourceParameters.RoleId == 1)
             {
                 var countOfHealthyDrivers = query.Count();
                 operatorReviews.PageSize = countOfHealthyDrivers;
@@ -76,10 +76,10 @@ namespace CheckDrive.Services
 
                 await _chat.SendPrivateRequest(new UndeliveredMessageForDto
                 {
-                    SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicHandover,
+                    SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.OperatorReview,
                     ReviewId = operatorReviewEntity.Id,
                     UserId = data.AccountDriverId.ToString(),
-                    Message = $"Sizga {data.OperatorName} shu {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?"
+                    Message = $"Sizga {data.OperatorName} {data.CarModel} avtomobilga {data.OilMarks} markali {data.OilAmount} litr benzin quydimi ?"
                 });
             }
 

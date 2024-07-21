@@ -88,7 +88,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
                 SendingMessageStatus = (SendingMessageStatusForDto)SendingMessageStatus.MechanicAcceptance,
                 ReviewId = mechanicAcceptanceEntity.Id,
                 UserId = data.AccountDriverId.ToString(),
-                Message = $"Siz shu {data.CarName} rusumli avtomobilni {data.MechanicName} ga topshirdizmi ?"
+                Message = $"Siz {data.CarName} avtomobilni {data.MechanicName} ga {data.Distance} km bosib o'tilgan masofasi bilan topshirdizmi ?"
             });
         }
 
