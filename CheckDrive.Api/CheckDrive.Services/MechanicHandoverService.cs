@@ -180,7 +180,7 @@ public class MechanicHandoverService : IMechanicHandoverService
     {
         var response = await _context.MechanicsHandovers
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -190,7 +190,7 @@ public class MechanicHandoverService : IMechanicHandoverService
 
         var doctorReviewsResponse = await _context.DoctorReviews
             .AsNoTracking()
-            .Where(x => x.IsHealthy == true && x.Date.Date == DateTime.Today)
+            .Where(x => x.IsHealthy == true && x.Date.Date == DateTime.UtcNow.Date)
             .Include(x => x.Doctor)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)
@@ -233,7 +233,7 @@ public class MechanicHandoverService : IMechanicHandoverService
                     IsHanded = false,
                     Distance = 0,
                     Comments = "",
-                    Date = DateTime.Today,
+                    Date = DateTime.UtcNow.Date,
                     Status = ApiContracts.StatusForDto.Unassigned,
                 });
             }

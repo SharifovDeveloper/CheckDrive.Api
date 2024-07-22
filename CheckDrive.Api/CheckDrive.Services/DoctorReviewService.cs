@@ -51,7 +51,7 @@ public class DoctorReviewService : IDoctorReviewService
     {
         var reviewsResponse = await _context.DoctorReviews
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date)
             .Include(x => x.Doctor)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)
@@ -93,7 +93,7 @@ public class DoctorReviewService : IDoctorReviewService
                     DoctorName = "",
                     IsHealthy = false,
                     Comments = "",
-                    Date = DateTime.Today
+                    Date = DateTime.UtcNow.Date
                 });
             }
         }

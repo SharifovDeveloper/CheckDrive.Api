@@ -175,7 +175,7 @@ public class DispatcherReviewService : IDispatcherReviewService
     {
         var reviewsResponse = await _context.DispatchersReviews
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date)
             .Include(x => x.Car)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
@@ -190,7 +190,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var mechanicAcceptanceResponse = await _context.MechanicsAcceptances
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date && x.Status == Status.Completed)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -200,7 +200,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var mechanicHandoverResponse = await _context.MechanicsHandovers
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date && x.Status == Status.Completed)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -210,7 +210,7 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         var operatorResponse = await _context.OperatorReviews
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today && x.Status == Status.Completed)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date && x.Status == Status.Completed)
             .Include(x => x.Operator)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)
@@ -225,8 +225,8 @@ public class DispatcherReviewService : IDispatcherReviewService
 
         foreach (var mechanicAcceptance in mechanicAcceptanceResponse)
         {
-            var mechanicHandoverReview = mechanicHandoverResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.Today);
-            var operatorReview = operatorResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.Today);
+            var mechanicHandoverReview = mechanicHandoverResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.UtcNow.Date);
+            var operatorReview = operatorResponse.FirstOrDefault(m => m.DriverId == mechanicAcceptance.DriverId && m.Date.Date == DateTime.UtcNow.Date);
             var carReview = carResponse.FirstOrDefault(c => c.Id == mechanicAcceptance.CarId);
             var review = reviewsResponse.FirstOrDefault(r => r.DriverId == mechanicAcceptance.DriverId);
 
@@ -280,7 +280,7 @@ public class DispatcherReviewService : IDispatcherReviewService
                     OperatorReviewId = operatorReviewDto.Id,
                     DispatcherName = "",
                     MechanicName = mechanicAcceptanceDto.MechanicName,
-                    Date = DateTime.Today,
+                    Date = DateTime.UtcNow.Date,
                     MechanicAcceptanceId = mechanicAcceptanceDto.Id,
                     MechanicHandoverId = mechanicHandoverReviewDto.Id,
                     OperatorId = operatorReviewDto.OperatorId,

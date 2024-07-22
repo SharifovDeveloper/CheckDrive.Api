@@ -74,7 +74,7 @@ namespace CheckDrive.Api.Extensions
                         PhoneNumber = "+998945242132",
                         FirstName = "Azamat",
                         LastName = "G`iyosov",
-                        Bithdate = DateTime.Now,
+                        Bithdate = DateTime.UtcNow,
                         RoleId = 1,
                     };
                 
