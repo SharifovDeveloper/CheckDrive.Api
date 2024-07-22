@@ -188,7 +188,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
     {
         var response = await _context.MechanicsAcceptances
             .AsNoTracking()
-            .Where(x => x.Date.Date == DateTime.Today)
+            .Where(x => x.Date.Date == DateTime.UtcNow.Date)
             .Include(x => x.Mechanic)
             .ThenInclude(x => x.Account)
             .Include(x => x.Car)
@@ -198,7 +198,7 @@ public class MechanicAcceptanceService : IMechanicAcceptanceService
 
         var operatorReviewsResponse = await _context.OperatorReviews
             .AsNoTracking()
-            .Where(dr => dr.Date.Date == DateTime.Today && dr.Status == Status.Completed)
+            .Where(dr => dr.Date.Date == DateTime.UtcNow.Date && dr.Status == Status.Completed)
             .Include(x => x.Operator)
             .ThenInclude(x => x.Account)
             .Include(x => x.Driver)

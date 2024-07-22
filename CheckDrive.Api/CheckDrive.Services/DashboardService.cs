@@ -68,7 +68,7 @@ public class DashboardService : IDashboardService
 
         var lastMonth = DateTime.Now.AddMonths(-1);
         var startOfLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
-        var startOfThisMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        var startOfThisMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
 
         double totalOilAmount = await _context.OperatorReviews
                                     .Where(or => or.Date >= startOfLastMonth && or.Date < startOfThisMonth)
